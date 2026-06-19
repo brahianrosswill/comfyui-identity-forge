@@ -7,6 +7,11 @@ on:
     paths:
       - "pyproject.toml"
 
+# Least privilege: this workflow only reads the repo and talks to the Comfy
+# registry via REGISTRY_ACCESS_TOKEN — it never needs write scope on the repo.
+permissions:
+  contents: read
+
 jobs:
   publish-node:
     name: Publish Custom Node to registry
@@ -15,8 +20,14 @@ jobs:
     if: ${{ github.repository_owner == 'EnragedAntelope' }}
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        # Pinned to a commit SHA (v4.2.2). persist-credentials:false so the
+        # GITHUB_TOKEN isn't left in .git/config for the third-party step below.
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
       - name: Publish Custom Node
-        uses: Comfy-Org/publish-node-action@main
+        # Pinned to the v1.0.1 release commit SHA (not @main) so a future
+        # upstream change can't silently run with our registry token.
+        uses: Comfy-Org/publish-node-action@7578cdb0c1410f2515e6f9b1443c6859cab94f05
         with:
           personal_access_token: ${{ secrets.REGISTRY_ACCESS_TOKEN }}

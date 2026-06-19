@@ -16,6 +16,6 @@ Repository = "https://github.com/EnragedAntelope/comfyui-identity-forge"
 "Bug Tracker" = "https://github.com/EnragedAntelope/comfyui-identity-forge/issues"
 
 [tool.comfy]
-PublisherId = "EnragedAntelope"
+PublisherId = "enragedantelope"
 DisplayName = "Identity Forge"
 requires-comfyui = ">=0.25.0"
