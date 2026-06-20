@@ -635,6 +635,61 @@ def group_fields(field_values: dict[str, str]) -> "OrderedDict[str, dict[str, st
     return OrderedDict((group, fields) for group, fields in grouped.items() if fields)
 
 
+def _as_dict(value: Any) -> dict:
+    """Return ``value`` if it is a dict, else an empty dict."""
+    return value if isinstance(value, dict) else {}
+
+
+def _load_document(raw: str) -> dict:
+    """Parse a preset JSON string into a dict; ``{}`` on empty/malformed input."""
+    raw = (raw or "").strip()
+    if not raw:
+        return {}
+    try:
+        data = json.loads(raw)
+    except (ValueError, TypeError):
+        print("[IdentityForge] Ignoring malformed preset JSON during merge.")
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def merge_preset_documents(upstream_json: str, own_json: str) -> str:
+    """Merge two preset JSON documents, with ``own`` (downstream) winning.
+
+    Lets the preset nodes chain: an upstream preset's ``character_json`` is merged
+    *under* this node's own output, so wiring ``Archetype -> Cosplayer ->
+    IdentityForge`` keeps both connected. A node set to ``"None"`` emits ``"{}"``,
+    which here passes the upstream through unchanged. On overlap the downstream
+    (own) document wins, field by field, including ``_meta`` keys. ``_meta`` is
+    emitted first and groups follow :data:`_GROUP_ORDER` for readable output.
+
+    Either input may be empty, ``"{}"`` or malformed; the result is always a
+    valid JSON object string.
+    """
+    upstream = _load_document(upstream_json)
+    own = _load_document(own_json)
+    if not own:  # this node is inactive ("None") -> pass the upstream through
+        return json.dumps(upstream, indent=2) if upstream else "{}"
+    if not upstream:
+        return json.dumps(own, indent=2)
+
+    merged: "OrderedDict[str, Any]" = OrderedDict()
+    meta = {**_as_dict(upstream.get("_meta")), **_as_dict(own.get("_meta"))}
+    if meta:
+        merged["_meta"] = OrderedDict(meta)
+    # Canonical groups first, then any unexpected extras; own fields win on overlap.
+    keys = [k for k in _GROUP_ORDER if k in upstream or k in own]
+    keys += [
+        k for k in (*upstream, *own)
+        if k != "_meta" and k not in _GROUP_ORDER and k not in keys
+    ]
+    for key in keys:
+        section = {**_as_dict(upstream.get(key)), **_as_dict(own.get(key))}
+        if section:
+            merged[key] = section
+    return json.dumps(merged, indent=2)
+
+
 def _format_json(
     resolved: dict[str, str], gender: str, hair_color_scope: str, wardrobe: str,
     cosplay_label: str | None = None,

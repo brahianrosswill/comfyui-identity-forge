@@ -149,6 +149,15 @@ def validate() -> list[str]:
                 errors.append(f"cosplayer '{name}': missing '{key}'")
         if entry.get("gender") not in ("Female", "Male"):
             errors.append(f"cosplayer '{name}': bad gender {entry.get('gender')!r}")
+        # Masks: a full-mask character must carry a non-empty ``mask`` string (the
+        # head covering kept out of ``costume`` so the Unmask toggle can drop it);
+        # a face-visible character must not have one.
+        mask = entry.get("mask")
+        if entry.get("covers_face"):
+            if not isinstance(mask, str) or not mask:
+                errors.append(f"cosplayer '{name}': covers_face entry missing 'mask' text")
+        elif mask is not None:
+            errors.append(f"cosplayer '{name}': 'mask' set but covers_face is not True")
         # signature is applied in both modes; physique only in Full character.
         # Every key must be a real field and every value a valid option for it.
         for section in ("signature", "physique"):

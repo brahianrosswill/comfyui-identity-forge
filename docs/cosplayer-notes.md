@@ -7,26 +7,48 @@ are informed.
 ## How it works
 
 The Cosplayer node emits the same grouped-JSON document the Archetype node does
-and wires into Identity Forge's shared `archetype_json` socket. A character is
-stored as a **costume** (worn items only) plus a small **signature** look (hair,
-eyes) and an optional **physique** (body/skin/height). Identity Forge randomizes
-everything else, so each run is a different person wearing the same costume.
+and wires into Identity Forge's `archetype_json` socket. A character is stored as
+a **costume** (worn items only) plus a small **signature** look (hair, eyes) and
+an optional **physique** (body/skin/height). Identity Forge randomizes everything
+else, so each run is a different person wearing the same costume.
 
 - **Costume only** (default): costume + signature; body, face, ethnicity randomize.
 - **Full character**: also locks the physique for a faithful look.
 
 An entry may set **`covers_face: True`** when the head is fully masked/helmeted
 (Spider-Man, a Mandalorian helmet, a ninja hood, a featureless chrome head). The
-Cosplayer node passes this through its `_meta`, and IdentityForge then drops the
-randomized **Face / Hair / Makeup** fields (plus earrings/piercings) from both the
-prose and JSON — so a random face never gets described fighting the mask. Leave it
-off whenever the face is visible (an open cowl, a domino mask, a body-painted but
-visible face like Hulk).
+head covering is stored in a separate **`mask`** string, kept *out* of `costume`.
+The Cosplayer node re-attaches the mask to the costume and passes `covers_face`
+through its `_meta`; IdentityForge then drops the randomized **Face / Hair /
+Makeup** fields (plus earrings/piercings) from both the prose and JSON — so a
+random face never gets described fighting the mask. Leave both off whenever the
+face is visible (an open cowl, a domino mask, a body-painted but visible face like
+Hulk).
+
+The node's **`mask`** widget controls this per render: **Default** keeps the mask
+on, while **Unmask (show face)** drops the mask clause *and* clears `covers_face`,
+so the randomized head/hair shows under the suit — a helmet-off look (Tony Stark in
+the Iron Man armor). It is a no-op for face-visible characters. Keeping the head
+covering in its own field is what lets it be removed cleanly, with no stray
+"faceplate" reference stranded in the costume prose.
+
+### Chaining presets
+
+Both preset nodes expose an optional **`upstream`** input, so Archetype and
+Cosplayer nodes chain into one wire (`Archetype → Cosplayer → Identity Forge`)
+instead of competing for the single socket. Documents are deep-merged with the
+**downstream** node (closest to Identity Forge) winning on overlap, including
+`_meta`; non-overlapping upstream values survive. A node set to `None` emits `{}`,
+which passes its upstream through unchanged — so both presets can stay wired and
+you just toggle which one is active.
 
 ## Known limitations
 
-1. **Shared socket with Archetype.** Identity Forge has one preset input, so the
-   Cosplayer and Archetype nodes are mutually exclusive — use one or the other.
+1. **One preset input on Identity Forge.** Identity Forge still has a single
+   `archetype_json` socket, but preset nodes now chain through their `upstream`
+   input (see *Chaining presets* above), so you no longer have to unplug one to use
+   the other. Combining an Archetype with a Cosplayer is allowed but unusual; the
+   downstream node wins on overlap.
 
 2. **`Any` gender follows the character.** With a cosplayer connected and the
    Identity Forge `gender` widget on `Any`, the person defaults to the *character's*
@@ -66,6 +88,11 @@ The shipped set is a curated starter list and grows over time. Add your own
 without editing the source (survives `git pull`) via the `cosplayers` section of
 `user_options.json` — see `user_options.example.json`. A `gender: "Male"` entry is
 how the `Random — male` pick gets populated. Worn items only; leave held props and
-weapons out and add them by editing the prompt before rendering. Add
-`"covers_face": true` for a fully masked head. Keep costume text and names plain
-ASCII (no em dashes / smart quotes) so text-to-image tokenizers don't mangle them.
+weapons out and add them by editing the prompt before rendering. For a fully masked
+head set `"covers_face": true` **and** put the head covering in a separate `"mask"`
+string (kept out of `costume`) so the *Unmask* toggle can drop it. Keep costume
+text and names plain ASCII (no em dashes / smart quotes) so text-to-image
+tokenizers don't mangle them.
+
+Contributions are welcome, too: if you'd rather a character ship in the built-in
+set than live in your own `user_options.json`, open an issue or PR suggesting it.

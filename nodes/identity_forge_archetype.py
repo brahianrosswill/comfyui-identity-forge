@@ -6,6 +6,11 @@ Pick (or randomize) an archetype and emit a JSON document of overrides. Wire its
 *look* (costume, signature hair/makeup, setting) and IdentityForge randomizes the
 rest of the person, so every run is a different individual in the same getup.
 
+Presets chain: connect another preset's ``character_json`` into the optional
+``upstream`` input and they stack into one document (this node wins on overlap),
+so Archetype and Cosplayer nodes can all stay wired at once. Set a node to
+``None`` and it simply passes its upstream through.
+
 Two lock levels:
 
 * **Essentials** (default) — only the look-defining fields are sent, so body,
@@ -33,13 +38,13 @@ try:
         ARCHETYPES, get_archetype_names, get_archetype_preset, fill_costume,
     )
     from ..data.fields import FIELD_DEFINITIONS
-    from .identity_forge import group_fields
+    from .identity_forge import group_fields, merge_preset_documents
 except ImportError:  # pragma: no cover — standalone/test context
     from data.templates import (
         ARCHETYPES, get_archetype_names, get_archetype_preset, fill_costume,
     )
     from data.fields import FIELD_DEFINITIONS
-    from nodes.identity_forge import group_fields
+    from nodes.identity_forge import group_fields, merge_preset_documents
 
 try:
     from comfy_api.latest import io  # type: ignore[import-not-found]
@@ -115,7 +120,9 @@ if _COMFY_AVAILABLE:
                 category="conditioning/character",
                 description="Pick or randomize a themed character archetype (knight, "
                             "sorceress, pirate, pop star, …) and emit JSON to seed an "
-                            "IdentityForge node. Costume colours vary by seed.",
+                            "IdentityForge node. Costume colours vary by seed. Chain "
+                            "presets via the 'upstream' input — they stack instead of "
+                            "fighting over IdentityForge's single socket.",
                 inputs=[
                     io.Combo.Input(
                         "archetype",
@@ -143,15 +150,26 @@ if _COMFY_AVAILABLE:
                         tooltip="Seed for the random archetype pick and costume colour "
                                 "variation. The control below defaults to 'randomize'.",
                     ),
+                    io.String.Input(
+                        "upstream",
+                        default="",
+                        optional=True,
+                        force_input=True,
+                        tooltip="Optional: connect another preset's character_json here "
+                                "to stack presets. This node's values win where they "
+                                "overlap; set this node to 'None' to pass the upstream "
+                                "through unchanged.",
+                    ),
                 ],
                 outputs=[io.String.Output(display_name="character_json")],
             )
 
         @classmethod
         def execute(cls, **kwargs: Any) -> "io.NodeOutput":
-            character_json = build_archetype_json(
+            own = build_archetype_json(
                 kwargs.get("archetype", _NONE),
                 int(kwargs.get("seed", 0)),
                 kwargs.get("lock_level", _ESSENTIALS),
             )
+            character_json = merge_preset_documents(kwargs.get("upstream", ""), own)
             return io.NodeOutput(character_json)

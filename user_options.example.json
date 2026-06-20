@@ -31,7 +31,8 @@
       "location": "an airship deck"
     }
   },
-  "_comment_cosplayers": "'cosplayers' adds characters to the Cosplayer node. 'costume' (worn items only, no held weapons) is required; 'franchise' and 'gender' (Female/Male, used only for Random scoping) are optional; 'signature' (applied in both modes) and 'physique' (Full character only) are {field: value} maps of valid options. Add gender:Male entries to populate 'Random - male'. Set 'covers_face': true for a fully masked head to drop the randomized face/hair so only the mask is described. Keep text plain ASCII (no em dashes or smart quotes).",
+  "_comment_cosplayers": "'cosplayers' adds characters to the Cosplayer node. 'costume' (worn items only, no held weapons) is required; 'franchise' and 'gender' (Female/Male, used only for Random scoping) are optional; 'signature' (applied in both modes) and 'physique' (Full character only) are {field: value} maps of valid options. Add gender:Male entries to populate 'Random - male'. Keep text plain ASCII (no em dashes or smart quotes).",
+  "_comment_mask": "For a fully masked head set 'covers_face': true AND put the head covering in a separate 'mask' string (kept OUT of 'costume'). covers_face hides the randomized face/hair; the mask is appended to the costume by default but kept apart so the node's 'Unmask (show face)' toggle can drop it and reveal the random head. Omit both when the face is visible.",
   "cosplayers": {
     "Custom Hero (My OC)": {
       "franchise": "Original",
@@ -44,7 +45,8 @@
       "franchise": "Original",
       "gender": "Male",
       "covers_face": true,
-      "costume": "a matte-black armored bodysuit with a full face helmet and a hooded cape"
+      "costume": "a matte-black armored bodysuit with a hooded cape",
+      "mask": "a full black face helmet with narrow glowing eye slits"
     }
   }
 }

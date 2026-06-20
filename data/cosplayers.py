@@ -13,6 +13,9 @@ Schema per entry (keyed by character name)::
         "gender":    "Female",            # SOURCE character gender — for Random scoping only
         "covers_face": True,              # OPTIONAL — full mask/helmet: drop the randomized
                                           #   face/hair/makeup so only the costume shows
+        "mask":      "a full face mask ...",# REQUIRED when covers_face — the head covering,
+                                          #   kept apart from costume so the node's "Unmask"
+                                          #   toggle can drop it and reveal the random head
         "costume":   "a gothic black ...",# → IdentityForge's hidden outfit_description
         "signature": {                    # iconic, field-mappable look — applied in BOTH modes
             "hair_color": "platinum blonde", "hair_length": "chin length bob",
@@ -43,6 +46,12 @@ Curation rules (so the data stays coherent with the engine):
   ``"covers_face": True`` so IdentityForge drops the randomized face, hair and
   makeup that would otherwise be described fighting the mask. Omit it whenever
   the face is visible (an open cowl, body-painted-but-visible face, domino mask).
+  Every ``covers_face`` entry also puts its head covering in a separate ``mask``
+  string (kept *out* of ``costume``): in the default mode the node re-attaches it
+  to the costume, but the Cosplayer node's ``Unmask`` toggle drops it and clears
+  ``covers_face`` so the randomized head/hair shows under the suit. ``mask`` reads
+  naturally as one more worn item appended after the costume (lowercase, with an
+  article); face-visible characters have no ``mask``.
 * **Plain ASCII only.** Costume text and the character name reach the prompt, so
   avoid em/en dashes, smart quotes and ellipses (use ``-``, ``'``, ``...``);
   some text-to-image tokenizers mangle them.
@@ -1345,8 +1354,8 @@ COSPLAYERS: dict[str, dict] = {
         "gender": "Male",
         "covers_face": True,
         "costume": "a skintight red and blue bodysuit with black webbing lines across the "
-                   "red, a large black spider emblem on the chest, a full face mask with "
-                   "large white teardrop eye lenses, red gloves, and red boots",
+                   "red, a large black spider emblem on the chest, red gloves, and red boots",
+        "mask": "a full face mask with large white teardrop eye lenses",
         "physique": {"body_type": "lean", "height": "average height"},
     },
     "Iron Man": {
@@ -1354,8 +1363,9 @@ COSPLAYERS: dict[str, dict] = {
         "gender": "Male",
         "covers_face": True,
         "costume": "a glossy hot-rod red and gold plated powered exosuit with a glowing "
-                   "circular arc reactor in the chest, narrow glowing eye slits in the "
-                   "faceplate, and articulated armored gauntlets and boots",
+                   "circular arc reactor in the chest and articulated armored gauntlets "
+                   "and boots",
+        "mask": "a faceplate with narrow glowing eye slits",
         "physique": {"body_type": "athletic", "height": "average height"},
     },
     "Tony Stark": {
@@ -1409,9 +1419,9 @@ COSPLAYERS: dict[str, dict] = {
         "franchise": "Marvel",
         "gender": "Male",
         "covers_face": True,
-        "costume": "a skintight red and black bodysuit with black side panels, a full red "
-                   "and black mask with white teardrop eye patches, leg holsters, and "
-                   "ammo pouches and belts",
+        "costume": "a skintight red and black bodysuit with black side panels, leg "
+                   "holsters, and ammo pouches and belts",
+        "mask": "a full red and black mask with white teardrop eye patches",
         "physique": {"body_type": "athletic", "height": "average height"},
     },
     "Black Panther": {
@@ -1419,8 +1429,8 @@ COSPLAYERS: dict[str, dict] = {
         "gender": "Male",
         "covers_face": True,
         "costume": "a sleek matte-black vibranium catsuit with a faint raised silver "
-                   "triangular weave, a panther mask with small rounded ears, and a silver "
-                   "vibranium necklace",
+                   "triangular weave and a silver vibranium necklace",
+        "mask": "a panther mask with small rounded ears",
         "physique": {"body_type": "athletic", "height": "tall"},
     },
     "Doctor Strange": {
@@ -1462,16 +1472,18 @@ COSPLAYERS: dict[str, dict] = {
         "franchise": "Marvel",
         "gender": "Male",
         "covers_face": True,
-        "costume": "a hulking glossy pitch-black symbiote bodysuit with huge jagged white "
-                   "eye patches, a white spider emblem across the chest, and clawed hands",
+        "costume": "a hulking glossy pitch-black symbiote bodysuit with a white spider "
+                   "emblem across the chest and clawed hands",
+        "mask": "a featureless symbiote head with huge jagged white eye patches",
         "physique": {"body_type": "athletic", "height": "very tall"},
     },
     "Daredevil": {
         "franchise": "Marvel",
         "gender": "Male",
         "covers_face": True,
-        "costume": "deep red textured leather armor from head to toe, a small mask with "
-                   "two short devil horns, and a double-D emblem on the chest",
+        "costume": "deep red textured leather armor from neck to toe with a double-D "
+                   "emblem on the chest",
+        "mask": "a small mask with two short devil horns",
         "physique": {"body_type": "lean", "height": "average height"},
     },
     "Punisher": {
@@ -1496,8 +1508,9 @@ COSPLAYERS: dict[str, dict] = {
         "franchise": "Marvel",
         "gender": "Male",
         "covers_face": True,
-        "costume": "a riveted steel mask with narrow eye slits, a hooded green cloak over "
-                   "silver metallic plate armor, a wide brown belt, and gauntlets",
+        "costume": "a hooded green cloak over silver metallic plate armor, a wide brown "
+                   "belt, and gauntlets",
+        "mask": "a riveted steel mask with narrow eye slits",
         "physique": {"body_type": "athletic", "height": "tall"},
     },
     "Gambit": {
@@ -1521,7 +1534,8 @@ COSPLAYERS: dict[str, dict] = {
         "gender": "Male",
         "covers_face": True,
         "costume": "a seamless mirror-chrome silver bodysuit with all-over reflective "
-                   "silver body paint and blank silver eyes",
+                   "silver body paint",
+        "mask": "a featureless chrome head with blank silver eyes",
         "physique": {"body_type": "lean", "height": "tall"},
     },
     "Winter Soldier": {
@@ -1537,8 +1551,8 @@ COSPLAYERS: dict[str, dict] = {
         "franchise": "Marvel",
         "gender": "Male",
         "covers_face": True,
-        "costume": "a black studded leather jacket with chains, with a bare flaming skull "
-                   "wreathed in orange fire for a head",
+        "costume": "a black studded leather jacket with chains",
+        "mask": "a bare flaming skull wreathed in orange fire for a head",
         "physique": {"body_type": "lean", "height": "tall"},
     },
     "Blade": {
@@ -1567,8 +1581,9 @@ COSPLAYERS: dict[str, dict] = {
         "gender": "Male",
         "covers_face": True,
         "costume": "a dark grey armored bodysuit with a black bat emblem across the chest, "
-                   "a long scalloped black cape, a yellow utility belt, black gauntlets "
-                   "with fin blades, and a black cowl with pointed bat ears",
+                   "a long scalloped black cape, a yellow utility belt, and black "
+                   "gauntlets with fin blades",
+        "mask": "a black cowl with pointed bat ears",
         "physique": {"body_type": "athletic", "height": "tall"},
     },
     "Bruce Wayne": {
@@ -1585,8 +1600,8 @@ COSPLAYERS: dict[str, dict] = {
         "gender": "Male",
         "covers_face": True,
         "costume": "a full red bodysuit with a golden lightning-bolt emblem in a white "
-                   "circle on the chest, a red cowl with small golden wing bolts at the "
-                   "ears, and golden boots",
+                   "circle on the chest and golden boots",
+        "mask": "a red cowl with small golden wing bolts at the ears",
         "physique": {"body_type": "lean", "height": "average height"},
     },
     "Green Lantern": {
@@ -1656,18 +1671,18 @@ COSPLAYERS: dict[str, dict] = {
         "franchise": "DC",
         "gender": "Male",
         "covers_face": True,
-        "costume": "a black luchador mask covering the whole head, a tactical vest, broad "
-                   "bare muscular arms, and a thick green venom tube feeding into the back "
-                   "of the skull",
+        "costume": "a tactical vest, broad bare muscular arms, and a thick green venom "
+                   "tube feeding into the back of the skull",
+        "mask": "a black luchador mask covering the whole head",
         "physique": {"body_type": "athletic", "height": "very tall"},
     },
     "Deathstroke": {
         "franchise": "DC",
         "gender": "Male",
         "covers_face": True,
-        "costume": "a blue and grey armored tactical suit, a mask split half orange and "
-                   "half black with a single eye slit, bandoliers, and a sword sheathed "
-                   "on the back",
+        "costume": "a blue and grey armored tactical suit, bandoliers, and a sword "
+                   "sheathed on the back",
+        "mask": "a mask split half orange and half black with a single eye slit",
         "physique": {"body_type": "athletic", "height": "tall"},
     },
     "Black Adam": {
@@ -1710,9 +1725,9 @@ COSPLAYERS: dict[str, dict] = {
         "franchise": "Star Wars",
         "gender": "Male",
         "covers_face": True,
-        "costume": "a glossy black domed helmet and skull-like mask with triangular eye "
-                   "lenses, a black ribbed chest control panel, a wide belt box, and a "
-                   "flowing black cape",
+        "costume": "a black ribbed chest control panel, a wide belt box, and a flowing "
+                   "black cape",
+        "mask": "a glossy black domed helmet and skull-like mask with triangular eye lenses",
         "physique": {"body_type": "athletic", "height": "very tall"},
     },
     "Obi-Wan Kenobi": {
@@ -1761,17 +1776,18 @@ COSPLAYERS: dict[str, dict] = {
         "franchise": "Star Wars",
         "gender": "Male",
         "covers_face": True,
-        "costume": "weathered green and rust Mandalorian armor with battle dents, a green "
-                   "T-visor helmet with a side rangefinder, a jetpack, and a braided "
-                   "trophy cape on one shoulder",
+        "costume": "weathered green and rust Mandalorian armor with battle dents, a "
+                   "jetpack, and a braided trophy cape on one shoulder",
+        "mask": "a green T-visor helmet with a side rangefinder",
         "physique": {"body_type": "athletic", "height": "average height"},
     },
     "The Mandalorian": {
         "franchise": "Star Wars",
         "gender": "Male",
         "covers_face": True,
-        "costume": "full polished silver beskar plate armor over a flight suit, a smooth "
-                   "silver T-visor helmet, a jetpack, and a brown half-cape",
+        "costume": "full polished silver beskar plate armor over a flight suit, a jetpack, "
+                   "and a brown half-cape",
+        "mask": "a smooth silver T-visor helmet",
         "physique": {"body_type": "athletic", "height": "average height"},
     },
     "Darth Maul": {
@@ -1787,7 +1803,8 @@ COSPLAYERS: dict[str, dict] = {
         "gender": "Male",
         "covers_face": True,
         "costume": "a single bandolier strap of silver ammo across the chest, with "
-                   "all-over long shaggy brown fur over the whole body",
+                   "all-over long shaggy brown fur over the body",
+        "mask": "a long-muzzled Wookiee face covered in shaggy brown fur",
         "physique": {"body_type": "athletic", "height": "very tall"},
     },
     "Emperor Palpatine": {
@@ -1981,8 +1998,9 @@ COSPLAYERS: dict[str, dict] = {
         "franchise": "Mortal Kombat",
         "gender": "Male",
         "covers_face": True,
-        "costume": "a yellow and black ninja uniform with a mask and a hood, ninja-rope "
-                   "wrappings, and a kunai spear on a chain",
+        "costume": "a yellow and black ninja uniform with ninja-rope wrappings and a "
+                   "kunai spear on a chain",
+        "mask": "a yellow and black ninja mask and hood",
         "physique": {"body_type": "athletic", "height": "tall"},
     },
     "Sub-Zero": {
@@ -2042,15 +2060,17 @@ COSPLAYERS: dict[str, dict] = {
         "gender": "Male",
         "covers_face": True,
         "costume": "ornate armor with huge spiked shoulder pauldrons over a bare muscular "
-                   "chest, and a horned skull-faced helmet",
+                   "chest",
+        "mask": "a horned skull-faced helmet",
         "physique": {"body_type": "athletic", "height": "very tall"},
     },
     "Reptile": {
         "franchise": "Mortal Kombat",
         "gender": "Male",
         "covers_face": True,
-        "costume": "a green and black ninja uniform with a mask, with green scaled skin "
-                   "body paint and clawed hands",
+        "costume": "a green and black ninja uniform with green scaled skin body paint and "
+                   "clawed hands",
+        "mask": "a green and black ninja mask",
         "physique": {"body_type": "lean", "height": "average height"},
     },
     "Baraka": {
@@ -2303,8 +2323,9 @@ COSPLAYERS: dict[str, dict] = {
         "franchise": "Halo",
         "gender": "Male",
         "covers_face": True,
-        "costume": "full matte olive-green Mjolnir power armor, a helmet with a "
-                   "golden-orange reflective visor, and heavy plated shoulders and gauntlets",
+        "costume": "full matte olive-green Mjolnir power armor with heavy plated shoulders "
+                   "and gauntlets",
+        "mask": "a helmet with a golden-orange reflective visor",
         "physique": {"body_type": "athletic", "height": "very tall"},
     },
     "Solid Snake": {
@@ -2327,16 +2348,16 @@ COSPLAYERS: dict[str, dict] = {
         "franchise": "Watchmen",
         "gender": "Male",
         "covers_face": True,
-        "costume": "a belted tan trench coat, a brown fedora, fingerless gloves, and a "
-                   "white full-face mask covered in shifting black inkblot patterns",
+        "costume": "a belted tan trench coat, a brown fedora, and fingerless gloves",
+        "mask": "a white full-face mask covered in shifting black inkblot patterns",
         "physique": {"body_type": "average", "height": "average height"},
     },
     "Optimus Prime": {
         "franchise": "Transformers",
         "gender": "Male",
         "covers_face": True,
-        "costume": "towering red and blue metallic armor plating with a windshield chest, "
-                   "two head crest antennae, a faceplate, and glowing blue eyes",
+        "costume": "towering red and blue metallic armor plating with a windshield chest",
+        "mask": "a metallic head with two crest antennae, a faceplate, and glowing blue eyes",
         "physique": {"body_type": "athletic", "height": "very tall"},
     },
     "Spawn": {
@@ -2345,6 +2366,7 @@ COSPLAYERS: dict[str, dict] = {
         "covers_face": True,
         "costume": "a living pitch-black suit with a white spider-like chest symbol, an "
                    "enormous tattered red cape, and wrapped chains and spikes",
+        "mask": "a living black hood and mask with glowing white eyes",
         "physique": {"body_type": "athletic", "height": "tall"},
     },
     "Jack Sparrow": {

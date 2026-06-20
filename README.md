@@ -16,7 +16,8 @@ can splice into a larger prompt.
 - 🎲 **Reproducible** — seed-driven, so any character you like comes back exactly.
 - 🧩 **Coherent by design** — a constraint engine resolves clashing traits for you.
 - 🎭 **Archetypes** — knight, sorceress, pirate, ninja, samurai, pop star, astronaut, surgeon… as a one-wire preset.
-- 🦹 **Cosplayers** — a random person cosplaying a fictional character, with crossplay supported.
+- 🦹 **Cosplayers** — a random person cosplaying a fictional character, with crossplay (and a helmet-off *Unmask* toggle) supported.
+- 🔗 **Chainable presets** — wire Archetype → Cosplayer → Identity Forge so they stack instead of fighting over one socket.
 - 🔌 **Zero dependencies, fully offline** — no LLM, no API keys, no model downloads.
 - ✍️ **Extensible** — add your own dropdown options (and outfit styles) without touching the source.
 
@@ -99,6 +100,18 @@ Its **lock level**: **Essentials** (default) sends only the look, so face/body/
 ethnicity randomize each run; **Full preset** locks every field it defines for a
 fixed character.
 
+**Stacking presets.** Both preset nodes have an optional `upstream` input, so you
+can chain them into one wire instead of swapping plugs:
+
+```
+Identity Forge Archetype ─▶ Identity Forge Cosplayer ─(character_json)─▶ Identity Forge.archetype_json
+```
+
+The node closest to Identity Forge wins where fields overlap (downstream wins);
+non-overlapping values from upstream survive. Set any node in the chain to `None`
+and it simply passes its upstream through — so both presets can stay wired and you
+just toggle which is active.
+
 ### Cosplaying a fictional character
 
 ```
@@ -118,8 +131,13 @@ prefixed `Cosplaying as <Character> (<Franchise>):`.
 - **Full-mask characters look right.** Entries whose head is fully covered (Spider-
   Man, a Mandalorian helmet, a ninja hood) suppress the randomized face/hair so
   only the mask is described — no stray face fighting the costume at render time.
-- Shares the `archetype_json` socket with the Archetype node (use one or the
-  other). Held props/weapons are left out on purpose — add them in the prompt.
+- **`mask`**: **Default** keeps the mask on (face/hair hidden). **Unmask (show
+  face)** drops the head covering and reveals the randomized head/hair under the
+  suit — a helmet-off look (Tony Stark in the Iron Man armor, Peter Parker in the
+  suit). It has no effect on face-visible characters.
+- Chain it with the Archetype node via the `upstream` input (see *Stacking
+  presets* above) — no need to unplug one to use the other. Held props/weapons are
+  left out on purpose — add them in the prompt.
 
 See [docs/cosplayer-notes.md](docs/cosplayer-notes.md) for the finer details.
 
@@ -202,8 +220,9 @@ restart ComfyUI. Four optional sections:
 - **`cosplayers`** adds characters to the **Cosplayer** node. `costume` (worn
   items only) is required; `franchise`/`gender` are optional; `signature` (both
   modes) and `physique` (Full character) are `{field: value}` maps. A `gender:
-  "Male"` entry is how you populate the `Random — male` pick. Set
-  `"covers_face": true` for a fully masked head to drop the randomized face/hair.
+  "Male"` entry is how you populate the `Random — male` pick. For a fully masked
+  head set `"covers_face": true` **and** put the head covering in a separate
+  `"mask"` string (kept out of `costume`) so the *Unmask* toggle can drop it.
 
 A user entry whose name matches a built-in **overrides** it. Run
 `python tests/validate_data.py` to check that your custom field values are valid
@@ -249,6 +268,16 @@ Seed `42`, Female, `hair_color` = auburn:
   don't apply (colours still vary by seed).
 - Prose summarizes: a few fine fields (hair volume, eye size, teeth) live in the
   JSON but are left out of the prose to avoid clutter.
+
+## Contributing characters & archetypes
+
+The `user_options.json` route above is for private or instant additions, but you
+don't have to maintain your own list forever. **Suggestions are welcome** — open an
+[issue](https://github.com/EnragedAntelope/comfyui-identity-forge/issues) (or a PR)
+proposing new cosplayers, archetypes, outfit styles, or fields and they can be
+folded into the built-in set so everyone gets them on the next update. For
+cosplayers, a costume description (worn items only) and the franchise are enough to
+start; mark `covers_face` + `mask` if the head is fully covered.
 
 ## Development
 

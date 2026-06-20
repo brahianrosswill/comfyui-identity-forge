@@ -18,6 +18,7 @@ if str(ROOT) not in sys.path:
 from data.fields import FIELD_DEFINITIONS
 from nodes.identity_forge import (
     generate_character,
+    merge_preset_documents,
     _is_absent,
     _parse_archetype_json,
     _CONTROL_FIELDS,
@@ -25,7 +26,9 @@ from nodes.identity_forge import (
 )
 from nodes.identity_forge import _COSPLAY_LABEL_KEY, _COVERS_FACE_KEY
 from nodes.identity_forge_archetype import build_archetype_json
-from nodes.identity_forge_cosplayer import build_cosplayer_json
+from nodes.identity_forge_cosplayer import (
+    build_cosplayer_json, _MASK_DEFAULT, _MASK_OFF,
+)
 from data.templates import ARCHETYPES
 from data.cosplayers import COSPLAYERS, get_cosplayer_names
 from tests.validate_data import validate
@@ -476,9 +479,11 @@ class CosplayerTests(unittest.TestCase):
                 self.assertNotIn(group, doc, f"{group} should be suppressed")
             self.assertNotIn("His face", prose)
             self.assertNotIn("His hair", prose)
-            # The costume (with the mask) is still present.
+            # The costume is present with the mask re-attached (default mode).
+            entry = COSPLAYERS["Spider-Man"]
             self.assertEqual(
-                doc["Clothing"]["outfit_description"], COSPLAYERS["Spider-Man"]["costume"]
+                doc["Clothing"]["outfit_description"],
+                f"{entry['costume']}, {entry['mask']}",
             )
 
     def test_unmasked_character_keeps_face_and_hair(self):
@@ -488,6 +493,42 @@ class CosplayerTests(unittest.TestCase):
         locked = {k: v for k, v in flat.items() if k not in _CONTROL_FIELDS}
         _, js = generate_character(1, "Male", locked, covers_face=False)
         self.assertIn("Hair", json.loads(js))
+
+    def test_unmask_drops_mask_and_reveals_face(self):
+        # 'Unmask' clears covers_face and omits the mask text so the randomized
+        # head/hair show under the suit; 'Default' keeps the mask and suppresses.
+        entry = COSPLAYERS["Spider-Man"]
+        default = json.loads(build_cosplayer_json("Spider-Man", 0, mask_mode=_MASK_DEFAULT))
+        unmasked = json.loads(build_cosplayer_json("Spider-Man", 0, mask_mode=_MASK_OFF))
+
+        self.assertTrue(default["_meta"]["covers_face"])
+        self.assertEqual(
+            default["Clothing"]["outfit_description"],
+            f"{entry['costume']}, {entry['mask']}",
+        )
+
+        self.assertFalse(unmasked["_meta"]["covers_face"])
+        self.assertEqual(unmasked["Clothing"]["outfit_description"], entry["costume"])
+        self.assertNotIn(entry["mask"], unmasked["Clothing"]["outfit_description"])
+
+        # Run unmasked through the engine: face/hair are no longer suppressed.
+        flat = _parse_archetype_json(json.dumps(unmasked))
+        self.assertNotIn(_COVERS_FACE_KEY, flat)
+        locked = {k: v for k, v in flat.items() if k not in _CONTROL_FIELDS}
+        _, js = generate_character(1, "Male", locked, covers_face=False)
+        self.assertIn("Hair", json.loads(js))
+
+    def test_unmask_is_noop_for_face_visible_character(self):
+        # A character with no mask is identical in Default and Unmask modes.
+        self.assertEqual(
+            build_cosplayer_json("2B", 0, mask_mode=_MASK_DEFAULT),
+            build_cosplayer_json("2B", 0, mask_mode=_MASK_OFF),
+        )
+
+    def test_every_covers_face_entry_has_a_mask(self):
+        for name, entry in COSPLAYERS.items():
+            if entry.get("covers_face"):
+                self.assertTrue(entry.get("mask"), f"{name} missing mask")
 
     def test_all_cosplayer_fields_valid(self):
         valid = set(FIELD_DEFINITIONS)
@@ -511,6 +552,62 @@ class IntegrationTests(unittest.TestCase):
         self.assertEqual(doc["Hair"]["hair_color"], "raven black")
         self.assertEqual(doc["Makeup"]["makeup_style"], "gothic dark makeup")
         self.assertIn("age", doc["Demographics"])
+
+
+class PresetMergeTests(unittest.TestCase):
+    def test_empty_own_passes_upstream_through(self):
+        # A node set to "None" emits "{}"; the upstream must pass through unchanged.
+        upstream = build_archetype_json("Knight", 0)
+        self.assertEqual(
+            json.loads(merge_preset_documents(upstream, "{}")), json.loads(upstream)
+        )
+        self.assertEqual(merge_preset_documents("", "{}"), "{}")
+
+    def test_empty_upstream_returns_own(self):
+        own = build_cosplayer_json("2B", 0)
+        self.assertEqual(json.loads(merge_preset_documents("", own)), json.loads(own))
+
+    def test_downstream_wins_on_overlap(self):
+        upstream = json.dumps({
+            "_meta": {"gender": "Male", "lock_level": "Essentials"},
+            "Hair": {"hair_color": "dark brown", "hair_length": "long"},
+        })
+        own = json.dumps({
+            "_meta": {"gender": "Female", "cosplay_of": "Hero"},
+            "Hair": {"hair_color": "platinum blonde"},
+        })
+        merged = json.loads(merge_preset_documents(upstream, own))
+        # Own (downstream) wins where keys overlap, in _meta and in groups...
+        self.assertEqual(merged["_meta"]["gender"], "Female")
+        self.assertEqual(merged["_meta"]["cosplay_of"], "Hero")
+        self.assertEqual(merged["Hair"]["hair_color"], "platinum blonde")
+        # ...but non-overlapping upstream values survive.
+        self.assertEqual(merged["_meta"]["lock_level"], "Essentials")
+        self.assertEqual(merged["Hair"]["hair_length"], "long")
+
+    def test_merged_groups_follow_canonical_order(self):
+        upstream = json.dumps({"Clothing": {"outfit_description": "x"}})
+        own = json.dumps({"Hair": {"hair_color": "red"}})
+        keys = list(json.loads(merge_preset_documents(upstream, own)))
+        self.assertEqual(keys, ["Hair", "Clothing"])  # Hair precedes Clothing
+
+    def test_malformed_inputs_yield_valid_json(self):
+        self.assertEqual(merge_preset_documents("not json", "also not"), "{}")
+
+    def test_chained_archetype_and_cosplayer(self):
+        # Wire Archetype -> Cosplayer: the cosplayer (downstream) wins on overlap
+        # and its cosplay label survives into the parsed character.
+        upstream = build_archetype_json("Knight", 0, "Full preset")
+        chained = build_cosplayer_json("2B", 0)
+        merged = merge_preset_documents(upstream, chained)
+        flat = _parse_archetype_json(merged)
+        self.assertEqual(flat.get(_COSPLAY_LABEL_KEY), "2B (NieR: Automata)")
+        self.assertEqual(flat.get("hair_color"), "platinum blonde")  # cosplayer's
+        locked = {k: v for k, v in flat.items() if k not in _CONTROL_FIELDS}
+        _, js = generate_character(3, "Female", locked)
+        self.assertEqual(
+            json.loads(js)["Clothing"]["outfit_description"], COSPLAYERS["2B"]["costume"]
+        )
 
     def test_essentials_archetype_randomizes_the_person(self):
         # Same archetype + different IdentityForge seeds = different people.

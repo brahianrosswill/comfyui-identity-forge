@@ -8,6 +8,7 @@ Examples (run from the repo root)::
     python tests/preview_cosplayer.py "She-Hulk"
     python tests/preview_cosplayer.py "Captain Marvel" --male          # crossplay
     python tests/preview_cosplayer.py "2B" --full --seed 7 --json
+    python tests/preview_cosplayer.py "Iron Man" --unmask              # helmet off
     python tests/preview_cosplayer.py --random-female --seed 3
     python tests/preview_cosplayer.py --list
 """
@@ -26,12 +27,18 @@ from nodes.identity_forge import (
     generate_character, _parse_archetype_json, _COSPLAY_LABEL_KEY, _COVERS_FACE_KEY,
     _CONTROL_FIELDS,
 )
-from nodes.identity_forge_cosplayer import build_cosplayer_json
+from nodes.identity_forge_cosplayer import (
+    build_cosplayer_json, _MASK_DEFAULT, _MASK_OFF,
+)
 
 
-def render(character: str, gender: str, look_level: str, seed: int) -> tuple[str, str]:
+def render(
+    character: str, gender: str, look_level: str, seed: int, mask_mode: str = _MASK_DEFAULT
+) -> tuple[str, str]:
     """Build the cosplay JSON and run it through the IdentityForge engine."""
-    flat = _parse_archetype_json(build_cosplayer_json(character, seed, look_level))
+    flat = _parse_archetype_json(
+        build_cosplayer_json(character, seed, look_level, mask_mode)
+    )
     if not flat:
         raise SystemExit(f"No output for {character!r} — unknown name or empty Random pool.")
     label = flat.pop(_COSPLAY_LABEL_KEY, None)
@@ -55,6 +62,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--male", action="store_true", help="Render the person as male (crossplay).")
     parser.add_argument("--female", action="store_true", help="Render the person as female.")
     parser.add_argument("--full", action="store_true", help="Full character (lock physique too).")
+    parser.add_argument("--unmask", action="store_true",
+                        help="Drop the mask on a full-mask character (show the random head).")
     parser.add_argument("--seed", type=int, default=42, help="Seed (default 42).")
     parser.add_argument("--json", action="store_true", help="Also print the prompt_json.")
     args = parser.parse_args(argv)
@@ -78,8 +87,9 @@ def main(argv: list[str] | None = None) -> int:
 
     gender = "Male" if args.male else "Female" if args.female else ""
     look_level = "Full character" if args.full else "Costume only"
+    mask_mode = _MASK_OFF if args.unmask else _MASK_DEFAULT
 
-    prose, js = render(character, gender, look_level, args.seed)
+    prose, js = render(character, gender, look_level, args.seed, mask_mode)
     print(prose)
     if args.json:
         print("\n--- prompt_json ---")

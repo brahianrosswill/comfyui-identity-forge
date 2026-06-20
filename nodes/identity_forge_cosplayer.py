@@ -2,10 +2,14 @@
 
 Pick (or randomize) a fictional character and emit a JSON document of overrides.
 Wire its ``character_json`` output into the ``archetype_json`` input of an
-:class:`~nodes.identity_forge.IdentityForge` node (it shares that socket with the
-Archetype node — use one or the other). The character's costume defines the
-*look* and IdentityForge randomizes the person underneath, so every run is a
+:class:`~nodes.identity_forge.IdentityForge` node. The character's costume defines
+the *look* and IdentityForge randomizes the person underneath, so every run is a
 different individual cosplaying the same character.
+
+Presets chain: connect another preset's ``character_json`` into the optional
+``upstream`` input and they stack into one document (this node wins on overlap),
+so Archetype and Cosplayer nodes can all stay wired at once. Set a node to
+``None`` and it simply passes its upstream through.
 
 Two look levels:
 
@@ -14,6 +18,11 @@ Two look levels:
   This is the "a random person cosplaying X" mode.
 * **Full character** — also locks the character's physique (body type, height,
   skin tone, …) for a faithful reproduction; the scene still randomizes.
+
+Full-mask characters (``covers_face``) carry their head covering in a separate
+``mask`` field. The node's ``mask`` widget defaults to keeping it on (face/hair
+suppressed); ``"Unmask (show face)"`` drops it so the randomized head shows under
+the suit — a helmet-off look. It is a no-op for face-visible characters.
 
 The *person's* gender is chosen on the IdentityForge node, independent of the
 character's, so crossplay (e.g. a man cosplaying a female character) works: the
@@ -36,13 +45,13 @@ try:
         COSPLAYERS, get_cosplayer, get_cosplayer_names,
         get_cosplayer_names_by_gender,
     )
-    from .identity_forge import group_fields
+    from .identity_forge import group_fields, merge_preset_documents
 except ImportError:  # pragma: no cover — standalone/test context
     from data.cosplayers import (
         COSPLAYERS, get_cosplayer, get_cosplayer_names,
         get_cosplayer_names_by_gender,
     )
-    from nodes.identity_forge import group_fields
+    from nodes.identity_forge import group_fields, merge_preset_documents
 
 try:
     from comfy_api.latest import io  # type: ignore[import-not-found]
@@ -65,6 +74,10 @@ _RANDOM_POOLS: dict[str, str | None] = {
 _COSTUME_ONLY = "Costume only"
 _FULL = "Full character"
 
+#: Mask options (only affect ``covers_face`` characters).
+_MASK_DEFAULT = "Default"
+_MASK_OFF = "Unmask (show face)"
+
 
 def _resolve_character(character: str, rng: random.Random) -> str | None:
     """Resolve a combo selection to a concrete character name.
@@ -85,13 +98,23 @@ def _resolve_character(character: str, rng: random.Random) -> str | None:
 
 
 def build_cosplayer_json(
-    character: str, seed: int = 0, look_level: str = _COSTUME_ONLY
+    character: str,
+    seed: int = 0,
+    look_level: str = _COSTUME_ONLY,
+    mask_mode: str = _MASK_DEFAULT,
 ) -> str:
     """Return the cosplay preset as a grouped JSON string.
 
     ``character`` may be a name, ``"None"`` (→ ``"{}"``), or one of the
     ``"Random — …"`` scoping picks. In ``"Costume only"`` mode the costume plus
     signature look is emitted; ``"Full character"`` also locks the physique.
+
+    ``mask_mode`` only affects full-mask characters (those with ``covers_face``
+    and a ``mask`` clause). ``"Default"`` attaches the mask to the costume and
+    keeps ``covers_face`` set so IdentityForge drops the randomized face/hair.
+    ``"Unmask (show face)"`` omits the mask clause and clears ``covers_face`` so
+    the randomized head/hair shows (a "helmet-off" look). It is a no-op for
+    face-visible characters.
     """
     rng = random.Random(seed)
     name = _resolve_character(character, rng)
@@ -100,9 +123,16 @@ def build_cosplayer_json(
 
     entry = get_cosplayer(name)
 
+    covers = bool(entry.get("covers_face", False))
+    unmask = covers and mask_mode == _MASK_OFF
+    # The mask clause lives apart from the costume so it can be dropped on unmask.
+    costume = entry["costume"]
+    if covers and not unmask and entry.get("mask"):
+        costume = f"{costume}, {entry['mask']}"
+
     # The costume drives IdentityForge's hidden outfit_description override; the
     # signature look (hair/eyes) is always applied; physique only in Full mode.
-    fields: dict[str, str] = {"outfit_description": entry["costume"]}
+    fields: dict[str, str] = {"outfit_description": costume}
     fields.update(entry.get("signature", {}))
     if look_level == _FULL:
         fields.update(entry.get("physique", {}))
@@ -113,7 +143,7 @@ def build_cosplayer_json(
         ("franchise", entry.get("franchise", "")),
         ("gender", entry.get("gender", "Any")),
         ("look_level", look_level),
-        ("covers_face", bool(entry.get("covers_face", False))),
+        ("covers_face", covers and not unmask),
     ])
     document.update(group_fields(fields))
     return json.dumps(document, indent=2)
@@ -132,8 +162,9 @@ if _COMFY_AVAILABLE:
                 category="conditioning/character",
                 description="Pick or randomize a fictional character and emit JSON to "
                             "seed an IdentityForge node — a random (optionally cross-"
-                            "gender) person cosplaying that character. Shares the "
-                            "archetype_json socket with the Archetype node.",
+                            "gender) person cosplaying that character. Chain presets via "
+                            "the 'upstream' input so Archetype and Cosplayer nodes can "
+                            "all stay wired at once.",
                 inputs=[
                     io.Combo.Input(
                         "character",
@@ -154,6 +185,17 @@ if _COMFY_AVAILABLE:
                                 "look. Set the IdentityForge 'gender' widget to mix for "
                                 "crossplay.",
                     ),
+                    io.Combo.Input(
+                        "mask",
+                        options=[_MASK_DEFAULT, _MASK_OFF],
+                        default=_MASK_DEFAULT,
+                        tooltip="Only affects full-mask characters (Spider-Man, Iron "
+                                "Man, …). 'Default' keeps the mask on and hides the "
+                                "randomized face/hair. 'Unmask (show face)' drops the "
+                                "mask so the randomized head/hair shows under the suit "
+                                "(a helmet-off look). No effect on face-visible "
+                                "characters.",
+                    ),
                     io.Int.Input(
                         "seed",
                         default=0,
@@ -165,15 +207,27 @@ if _COMFY_AVAILABLE:
                         tooltip="Seed for the random character pick. The control below "
                                 "defaults to 'randomize'.",
                     ),
+                    io.String.Input(
+                        "upstream",
+                        default="",
+                        optional=True,
+                        force_input=True,
+                        tooltip="Optional: connect another preset's character_json here "
+                                "to stack presets. This node's values win where they "
+                                "overlap; set this node to 'None' to pass the upstream "
+                                "through unchanged.",
+                    ),
                 ],
                 outputs=[io.String.Output(display_name="character_json")],
             )
 
         @classmethod
         def execute(cls, **kwargs: Any) -> "io.NodeOutput":
-            character_json = build_cosplayer_json(
+            own = build_cosplayer_json(
                 kwargs.get("character", _NONE),
                 int(kwargs.get("seed", 0)),
                 kwargs.get("look_level", _COSTUME_ONLY),
+                kwargs.get("mask", _MASK_DEFAULT),
             )
+            character_json = merge_preset_documents(kwargs.get("upstream", ""), own)
             return io.NodeOutput(character_json)

@@ -29,6 +29,13 @@ source — so updates won't clobber them. Two sections, both optional::
           "costume": "a teal-and-silver bodysuit with a star emblem and white boots",
           "signature": {"hair_color": "electric blue", "hair_length": "long"},
           "physique": {"body_type": "athletic", "height": "tall"}
+        },
+        "Masked Vigilante (My OC)": {
+          "franchise": "Original", "gender": "Male",
+          "covers_face": true,
+          "costume": "a matte-black tactical bodysuit with a grey chest sigil and a long cloak",
+          "mask": "a full black helmet with narrow glowing eye slits",
+          "physique": {"body_type": "athletic", "height": "tall"}
         }
       }
     }
@@ -55,6 +62,15 @@ Reload the node / restart ComfyUI to apply. Notes:
   / ``physique`` ``{field: value}`` maps). A user entry whose name matches a
   built-in overrides it. Run ``python tests/validate_data.py`` to check that your
   field values are valid options.
+* **Masked characters (the ``mask`` flow — easy to get wrong).** For a full
+  helmet/mask, set ``"covers_face": true`` *and* put the head covering in a
+  separate ``"mask"`` string, keeping it **out** of ``costume`` (note the
+  "Masked Vigilante" example above). ``covers_face`` hides the randomized
+  face/hair so only the costume shows; the ``mask`` is appended to the costume in
+  the node's default mode, but kept separate so its ``Unmask (show face)`` toggle
+  can drop the mask and reveal the random head under the suit. Omit both
+  ``covers_face`` and ``mask`` whenever the face is visible (an open cowl, body
+  paint, a domino mask).
 
 The file is parsed as plain JSON — no code is executed.
 """
@@ -236,9 +252,10 @@ def apply_user_cosplayers(cosplayers: dict[str, dict], path: Path | None = None)
 
     Each entry needs a ``costume`` string (the only required key); ``franchise``
     defaults to "", ``gender`` to "Female" (used only for Random scoping),
-    ``covers_face`` to ``False`` (set ``True`` for a fully masked head), and
-    ``signature`` / ``physique`` to empty maps. A user entry whose name matches a
-    built-in overrides it. Returns the number of characters added.
+    ``covers_face`` to ``False`` (set ``True`` for a fully masked head, and put the
+    head covering in ``mask`` — see the module docstring), and ``signature`` /
+    ``physique`` to empty maps. A user entry whose name matches a built-in
+    overrides it. Returns the number of characters added.
     """
     path = path or USER_OPTIONS_PATH
     added = 0
@@ -250,11 +267,13 @@ def apply_user_cosplayers(cosplayers: dict[str, dict], path: Path | None = None)
             continue  # costume is what drives the look; an entry without it is useless
         gender = entry.get("gender")
         franchise = entry.get("franchise")
+        mask = entry.get("mask")
         cosplayers[name] = {
             "franchise": franchise if isinstance(franchise, str) else "",
             "gender": gender if gender in ("Female", "Male") else "Female",
             "covers_face": bool(entry.get("covers_face", False)),
             "costume": costume,
+            "mask": mask if isinstance(mask, str) else "",
             "signature": _clean_field_map(entry.get("signature")),
             "physique": _clean_field_map(entry.get("physique")),
         }
