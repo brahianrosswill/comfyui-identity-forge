@@ -27,11 +27,12 @@ from nodes.identity_forge import (
     _SET_ALL_OFF,
     _SET_ALL_NONE,
 )
-from nodes.identity_forge import _COSPLAY_LABEL_KEY, _COVERS_FACE_KEY
+from nodes.identity_forge import _COSPLAY_LABEL_KEY, _COVERS_FACE_KEY, _MODIFIERS_KEY
 from nodes.identity_forge_archetype import build_archetype_json
 from nodes.identity_forge_cosplayer import (
     build_cosplayer_json, _MASK_DEFAULT, _MASK_OFF,
 )
+from nodes.identity_forge_modifier import build_modifier_json, _parse_modifier_text
 from data.templates import ARCHETYPES
 from data.cosplayers import COSPLAYERS, get_cosplayer_names
 from tests.validate_data import validate
@@ -1012,6 +1013,84 @@ class BodyPaintPhrasingTests(unittest.TestCase):
             costume = entry["costume"]
             if "body paint" in costume and "all-over" in costume:
                 self.assertIn("an even, all-over coat", costume, name)
+
+
+class ModifierTests(unittest.TestCase):
+    """The Modifier node: parsing, payload, and prepend application."""
+
+    def test_empty_or_comment_only_yields_empty(self):
+        self.assertEqual(build_modifier_json(""), "{}")
+        self.assertEqual(build_modifier_json("# just a comment\n\n   \n"), "{}")
+
+    def test_parse_accepts_fields_and_groups_case_insensitively(self):
+        mods = _parse_modifier_text(
+            "Footwear: sci-fi chrome\nCLOTHING: weathered\nskin_tone: iridescent"
+        )
+        self.assertEqual(mods["footwear"], "sci-fi chrome")  # field, canonical case
+        self.assertEqual(mods["Clothing"], "weathered")      # group, canonical case
+        self.assertEqual(mods["skin_tone"], "iridescent")
+
+    def test_parse_skips_unknown_and_malformed_keys(self):
+        mods = _parse_modifier_text(
+            "not_a_field: x\nNoColonHere\nfootwear: glowing\nhair_color:   "
+        )
+        self.assertEqual(dict(mods), {"footwear": "glowing"})  # only the valid line
+
+    def test_payload_is_extracted_as_modifiers_not_locks(self):
+        doc = build_modifier_json("footwear: sci-fi")
+        flat = _parse_archetype_json(doc)
+        self.assertEqual(flat.get(_MODIFIERS_KEY), {"footwear": "sci-fi"})
+        self.assertNotIn("footwear", flat)  # never treated as a field lock
+
+    def test_field_modifier_prepends_to_that_field_only(self):
+        mods = {"skin_tone": "iridescent"}
+        prose, js = generate_character(
+            7, "Female", {"skin_tone": "porcelain", "eye_color": "emerald"}, modifiers=mods
+        )
+        doc = json.loads(js)
+        self.assertEqual(doc["Body"]["skin_tone"], "iridescent porcelain")
+        self.assertIn("iridescent porcelain skin", prose)
+        self.assertEqual(doc["Face"]["eye_color"], "emerald")  # untouched
+
+    def test_group_modifier_prepends_to_every_present_field(self):
+        _, js = generate_character(
+            7, "Female", {"skin_tone": "porcelain", "body_type": "athletic"},
+            modifiers={"Body": "armored"},
+        )
+        body = json.loads(js)["Body"]
+        self.assertEqual(body["skin_tone"], "armored porcelain")
+        self.assertEqual(body["body_type"], "armored athletic")
+
+    def test_field_modifier_beats_group_modifier(self):
+        _, js = generate_character(
+            7, "Female", {"skin_tone": "porcelain", "body_type": "athletic"},
+            modifiers={"Body": "armored", "skin_tone": "iridescent"},
+        )
+        body = json.loads(js)["Body"]
+        self.assertEqual(body["skin_tone"], "iridescent porcelain")  # field wins
+        self.assertEqual(body["body_type"], "armored athletic")      # group fallback
+
+    def test_modifier_does_not_resurrect_absent_field(self):
+        _, js = generate_character(
+            7, "Female", {"piercings": "None"}, modifiers={"piercings": "glowing"}
+        )
+        self.assertNotIn("piercings", json.loads(js).get("Jewelry & Nails", {}))
+
+    def test_chains_after_cosplayer(self):
+        chained = merge_preset_documents(
+            build_cosplayer_json("2B", 0), build_modifier_json("hair_color: silver-chrome")
+        )
+        flat = _parse_archetype_json(chained)
+        self.assertEqual(flat.get(_MODIFIERS_KEY), {"hair_color": "silver-chrome"})
+        label = flat.pop(_COSPLAY_LABEL_KEY, None)
+        mods = flat.pop(_MODIFIERS_KEY, None)
+        locked = {k: v for k, v in flat.items() if k not in _CONTROL_FIELDS}
+        _, js = generate_character(3, "Female", locked, cosplay_label=label, modifiers=mods)
+        # 2B's signature platinum blonde gets the chrome tilt; costume still intact.
+        self.assertEqual(json.loads(js)["Hair"]["hair_color"], "silver-chrome platinum blonde")
+        self.assertEqual(
+            json.loads(js)["Clothing"]["outfit_description"], COSPLAYERS["2B"]["costume"]
+        )
 
 
 if __name__ == "__main__":

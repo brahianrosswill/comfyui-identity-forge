@@ -17,7 +17,8 @@ can splice into a larger prompt.
 - 🧩 **Coherent by design** — a constraint engine resolves clashing traits for you.
 - 🎭 **Archetypes** — knight, sorceress, pirate, ninja, samurai, pop star, astronaut, surgeon… as a one-wire preset.
 - 🦹 **Cosplayers** — a random person cosplaying a fictional character, with crossplay (and a helmet-off *Unmask* toggle) supported.
-- 🔗 **Chainable presets** — wire Archetype → Cosplayer → Identity Forge so they stack instead of fighting over one socket.
+- ✨ **Modifiers** — prepend a custom descriptor to a single element (sci-fi shoes, glowing earrings, iridescent skin) without theming the whole image.
+- 🔗 **Chainable presets** — wire Archetype → Cosplayer → Modifier → Identity Forge so they stack instead of fighting over one socket.
 - 🔌 **Zero dependencies, fully offline** — no LLM, no API keys, no model downloads.
 - ✍️ **Extensible** — add your own dropdown options (and outfit styles) without touching the source.
 
@@ -26,6 +27,7 @@ can splice into a larger prompt.
 | **Identity Forge** | 70+ lockable dropdown fields (8 collapsible groups) + a constraint engine → `prompt_text` (prose) and `prompt_json`. |
 | **Identity Forge Archetype** | Dozens of themed presets (knight, sorceress, pirate, ninja, samurai, pop star, astronaut, surgeon…) that wire into Identity Forge to set the *look* while the person underneath randomizes. |
 | **Identity Forge Cosplayer** | Fictional characters (Spider-Man, Batman, Darth Vader, Cloud, 2B, She-Hulk, Zelda…) as a *cosplay look* — the costume is locked onto a random, optionally cross-gender person. |
+| **Identity Forge Modifier** | Prepend a custom descriptor to one field (`footwear: sci-fi`) or a whole group (`Clothing: weathered`) for per-element stylistic tilts — without touching the main node. |
 
 Built on the ComfyUI **V3 API** (`comfy_api.latest`). Category:
 `conditioning/character`.
@@ -140,6 +142,40 @@ prefixed `Cosplaying as <Character> (<Franchise>):`.
   left out on purpose — add them in the prompt.
 
 See [docs/cosplayer-notes.md](docs/cosplayer-notes.md) for the finer details.
+
+### Tilting a single element (Modifier node)
+
+```
+Identity Forge Modifier ──(character_json)──▶ Identity Forge.archetype_json
+```
+
+Want *just the shoes* to read sci-fi, or *just the skin* to look iridescent —
+without theming the whole image? The **Modifier** node prepends a custom descriptor
+in front of one element's randomized value (right where text-to-image models pick up
+textures and genres). Type one `key: descriptor` per line:
+
+```
+footwear: sci-fi chrome      # a FIELD  -> only the shoes change
+earrings: glowing            # a FIELD  -> only the earrings
+skin_tone: iridescent        # a FIELD  -> only the skin tone
+Clothing: weathered          # a GROUP  -> prepended to every clothing item
+```
+
+- **`key`** is either a **field name** — the same labels shown on the Identity Forge
+  node (`footwear`, `skin_tone`, `hair_color`, `earrings`, …) — for pin-point control,
+  or a **group header** (`Demographics`, `Body`, `Face`, `Hair`, `Makeup`,
+  `Jewelry & Nails`, `Clothing`, `Setting & Shot`) to tilt the whole group. A group
+  key is prepended to *each* present item in the group (so it can repeat — reach for
+  field keys when you want one item).
+- Keys are **case-insensitive**; a field key wins over a group key for the same field.
+  `#` comments and blank lines are ignored; unknown keys are skipped with a console
+  note. The box ships pre-filled with commented examples — delete a `#` to switch a
+  line on.
+- Modifiers only **decorate elements that are present** — they style an item, they
+  don't force an absent/`None` one to appear.
+- **Chainable**: wire it after an Archetype/Cosplayer via `upstream`
+  (`Cosplayer → Modifier → Identity Forge`). Clear the box or **mute the node** to
+  disable it.
 
 ---
 

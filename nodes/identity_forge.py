@@ -70,6 +70,14 @@ _COSPLAY_LABEL_KEY = "__cosplay_label__"
 #: the parsed-archetype dict, the same way the cosplay label travels.
 _COVERS_FACE_KEY = "__covers_face__"
 
+#: Top-level section name a Modifier node adds to the chained preset document,
+#: holding ``{field_or_group: descriptor}`` style modifiers.
+_MODIFIERS_DOC_KEY = "_modifiers"
+
+#: Reserved key carrying the parsed modifiers dict through the flattened
+#: parsed-archetype dict (double-underscored so it never collides with a field).
+_MODIFIERS_KEY = "__modifiers__"
+
 #: Field groups suppressed when a cosplayer sets ``covers_face`` — a full mask /
 #: helmet / featureless head hides the randomized face, hair and makeup, so
 #: describing them would only fight the costume at render time. Body and
@@ -718,6 +726,28 @@ def _format_json(
     return json.dumps(document, indent=2)
 
 
+def _apply_modifiers(resolved: dict[str, str], modifiers: dict[str, str] | None) -> None:
+    """Prepend style descriptors onto ``resolved`` values, in place.
+
+    ``modifiers`` keys are either a field name (applies to that field only) or a
+    group header (applies to every field in the group). A field key wins over a
+    group key for the same field. Only *present* values are decorated — absent /
+    ``"None"`` / suppressed fields are left untouched so a modifier styles an
+    element without forcing one to appear.
+    """
+    if not modifiers:
+        return
+    for field, value in list(resolved.items()):
+        if _is_absent(value):
+            continue
+        descriptor = modifiers.get(field)
+        if descriptor is None:
+            group = FIELD_DEFINITIONS.get(field, {}).get("group")
+            descriptor = modifiers.get(group) if group else None
+        if descriptor:
+            resolved[field] = f"{descriptor} {value}"
+
+
 def generate_character(
     seed: int,
     gender: str,
@@ -728,6 +758,7 @@ def generate_character(
     location_setting: str = "Any",
     cosplay_label: str | None = None,
     covers_face: bool = False,
+    modifiers: dict[str, str] | None = None,
 ) -> tuple[str, str]:
     """Engine entry point. Returns ``(prose, json_output)``.
 
@@ -740,6 +771,10 @@ def generate_character(
 
     ``covers_face`` (set by a full-mask cosplayer) drops the randomized face,
     hair and makeup so only the costume's mask/helmet is described.
+
+    ``modifiers`` (set by a connected Modifier node) maps a field name or group
+    header to a descriptor that is prepended to the matching resolved value(s),
+    e.g. ``{"footwear": "sci-fi"}`` → "sci-fi white sneakers".
     """
     rng = random.Random(seed)
     # "None" locks the *absent* state (optional fields only); keep it. Only
@@ -798,6 +833,11 @@ def generate_character(
                     or field in _CONCEALED_FACE_FIELDS):
                 resolved.pop(field, None)
 
+    # Style modifiers: prepend a descriptor to the surviving values. Applied last so
+    # it decorates exactly what prose and JSON will show (and never an item that was
+    # pruned above). Both outputs read from the same modified ``resolved``.
+    _apply_modifiers(resolved, modifiers)
+
     prose = _format_prose(resolved, gender, cosplay_label)
     json_output = _format_json(resolved, gender, hair_color_scope, wardrobe, cosplay_label)
     return prose, json_output
@@ -854,7 +894,7 @@ def _parse_archetype_json(raw: str) -> dict[str, str]:
     if not isinstance(data, dict):
         return {}
 
-    flat: dict[str, str] = {}
+    flat: dict[str, Any] = {}
     for key, value in data.items():
         if key == "_meta":
             meta = value if isinstance(value, dict) else {}
@@ -873,6 +913,15 @@ def _parse_archetype_json(raw: str) -> dict[str, str]:
                 )
             if meta.get("covers_face"):
                 flat[_COVERS_FACE_KEY] = "1"
+            continue
+        if key == _MODIFIERS_DOC_KEY:
+            # Style modifiers from a Modifier node: a {field_or_group: descriptor}
+            # map. Kept under a reserved key so the locked-field loops never treat
+            # its entries as field locks; merged across chained Modifier nodes.
+            if isinstance(value, dict):
+                mods = {k: v for k, v in value.items() if isinstance(v, str)}
+                if mods:
+                    flat[_MODIFIERS_KEY] = {**flat.get(_MODIFIERS_KEY, {}), **mods}
             continue
         if isinstance(value, dict):  # a group sub-dict
             for sub_key, sub_value in value.items():
@@ -1022,6 +1071,7 @@ if _COMFY_AVAILABLE:
             archetype = _parse_archetype_json(kwargs.get("archetype_json", ""))
             cosplay_label = archetype.pop(_COSPLAY_LABEL_KEY, None)
             covers_face = bool(archetype.pop(_COVERS_FACE_KEY, None))
+            modifiers = archetype.pop(_MODIFIERS_KEY, None)
 
             # Gender: an explicit widget choice wins; "Any" defers to the archetype.
             widget_gender = kwargs.get("gender", "Any")
@@ -1050,5 +1100,6 @@ if _COMFY_AVAILABLE:
             prose, json_output = generate_character(
                 seed, gender, locked, hair_color_scope, wardrobe,
                 accessory_density, location_setting, cosplay_label, covers_face,
+                modifiers,
             )
             return io.NodeOutput(prose, json_output)
