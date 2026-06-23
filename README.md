@@ -29,7 +29,7 @@ can splice into a larger prompt.
 | **Identity Forge Archetype** | Dozens of themed presets (knight, sorceress, pirate, ninja, samurai, pop star, astronaut, surgeon…) that wire into Identity Forge to set the *look* while the person underneath randomizes. |
 | **Identity Forge Cosplayer** | Fictional characters (Spider-Man, Batman, Darth Vader, Cloud, 2B, She-Hulk, Zelda…) as a *cosplay look* — the costume is locked onto a random, optionally cross-gender person. |
 | **Identity Forge Modifier** | Prepend a custom descriptor to one field (`footwear: sci-fi`) or a whole group (`Clothing: weathered`) for per-element stylistic tilts — without touching the main node. |
-| **Identity Forge Vault Save** | Save the generated character to a local vault, inline (passes image / text / JSON through unchanged). |
+| **Identity Forge Vault Save** | Save the generated character to a local vault. Terminal node like Save Image — branch in `prompt_json` (and optionally the image for a thumbnail). |
 | **Identity Forge Vault Load** | Recall a saved character as a chainable `character_json` preset, with a thumbnail preview and a Manage Vault gallery. |
 
 Built on the ComfyUI **V3 API** (`comfy_api.latest`). Category:
@@ -190,24 +190,23 @@ Clothing: weathered          # a GROUP  -> prepended to every clothing item
 Found a character you love and want it back later? Save it, then load it.
 
 ```
-Identity Forge ─(image)──────▶ Identity Forge Vault Save ─(image)──▶ Save Image
-              └─(prompt_text)─▶                          ─(prompt_text)─▶ …
-              └─(prompt_json)─▶                          ─(prompt_json)─▶ …
-              └─(seed)────────▶
+Identity Forge ──(prompt_json)──▶ Identity Forge Vault Save   (terminal — like Save Image)
+   VAE Decode ──(image, optional)─▶
 ```
 
 ```
 Identity Forge Vault Load ──(character_json)──▶ Identity Forge.archetype_json
 ```
 
-- **Vault Save** sits *inline* — wire `image`, `prompt_text`, `prompt_json` and
-  `seed` through it and it passes them all out unchanged while writing the entry.
-  Name it with `custom_name`; left blank it uses the cosplay/archetype label if
-  there is one, otherwise the seed. `on_existing` chooses overwrite / keep-both /
-  skip. Set `enabled` to *Disabled* to leave it wired but dormant.
-- **What gets saved is the resolved `prompt_json`** — by the time Identity Forge
-  emits it, any wired Cosplayer / Archetype / Modifier is already baked in, so one
-  saved file captures the whole character regardless of how the graph was wired.
+- **Vault Save** is a small terminal node, used just like **Save Image**: branch
+  Identity Forge's `prompt_json` into it — that's the only required wire. Optionally
+  wire the rendered `image` for a thumbnail. Type a `name` (blank uses the
+  cosplay/archetype label, otherwise a timestamp); `on_existing` chooses overwrite /
+  keep-both / skip. **Mute the node (Ctrl+M) to skip saving** without rewiring.
+- **`prompt_json` is all it needs** — by the time Identity Forge emits it, any wired
+  Cosplayer / Archetype / Modifier is already baked in, so one saved file captures
+  the whole character regardless of how the graph was wired. (The prose is
+  regenerated from the same fields on reload, so it isn't saved.)
 - **Vault Load** recalls it as a `character_json` — the *same* output the preset
   nodes use — so it wires into `archetype_json` and can even stack with a Modifier
   via `upstream`. Because recall flows back through the JSON string input (not the

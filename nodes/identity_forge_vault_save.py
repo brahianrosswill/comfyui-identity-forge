@@ -1,22 +1,24 @@
 """IdentityForgeVaultSave node — save a generated character to the local vault.
 
-Drop this node inline between an :class:`~nodes.identity_forge.IdentityForge` node
-and your output: wire the ``prompt_json``, ``prompt_text``, ``seed`` and (optionally)
-the rendered ``image`` through it. It passes all of them through unchanged *and*
-writes a self-contained vault entry to disk so the character can be recalled later
-with :class:`~nodes.identity_forge_vault_load.IdentityForgeVaultLoad`.
+A small terminal node, used like **Save Image**: branch the ``prompt_json`` output of
+an :class:`~nodes.identity_forge.IdentityForge` node into it (and, if you want a
+thumbnail, the rendered ``image``). That's it — one required wire. It writes a
+self-contained vault entry you can recall later with
+:class:`~nodes.identity_forge_vault_load.IdentityForgeVaultLoad`. Mute the node
+(Ctrl+M) to skip saving without rewiring.
 
-Why save the resolved ``prompt_json``? By the time IdentityForge emits it, any wired
+Why ``prompt_json`` is all it needs: by the time IdentityForge emits it, any wired
 Cosplayer / Archetype / Modifier preset has already been baked into the document
 (``_meta.cosplay_of``, the ``_modifiers`` section, every resolved field value). So a
 single saved document captures the whole character regardless of how the graph was
 wired, and recall feeds it straight back through IdentityForge's ``archetype_json``
-string input — no fragile per-widget round-trip.
+string input — no fragile per-widget round-trip. (The prose is regenerated from the
+same fields on reload, so it isn't required here.)
 
 Storage lives under ComfyUI's *user* directory (``user/identity_forge/characters/``),
 which survives node-pack reinstalls and is never touched when you clear ``output/``.
 Each character is one folder containing ``character.json`` (the pristine resolved
-document), ``prompt.txt`` (the prose), ``preview.png`` (a thumbnail) and ``meta.json``
+document), ``preview.png`` (a thumbnail, when an image is wired) and ``meta.json``
 (sidecar metadata kept *out* of ``character.json`` so recall stays a clean round-trip).
 
 The storage engine (:func:`save_character` and friends) is pure and testable without
@@ -44,10 +46,6 @@ SCHEMA_VERSION = 1
 
 #: Largest edge of the stored preview thumbnail, in pixels.
 _THUMBNAIL_MAX = 512
-
-#: ``enabled`` combo.
-_ENABLED = "Enabled"
-_DISABLED = "Disabled"
 
 #: ``on_existing`` collision policy.
 _OVERWRITE = "Overwrite"
@@ -87,13 +85,18 @@ def _source_label(character_json: str) -> str:
     return str(meta.get("cosplay_of") or meta.get("archetype") or "")
 
 
-def _derive_name(custom_name: str, character_json: str, seed: int) -> str:
-    """Pick a folder name: sanitized custom name, else cosplay label, else seed."""
+def _derive_name(custom_name: str, character_json: str, fallback: Any) -> str:
+    """Pick a folder name: sanitized custom name, else cosplay label, else fallback."""
     return (
         sanitize_name(custom_name)
         or sanitize_name(_source_label(character_json))
-        or str(seed)
+        or str(fallback)
     )
+
+
+def _timestamp_name() -> str:
+    """A readable, reasonably-unique default name when nothing else is available."""
+    return _dt.datetime.now().strftime("character-%Y%m%d-%H%M%S")
 
 
 def _entry_dir(vault_root: Path, name: str) -> Path:
@@ -131,7 +134,6 @@ def save_character(
     name: str,
     character_json: str,
     prompt_text: str = "",
-    seed: int = 0,
     on_existing: str = _OVERWRITE,
     thumbnail: Any = None,
     pack_version: str = "",
@@ -141,8 +143,9 @@ def save_character(
     ``thumbnail`` is an optional PIL image (already decoded by the node, so this
     function stays torch/numpy-free); it is copied, downscaled to
     :data:`_THUMBNAIL_MAX` and saved as ``preview.png``. ``character_json`` is
-    stored verbatim so recall round-trips cleanly. ``on_existing`` selects the
-    collision policy: overwrite, keep-both (suffix), or skip.
+    stored verbatim so recall round-trips cleanly. ``prompt_text`` is written only
+    when non-empty. ``on_existing`` selects the collision policy: overwrite,
+    keep-both (suffix), or skip.
     """
     root = Path(vault_root)
     target = _entry_dir(root, name)
@@ -157,7 +160,8 @@ def save_character(
     target.mkdir(parents=True, exist_ok=True)
 
     (target / _CHARACTER_FILE).write_text(character_json or "{}", encoding="utf-8")
-    (target / _PROMPT_FILE).write_text(prompt_text or "", encoding="utf-8")
+    if prompt_text:
+        (target / _PROMPT_FILE).write_text(prompt_text, encoding="utf-8")
 
     if thumbnail is not None:
         thumb = thumbnail.copy()
@@ -167,7 +171,6 @@ def save_character(
     meta = OrderedDict([
         ("display_name", target.name),
         ("created", _dt.datetime.now().isoformat(timespec="seconds")),
-        ("seed", int(seed)),
         ("source_label", _source_label(character_json)),
         ("schema_version", SCHEMA_VERSION),
         ("pack_version", pack_version),
@@ -198,7 +201,7 @@ if _COMFY_AVAILABLE:
         return pil if pil.mode == "RGB" else pil.convert("RGB")
 
     class IdentityForgeVaultSave(io.ComfyNode):  # type: ignore[misc, valid-type]
-        """Save a generated character to the local vault; pass everything through."""
+        """Save a generated character to the local vault (terminal node)."""
 
         @classmethod
         def define_schema(cls) -> "io.Schema":
@@ -207,48 +210,31 @@ if _COMFY_AVAILABLE:
                 display_name="Identity Forge Vault Save",
                 category="conditioning/character",
                 description=(
-                    "Save the generated character to a local vault you can recall later "
-                    "with Identity Forge Vault Load. Wire prompt_json / prompt_text / seed "
-                    "(and optionally the rendered image) through it — everything passes "
-                    "through unchanged. Stores under ComfyUI/user/identity_forge/characters/, "
+                    "Save the generated character so you can recall it later with Identity "
+                    "Forge Vault Load. Wire Identity Forge's 'prompt_json' in (that's all it "
+                    "needs); add the rendered 'image' for a thumbnail. Mute the node (Ctrl+M) "
+                    "to skip saving. Stored under ComfyUI/user/identity_forge/characters/, "
                     "which survives updates and isn't cleared with your image output."
                 ),
                 inputs=[
-                    io.Combo.Input(
-                        "enabled",
-                        options=[_ENABLED, _DISABLED],
-                        default=_ENABLED,
-                        tooltip="'Disabled' passes everything through without writing — "
-                                "handy to leave the node wired but dormant.",
-                    ),
                     io.String.Input(
                         "prompt_json",
-                        default="",
                         force_input=True,
-                        tooltip="The resolved character document from Identity Forge "
-                                "(prompt_json). This is what gets saved and recalled.",
+                        tooltip="Wire Identity Forge's 'prompt_json' here — the character to "
+                                "save. Any wired Cosplayer/Archetype/Modifier is already "
+                                "baked into it.",
                     ),
-                    io.String.Input(
-                        "prompt_text",
-                        default="",
-                        force_input=True,
-                        tooltip="The prose description (prompt_text). Stored for reference.",
-                    ),
-                    io.Int.Input(
-                        "seed",
-                        default=0,
-                        min=0,
-                        max=0xFFFFFFFFFFFFFFFF,
-                        force_input=True,
-                        tooltip="The seed used. Stored in metadata and used as the default "
-                                "name when no custom name / cosplay label is available.",
-                    ),
-                    io.String.Input(
-                        "custom_name",
-                        default="",
+                    io.Image.Input(
+                        "image",
                         optional=True,
-                        tooltip="Folder name for this character. Leave blank to use the "
-                                "cosplay/archetype label if present, otherwise the seed.",
+                        tooltip="Optional: the rendered image. Its first frame is stored as "
+                                "a thumbnail for the visual recall gallery.",
+                    ),
+                    io.String.Input(
+                        "name",
+                        default="",
+                        tooltip="Name for this character. Leave blank to use the cosplay / "
+                                "archetype label if present, otherwise a timestamp.",
                     ),
                     io.Combo.Input(
                         "on_existing",
@@ -256,44 +242,32 @@ if _COMFY_AVAILABLE:
                         default=_OVERWRITE,
                         tooltip="What to do if a character with this name already exists.",
                     ),
-                    io.Image.Input(
-                        "image",
-                        optional=True,
-                        tooltip="Optional rendered image; its first frame is stored as a "
-                                "thumbnail for the visual recall list.",
-                    ),
                 ],
-                outputs=[
-                    io.Image.Output(display_name="image"),
-                    io.String.Output(display_name="prompt_text"),
-                    io.String.Output(display_name="prompt_json"),
-                    io.String.Output(display_name="saved_as"),
-                ],
+                outputs=[],
+                is_output_node=True,
             )
 
         @classmethod
         def execute(cls, **kwargs: Any) -> "io.NodeOutput":
-            image = kwargs.get("image")
-            prompt_text = kwargs.get("prompt_text", "")
             prompt_json = kwargs.get("prompt_json", "")
-            seed = int(kwargs.get("seed", 0))
+            name = _derive_name(kwargs.get("name", ""), prompt_json, _timestamp_name())
 
-            saved_as = ""
-            if kwargs.get("enabled", _ENABLED) == _ENABLED:
-                name = _derive_name(kwargs.get("custom_name", ""), prompt_json, seed)
-                thumbnail = None
-                if image is not None:
-                    try:
-                        thumbnail = _tensor_to_pil(image)
-                    except Exception as exc:  # noqa: BLE001 — never block the passthrough
-                        print(f"[IdentityForgeVaultSave] Could not build thumbnail: {exc}")
+            thumbnail = None
+            image = kwargs.get("image")
+            if image is not None:
                 try:
-                    saved_as = save_character(
-                        _vault_root(), name, prompt_json, prompt_text, seed,
-                        kwargs.get("on_existing", _OVERWRITE), thumbnail,
-                    )
-                    print(f"[IdentityForgeVaultSave] Saved character '{saved_as}'.")
-                except Exception as exc:  # noqa: BLE001 — saving must never break a run
-                    print(f"[IdentityForgeVaultSave] Save failed: {exc}")
+                    thumbnail = _tensor_to_pil(image)
+                except Exception as exc:  # noqa: BLE001 — a bad image must not block saving
+                    print(f"[IdentityForgeVaultSave] Could not build thumbnail: {exc}")
 
-            return io.NodeOutput(image, prompt_text, prompt_json, saved_as)
+            try:
+                saved_as = save_character(
+                    _vault_root(), name, prompt_json,
+                    on_existing=kwargs.get("on_existing", _OVERWRITE),
+                    thumbnail=thumbnail,
+                )
+                print(f"[IdentityForgeVaultSave] Saved character '{saved_as}'.")
+            except Exception as exc:  # noqa: BLE001 — saving must never break a run
+                print(f"[IdentityForgeVaultSave] Save failed: {exc}")
+
+            return io.NodeOutput()

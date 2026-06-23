@@ -95,7 +95,7 @@ class RoundTripTests(unittest.TestCase):
         self._tmp.cleanup()
 
     def test_save_list_load_roundtrip_pristine(self):
-        name = save_character(self.root, "2B", SAMPLE_JSON, "She wears…", 42,
+        name = save_character(self.root, "2B", SAMPLE_JSON, "She wears…",
                               thumbnail=_FakeImage())
         self.assertEqual(name, "2B")
         self.assertEqual(list_character_names(self.root), ["2B"])
@@ -108,11 +108,15 @@ class RoundTripTests(unittest.TestCase):
         entry = self.root / "2B"
         self.assertTrue((entry / "preview.png").is_file())
         meta = json.loads((entry / "meta.json").read_text(encoding="utf-8"))
-        self.assertEqual(meta["seed"], 42)
         self.assertEqual(meta["source_label"], "2B (NieR: Automata)")
 
+    def test_prompt_file_skipped_when_empty(self):
+        save_character(self.root, "NoProse", SAMPLE_JSON)
+        self.assertFalse((self.root / "NoProse" / "prompt.txt").exists())
+        self.assertEqual(load_character(self.root, "NoProse")[1], "")
+
     def test_list_characters_metadata(self):
-        save_character(self.root, "2B", SAMPLE_JSON, seed=1)
+        save_character(self.root, "2B", SAMPLE_JSON)
         info = list_characters(self.root)
         self.assertEqual(len(info), 1)
         self.assertEqual(info[0]["name"], "2B")
@@ -120,21 +124,21 @@ class RoundTripTests(unittest.TestCase):
         self.assertFalse(info[0]["has_preview"])
 
     def test_on_existing_overwrite(self):
-        save_character(self.root, "X", json.dumps({"a": 1}), seed=1)
-        save_character(self.root, "X", SAMPLE_JSON, seed=2, on_existing=_OVERWRITE)
+        save_character(self.root, "X", json.dumps({"a": 1}))
+        save_character(self.root, "X", SAMPLE_JSON, on_existing=_OVERWRITE)
         self.assertEqual(list_character_names(self.root), ["X"])
         loaded, _ = load_character(self.root, "X")
         self.assertEqual(loaded, SAMPLE_JSON)
 
     def test_on_existing_keep_both_suffixes(self):
-        save_character(self.root, "X", "{}", seed=1)
-        second = save_character(self.root, "X", "{}", seed=2, on_existing=_KEEP_BOTH)
+        save_character(self.root, "X", "{}")
+        second = save_character(self.root, "X", "{}", on_existing=_KEEP_BOTH)
         self.assertEqual(second, "X-2")
         self.assertEqual(sorted(list_character_names(self.root)), ["X", "X-2"])
 
     def test_on_existing_skip(self):
-        save_character(self.root, "X", json.dumps({"keep": True}), seed=1)
-        result = save_character(self.root, "X", "{}", seed=2, on_existing=_SKIP)
+        save_character(self.root, "X", json.dumps({"keep": True}))
+        result = save_character(self.root, "X", "{}", on_existing=_SKIP)
         self.assertEqual(result, "X")
         loaded, _ = load_character(self.root, "X")
         self.assertEqual(json.loads(loaded), {"keep": True})
@@ -144,14 +148,14 @@ class RoundTripTests(unittest.TestCase):
         self.assertEqual(load_character(self.root, "../escape"), ("{}", ""))
 
     def test_delete(self):
-        save_character(self.root, "A", "{}", seed=1)
-        save_character(self.root, "B", "{}", seed=2)
-        save_character(self.root, "C", "{}", seed=3)
+        save_character(self.root, "A", "{}")
+        save_character(self.root, "B", "{}")
+        save_character(self.root, "C", "{}")
         survivors = delete_characters(self.root, ["A", "C", "missing"])
         self.assertEqual(survivors, ["B"])
 
     def test_rename(self):
-        save_character(self.root, "Old", SAMPLE_JSON, seed=1)
+        save_character(self.root, "Old", SAMPLE_JSON)
         final = rename_character(self.root, "Old", "New Name")
         self.assertEqual(final, "New Name")
         self.assertEqual(list_character_names(self.root), ["New Name"])
@@ -159,8 +163,8 @@ class RoundTripTests(unittest.TestCase):
         self.assertEqual(meta["display_name"], "New Name")
 
     def test_rename_collision_and_missing(self):
-        save_character(self.root, "A", "{}", seed=1)
-        save_character(self.root, "B", "{}", seed=2)
+        save_character(self.root, "A", "{}")
+        save_character(self.root, "B", "{}")
         with self.assertRaises(ValueError):
             rename_character(self.root, "A", "B")
         with self.assertRaises(ValueError):
