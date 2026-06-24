@@ -494,6 +494,7 @@ def _format_prose(
     poss = _POSS.get(gender, "Their")
     has = "have" if gender == "Any" else "has"
     is_v = "are" if gender == "Any" else "is"
+    wears = "wear" if gender == "Any" else "wears"
     bust_noun = "chest" if gender == "Male" else "bust"
 
     def g(field: str) -> str:
@@ -640,7 +641,7 @@ def _format_prose(
             val = g(field)
             if val:
                 makeup.append(val if stem in val else f"{val} {noun}")
-        sentences.append(f"{subj} wears " + _join(makeup))
+        sentences.append(f"{subj} {wears} " + _join(makeup))
 
     # --- Jewellery & nails ---------------------------------------------
     jewelry = []
@@ -661,11 +662,11 @@ def _format_prose(
     clothing = []
     outfit = g("outfit_description")
     if outfit:
-        clothing.append(f"{subj} wears {outfit}")
+        clothing.append(f"{subj} {wears} {outfit}")
     else:
         pattern_color = _words(g("clothing_color"), g("clothing_pattern"))
         if pattern_color:
-            clothing.append(f"{subj} wears {pattern_color} clothing")
+            clothing.append(f"{subj} {wears} {pattern_color} clothing")
         if g("footwear"):
             clothing.append(f"in {g('footwear')}")
     if g("bag"):
