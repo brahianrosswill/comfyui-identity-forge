@@ -1093,5 +1093,21 @@ class ModifierTests(unittest.TestCase):
         )
 
 
+class GrammarAgreementTests(unittest.TestCase):
+    """The 'Any' gender uses plural 'They' and must take plural verbs."""
+
+    def test_they_takes_plural_wear(self):
+        prose, _ = generate_character(
+            7, "Any", {"outfit_style": "casual", "makeup_style": "soft glam"}
+        )
+        self.assertNotIn("They wears", prose)
+        self.assertIn("They wear", prose)
+
+    def test_gendered_subjects_keep_singular_wears(self):
+        for gender in ("Female", "Male"):
+            prose, _ = generate_character(7, gender, {"outfit_style": "casual"})
+            self.assertNotIn(" wear ", prose)  # no plural verb for She/He
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
