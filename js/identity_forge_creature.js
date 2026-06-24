@@ -10,9 +10,17 @@ import { app } from "../../scripts/app.js";
  * widget is *drawn* — it stays in node.widgets, so its value is still serialized
  * and passed to the backend (exactly how the main node's collapsed locks work).
  *
- * The multiline `more_features` box is a DOM-backed textarea that does not hide
- * cleanly (the <textarea> keeps rendering past the node), so it is left always
- * visible at the bottom rather than placed in a collapsible group.
+ * The multiline `more_features` box is a DOM-backed <textarea>. ComfyUI positions
+ * DOM widgets by accumulating the heights of the widgets *above* them, so a textarea
+ * placed *below* the collapsible groups desyncs on first paint (it overlaps the last
+ * collapsed widget until a relayout). The fix is to anchor it to the stable headline
+ * widgets only — it is placed directly after creature/form/seed, with the collapsible
+ * groups below it, so collapsing/expanding anything can never push a group under it.
+ * A deferred relayout (next frame) makes the initial DOM position correct too.
+ *
+ * Collapsing only changes how a widget is *drawn* — it stays in node.widgets, so its
+ * value is still serialized and passed to the backend (exactly how the main node's
+ * collapsed locks work).
  *
  * Degrades gracefully — any failure is caught so the node still works headless.
  * The widget *names* below must match the Python schema's input names.
@@ -25,8 +33,9 @@ const GROUPS = [
 
 const GROUPED_NAMES = new Set(GROUPS.flatMap(([, names]) => names));
 
-// Multiline DOM widget(s) kept out of the collapse machinery and pinned last.
-const PINNED_LAST = ["more_features"];
+// Multiline DOM widget(s): kept out of the collapse machinery and anchored to the
+// stable headline (placed right after it, above the collapsible groups).
+const MULTILINE_AFTER_HEADLINE = ["more_features"];
 
 // --- collapse helpers (hide a widget without losing its type) -------------
 function hideWidget(w) {
@@ -60,13 +69,20 @@ function setupCreature(node) {
   if (!original.length) return;
 
   const byName = new Map(original.map((w) => [w.name, w]));
-  const pinned = new Set(PINNED_LAST);
-  // Headline = everything that isn't grouped or pinned, kept in schema order. Using
-  // "not grouped" (rather than a name allow-list) means a linked/auto widget like
-  // control_after_generate is never accidentally dropped.
-  const headline = original.filter((w) => !GROUPED_NAMES.has(w.name) && !pinned.has(w.name));
+  const multiline = new Set(MULTILINE_AFTER_HEADLINE);
+  // Headline = everything that isn't grouped or a pinned multiline, kept in schema
+  // order. Using "not grouped" (rather than a name allow-list) means a linked/auto
+  // widget like control_after_generate is never accidentally dropped.
+  const headline = original.filter((w) => !GROUPED_NAMES.has(w.name) && !multiline.has(w.name));
 
+  // The multiline DOM box(es) go right after the headline so their position depends
+  // only on stable widgets above them — never on a collapsed group.
   const ordered = [...headline];
+  for (const name of MULTILINE_AFTER_HEADLINE) {
+    const w = byName.get(name);
+    if (w) ordered.push(w);
+  }
+
   for (const [title, names] of GROUPS) {
     const widgets = names.map((n) => byName.get(n)).filter(Boolean);
     if (!widgets.length) continue;
@@ -81,12 +97,6 @@ function setupCreature(node) {
     ordered.push(header, ...widgets);
   }
 
-  // Pin the multiline box(es) to the bottom, always visible.
-  for (const name of PINNED_LAST) {
-    const w = byName.get(name);
-    if (w) ordered.push(w);
-  }
-
   // Safety net: append any widget we didn't explicitly place so a future
   // auto-added widget can never silently disappear.
   const placed = new Set(ordered);
@@ -94,6 +104,9 @@ function setupCreature(node) {
 
   node.widgets = ordered.filter((w, i) => ordered.indexOf(w) === i);
   resize(node);
+  // The DOM textarea caches its position on first layout; nudge a relayout next
+  // frame so it lands correctly even before any user interaction.
+  requestAnimationFrame(() => resize(node));
 }
 
 app.registerExtension({
