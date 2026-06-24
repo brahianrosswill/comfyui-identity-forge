@@ -4,10 +4,15 @@ import { app } from "../../scripts/app.js";
  * IdentityForgeCreature frontend extension.
  *
  * Keeps the node compact: the headline widgets (creature / form / seed) stay
- * visible, while the per-slot hybrid overrides, the detail dropdowns and the
- * free-text box live in collapsed-by-default sections (the same zero-height
- * collapse trick the main IdentityForge node uses for its 70+ fields). Deep
- * control is one click away without a wall of widgets.
+ * visible, while the per-slot hybrid overrides and the detail dropdowns live in
+ * collapsed-by-default sections (the same zero-height collapse trick the main
+ * IdentityForge node uses for its 70+ fields). Collapsing only changes how a
+ * widget is *drawn* — it stays in node.widgets, so its value is still serialized
+ * and passed to the backend (exactly how the main node's collapsed locks work).
+ *
+ * The multiline `more_features` box is a DOM-backed textarea that does not hide
+ * cleanly (the <textarea> keeps rendering past the node), so it is left always
+ * visible at the bottom rather than placed in a collapsible group.
  *
  * Degrades gracefully — any failure is caught so the node still works headless.
  * The widget *names* below must match the Python schema's input names.
@@ -16,10 +21,12 @@ import { app } from "../../scripts/app.js";
 const GROUPS = [
   ["Hybrid slots", ["head", "eyes", "integument", "arms", "hands", "legs_feet", "tail", "wings"]],
   ["Detail", ["integument_finish", "palette", "size_scale"]],
-  ["More features", ["more_features"]],
 ];
 
 const GROUPED_NAMES = new Set(GROUPS.flatMap(([, names]) => names));
+
+// Multiline DOM widget(s) kept out of the collapse machinery and pinned last.
+const PINNED_LAST = ["more_features"];
 
 // --- collapse helpers (hide a widget without losing its type) -------------
 function hideWidget(w) {
@@ -53,10 +60,11 @@ function setupCreature(node) {
   if (!original.length) return;
 
   const byName = new Map(original.map((w) => [w.name, w]));
-  // Headline = everything that isn't a grouped widget, kept in schema order. Using
+  const pinned = new Set(PINNED_LAST);
+  // Headline = everything that isn't grouped or pinned, kept in schema order. Using
   // "not grouped" (rather than a name allow-list) means a linked/auto widget like
   // control_after_generate is never accidentally dropped.
-  const headline = original.filter((w) => !GROUPED_NAMES.has(w.name));
+  const headline = original.filter((w) => !GROUPED_NAMES.has(w.name) && !pinned.has(w.name));
 
   const ordered = [...headline];
   for (const [title, names] of GROUPS) {
@@ -71,6 +79,12 @@ function setupCreature(node) {
     }, { serialize: false });
     for (const w of widgets) hideWidget(w); // start collapsed
     ordered.push(header, ...widgets);
+  }
+
+  // Pin the multiline box(es) to the bottom, always visible.
+  for (const name of PINNED_LAST) {
+    const w = byName.get(name);
+    if (w) ordered.push(w);
   }
 
   // Safety net: append any widget we didn't explicitly place so a future
