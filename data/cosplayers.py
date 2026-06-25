@@ -307,6 +307,7 @@ COSPLAYERS: dict[str, dict] = {
         "costume": "a form-fitting red leather bodysuit with strategic cutouts, a red "
                    "hooded cloak, a blood-red face mask, crimson arm guards, and black "
                    "boots with red accents",
+        "eyes": "glowing red",
         "signature": {"hair_color": "bright red", "hair_length": "long",
                       "hair_style": "loose braids"},
         "physique": {"body_type": "lean", "height": "average height", "skin_tone": "pale"},
@@ -351,6 +352,7 @@ COSPLAYERS: dict[str, dict] = {
         "costume": "a form-fitting dark purple bodysuit with technological enhancements, "
                    "a high collar, integrated armor, a visor, stealth boots, and "
                    "an even, smooth coat of blue-violet body paint",
+        "eyes": "glowing yellow",
         "signature": {"hair_color": "raven black", "hair_length": "long",
                       "hair_style": "low ponytail"},
         "physique": {"body_type": "slender", "height": "tall"},
@@ -382,6 +384,7 @@ COSPLAYERS: dict[str, dict] = {
         "gender": "Female",
         "costume": "a purple crop top, blue shorts, pink-and-blue striped stockings, "
                    "purple boots, and blue arm tattoos in a punk-anarchist style",
+        "eyes": "glowing pink",
         "signature": {"hair_color": "electric blue", "hair_length": "hip length",
                       "hair_style": "loose braids"},
         "physique": {"body_type": "very slim", "height": "short", "skin_tone": "pale"},
@@ -625,8 +628,9 @@ COSPLAYERS: dict[str, dict] = {
         "gender": "Female",
         "costume": "a purple crop top, a purple miniskirt, purple thigh-high boots, "
                    "silver arm guards, and an even, smooth coat of warm golden-orange body paint",
+        "eyes": "solid glowing green",
         "signature": {"hair_color": "bright red", "hair_length": "hip length",
-                      "hair_style": "worn down", "eye_color": "bright green"},
+                      "hair_style": "worn down"},
         "physique": {"body_type": "curvy", "height": "very tall"},
     },
     "Raven": {
@@ -5029,6 +5033,1185 @@ COSPLAYERS: dict[str, dict] = {
                       "facial_hair": "goatee", "eye_color": "dark brown"},
         "physique": {"body_type": "lean", "height": "tall", "skin_tone": "dark brown"},
     },
+
+    # === DC (heroines, Lanterns, sorceresses, villains) ==================
+    "Amethyst, Princess of Gemworld": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a purple-and-white magical gown with crystalline armor pieces, a "
+                   "jeweled tiara, and amethyst boots",
+        "eyes": "sparkling violet",
+        "signature": {"hair_color": "white", "hair_length": "hip length",
+                      "hair_texture": "loosely wavy"},
+        "physique": {"body_type": "slender", "height": "tall", "skin_tone": "porcelain"},
+    },
+    "Arisia Rrab": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a white-and-green Green Lantern uniform with a cropped top, a bright "
+                   "green miniskirt, and matching gloves and boots, with a glowing green "
+                   "Lantern emblem on the chest, over an even, smooth coat of warm "
+                   "yellow-green body paint",
+        "eyes": "vivid green",
+        "signature": {"hair_color": "golden blonde", "hair_length": "long",
+                      "hair_texture": "loosely wavy"},
+        "physique": {"body_type": "petite and slim", "height": "short"},
+        "prop": "a glowing green power ring on the right hand",
+    },
+    "Artemis": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a green sleeveless top with a matching green mini-skirt, dark green "
+                   "gloves and boots, a black belt, and a green domino mask",
+        "signature": {"hair_color": "golden blonde", "hair_length": "very long",
+                      "hair_style": "high ponytail", "eye_color": "green"},
+        "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "fair"},
+        "prop": "a recurve bow drawn ready, with a quiver of arrows across the back",
+    },
+    "Blackfire": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a revealing black-and-purple outfit with a black top, purple shorts, "
+                   "black thigh-high boots, and silver armor pieces, over an even, smooth "
+                   "coat of golden-orange body paint",
+        "eyes": "glowing purple",
+        "signature": {"hair_color": "jet black", "hair_length": "very long"},
+        "physique": {"body_type": "slender", "height": "very tall"},
+    },
+    "Bloody Mary": {
+        "franchise": "Fables",
+        "gender": "Female",
+        "costume": "simple dark clothing that seems to blur and shift like a reflection, "
+                   "blood-red lips, bare feet, and an aura of floating broken-mirror shards, "
+                   "over an even, smooth coat of pale mirror-bright skin",
+        "eyes": "dark and hollow",
+        "signature": {"hair_color": "jet black", "hair_length": "very long",
+                      "hair_style": "worn down"},
+        "physique": {"body_type": "slender", "height": "tall"},
+    },
+    "Circe": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "form-fitting purple-and-gold sorceress robes with a high-slit skirt, "
+                   "ornate golden armlets and a choker, and a dramatic sweeping cape",
+        "eyes": "glowing green",
+        "signature": {"hair_color": "purple", "hair_length": "very long",
+                      "hair_texture": "wavy"},
+        "physique": {"body_type": "hourglass", "height": "statuesque", "skin_tone": "porcelain"},
+    },
+    "Dee Dee": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "matching red-and-black jester-inspired crop tops and mini-skirts with "
+                   "striped thigh-high stockings and red hair bands, worn as identical twins",
+        "signature": {"hair_color": "platinum blonde", "hair_length": "long",
+                      "hair_style": "pigtails", "eye_color": "bright blue"},
+        "physique": {"body_type": "petite and slim", "height": "petite", "skin_tone": "porcelain"},
+    },
+    "Donna Troy": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a black bodysuit covered in silver star patterns, a red belt, red "
+                   "mid-calf boots, a silver tiara, and silver bracelets",
+        "signature": {"hair_color": "jet black", "hair_length": "very long",
+                      "hair_texture": "loosely wavy", "eye_color": "deep blue"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "golden tan"},
+    },
+    "Dove": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a white-and-pale-blue bodysuit with feather-like patterns along the "
+                   "arms and legs, soft blue gloves and boots, a flowing white wing-shaped "
+                   "cape, and a light blue domino mask",
+        "signature": {"hair_color": "platinum blonde", "hair_length": "slightly past shoulders",
+                      "hair_texture": "loosely wavy", "eye_color": "bright blue"},
+        "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "fair"},
+    },
+    "Fatality": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "form-fitting technological armor in metallic purples and blacks with "
+                   "integrated alien weaponry and a ridged hairless skull, over an even, "
+                   "smooth coat of purple-grey body paint",
+        "eyes": "glowing yellow",
+        "physique": {"body_type": "athletic", "height": "tall"},
+    },
+    "Golden Glider": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a form-fitting golden bodysuit with a golden cape and golden boots",
+        "signature": {"hair_color": "golden blonde", "hair_length": "long",
+                      "hair_style": "windswept", "eye_color": "bright blue"},
+        "physique": {"body_type": "slender", "height": "tall", "skin_tone": "pale"},
+    },
+    "Granny Goodness": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "heavy blue-and-silver Apokoliptian armor with a cape and imposing "
+                   "shoulder plates, on a stout broad-shouldered elderly frame",
+        "signature": {"hair_color": "white", "hair_length": "short pixie",
+                      "hair_texture": "tightly curled", "eye_color": "dark gray"},
+        "physique": {"body_type": "stocky", "height": "average height", "skin_tone": "fair"},
+    },
+    "Gypsy": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a flowing purple-and-gold outfit with a crop top, a flowing skirt, "
+                   "boots, large hoop earrings, and mystical jewelry",
+        "signature": {"hair_color": "dark brown", "hair_length": "very long",
+                      "hair_texture": "wavy", "eye_color": "dark brown"},
+        "physique": {"body_type": "slender", "height": "average height", "skin_tone": "olive"},
+    },
+    "Hippolyta": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "ornate gold-and-white Amazon armor with a flowing cape and armored boots",
+        "signature": {"hair_color": "golden blonde", "hair_length": "very long",
+                      "hair_texture": "wavy", "eye_color": "bright blue"},
+        "physique": {"body_type": "athletic", "height": "statuesque", "skin_tone": "golden tan"},
+    },
+    "Jade (Jennifer-Lynn Hayden)": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a sleeveless green-and-black costume with a Green Lantern emblem and "
+                   "black boots, over an even, smooth coat of luminous green body paint",
+        "eyes": "glowing green",
+        "signature": {"hair_color": "jet black", "hair_length": "long",
+                      "hair_texture": "loosely wavy"},
+        "physique": {"body_type": "slender", "height": "tall"},
+        "prop": "a glowing green energy construct shaped like a star",
+    },
+    "Jessica Cruz": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a sleek green-and-black form-fitting Green Lantern costume with a "
+                   "bright green chest emblem, integrated green gloves and boots, and a "
+                   "faint green energy aura",
+        "eyes": "glowing green",
+        "signature": {"hair_color": "dark brown", "hair_length": "shoulder length",
+                      "hair_texture": "wavy"},
+        "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "light medium"},
+        "prop": "a glowing green power ring",
+    },
+    "Jinx (Teen Titans)": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a black dress with pink trim reaching the thighs, black-and-pink "
+                   "striped stockings, black boots, and gothic-punk mystical accessories",
+        "eyes": "glowing pink",
+        "signature": {"hair_color": "hot pink", "hair_length": "very long",
+                      "hair_texture": "sleek straight"},
+        "physique": {"body_type": "very slim", "height": "petite", "skin_tone": "very pale"},
+    },
+    "Katma Tui": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "the green-and-black Green Lantern Corps uniform with a white waist band "
+                   "and chest emblem, white forearm-length gloves, green knee-high boots, "
+                   "and a green domino mask, over an even, smooth coat of smooth purple body paint",
+        "eyes": "vivid emerald green",
+        "signature": {"hair_color": "jet black", "hair_length": "mid back",
+                      "hair_texture": "sleek straight"},
+        "physique": {"body_type": "athletic", "height": "tall"},
+        "prop": "a glowing green power ring on the index finger",
+    },
+    "Killer Frost": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a form-fitting icy costume with crystalline armor pieces and ice "
+                   "boots, over an even, all-over coat of pale blue frost-rimed skin",
+        "signature": {"hair_color": "white", "hair_length": "long", "hair_style": "slicked back",
+                      "eye_color": "ice blue"},
+        "physique": {"body_type": "slender", "height": "tall"},
+    },
+    "Livewire": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a form-fitting bodysuit that looks woven from crackling electrical "
+                   "energy with lightning patterns and sparking boots, hair standing up in "
+                   "jagged bolts of white electricity, over an even, smooth coat of pale "
+                   "blue body paint",
+        "eyes": "electric blue",
+        "signature": {"hair_color": "white", "hair_length": "short pixie", "hair_style": "windswept"},
+        "physique": {"body_type": "slender", "height": "tall"},
+    },
+    "Lyssa Drak": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a black bikini-style outfit with thin straps and yellow-gold accents "
+                   "along the edges, and a long flowing black cloak, over an even, smooth "
+                   "coat of light blue body paint",
+        "eyes": "glowing yellow",
+        "signature": {"hair_color": "jet black", "hair_length": "long",
+                      "hair_texture": "sleek straight"},
+        "physique": {"body_type": "slender", "height": "tall"},
+        "prop": "the Book of Parallax, a heavy chained tome glowing with yellow light",
+    },
+    "Madame Xanadu": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "elaborate colorful fortune-teller clothing with flowing skirts and "
+                   "shawls in purples, golds, and reds, large ornate jewelry including a "
+                   "crystal-ball pendant and golden arm bands, and embroidered mystical symbols",
+        "eyes": "violet",
+        "signature": {"hair_color": "gray-streaked dark hair", "hair_length": "very long",
+                      "hair_texture": "wavy"},
+        "physique": {"body_type": "slender", "height": "average height", "skin_tone": "olive"},
+        "prop": "a fanned deck of oversized tarot cards",
+    },
+    "Mary Marvel": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a red costume with a short flared skirt, a bold gold lightning-bolt "
+                   "emblem on the chest, gold trim and a sash, and a white cape with gold accents",
+        "signature": {"hair_color": "dark brown", "hair_length": "shoulder length",
+                      "hair_texture": "wavy", "eye_color": "medium brown"},
+        "physique": {"body_type": "petite and slim", "height": "petite", "skin_tone": "fair"},
+    },
+    "Maxima": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a fitted green costume with a short green miniskirt, matching green "
+                   "boots and gloves, and minimal gold accents along the belt and neckline",
+        "signature": {"hair_color": "bright red", "hair_length": "very long",
+                      "hair_texture": "wavy", "eye_color": "bright green"},
+        "physique": {"body_type": "athletic", "height": "statuesque", "skin_tone": "fair"},
+    },
+    "Miss Martian": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a form-fitting white bodysuit with red accents, a blue cape, and red "
+                   "boots, over an even, smooth coat of green body paint",
+        "eyes": "solid red",
+        "signature": {"hair_color": "bright red", "hair_length": "long"},
+        "physique": {"body_type": "slender", "height": "tall"},
+    },
+    "Punchline": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a tight black-and-purple outfit streaked with electric blue, with punk "
+                   "accents, fingerless gloves, high boots, and bold dark makeup",
+        "eyes": "violet",
+        "signature": {"hair_color": "jet black", "hair_length": "long",
+                      "hair_texture": "sleek straight"},
+        "physique": {"body_type": "slim", "height": "average height", "skin_tone": "pale"},
+    },
+    "Red Claw": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a deep red single-shoulder-baring outfit with a fitted asymmetrical "
+                   "top, a matching skirt, a wide black sash-belt, and black gloves",
+        "signature": {"hair_color": "gray-streaked dark hair", "hair_length": "long",
+                      "hair_style": "slicked back", "eye_color": "dark brown"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "fair"},
+    },
+    "Rose Wilson": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "an orange-and-blue form-fitting costume with armor plating, an "
+                   "orange-and-black mask covering the right eye, black boots and gloves, "
+                   "and a sword harness across the back",
+        "signature": {"hair_color": "silver", "hair_length": "very long",
+                      "hair_style": "high ponytail", "eye_color": "ice blue"},
+        "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "olive"},
+        "prop": "a pair of curved short swords",
+    },
+    "Star Sapphire": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a form-fitting purple-and-pink costume that looks crystallized from "
+                   "violet light, with a star-sapphire emblem on the chest and sparkling gem boots",
+        "eyes": "glowing violet",
+        "signature": {"hair_color": "golden blonde", "hair_length": "very long",
+                      "hair_texture": "loosely wavy"},
+        "physique": {"body_type": "hourglass", "height": "tall", "skin_tone": "fair"},
+        "prop": "a glowing violet star-sapphire power ring",
+    },
+    "Tala": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a deep red form-fitting gown with a high slit, gold mystical jewelry, "
+                   "bare arms, and elegant heels",
+        "eyes": "glowing pale blue",
+        "signature": {"hair_color": "platinum blonde", "hair_length": "very long",
+                      "hair_texture": "loosely wavy"},
+        "physique": {"body_type": "slender", "height": "tall", "skin_tone": "porcelain"},
+    },
+    "Tala (Legion of Doom)": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a dark violet form-fitting gown with a high slit, black-and-gold "
+                   "arcane jewelry, bare arms, and elegant dark heels",
+        "eyes": "glowing pale blue",
+        "signature": {"hair_color": "deep purple", "hair_length": "very long",
+                      "hair_texture": "loosely wavy"},
+        "physique": {"body_type": "slender", "height": "tall", "skin_tone": "porcelain"},
+    },
+    "Talia al Ghul": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "form-fitting dark combat clothing in green and black, with black "
+                   "gloves and black boots",
+        "signature": {"hair_color": "jet black", "hair_length": "very long",
+                      "hair_texture": "wavy", "eye_color": "green"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "warm tan"},
+    },
+    "Thorn": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a costume made entirely of living vines, leaves, and thorns that shift "
+                   "and grow, with bare feet trailing root-like tendrils, over an even, "
+                   "all-over coat of pale green leaf-veined skin",
+        "eyes": "vivid leaf green",
+        "signature": {"hair_color": "emerald green", "hair_length": "very long",
+                      "hair_texture": "wavy"},
+        "physique": {"body_type": "slender", "height": "tall"},
+    },
+    "Wonder Girl (Cassie Sandsmark)": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a red costume with a fitted top and subtle star accents, a bold gold "
+                   "'W' emblem across the chest, matching gold bracers and belt, sleek "
+                   "black pants, red boots, and a golden lasso coiled at the hip",
+        "signature": {"hair_color": "golden blonde", "hair_length": "long",
+                      "hair_style": "windswept", "eye_color": "bright blue"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "golden tan"},
+    },
+
+    # === Marvel (heroines, sorceresses, cosmic & demonic) ================
+    "Agatha Harkness": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a flowing purple robe patterned with magical symbols, dark fitted "
+                   "pants, black boots, and silver jewelry and mystical amulets",
+        "eyes": "violet",
+        "signature": {"hair_color": "dark brown", "hair_length": "very long",
+                      "hair_texture": "wavy"},
+        "physique": {"body_type": "slender", "height": "tall", "skin_tone": "very pale"},
+    },
+    "Angela": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "elaborate golden armor with wing motifs covering strategic areas, "
+                   "flowing red-and-gold ribbons and fabric strips, ornate golden jewelry, "
+                   "and massive feathered wings extending from the back",
+        "signature": {"hair_color": "copper", "hair_length": "very long",
+                      "hair_texture": "loosely wavy", "eye_color": "deep blue"},
+        "physique": {"body_type": "athletic", "height": "statuesque", "skin_tone": "fair"},
+        "prop": "a long curved Asgardian war-blade",
+    },
+    "Binary": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a body of brilliant golden-white stellar energy with hair transformed "
+                   "into flowing solar flames, constellation-like energy patterns across "
+                   "the form, and a radiant aura of cosmic fire, over an even, smooth coat "
+                   "of glowing golden-white body paint",
+        "eyes": "burning starlight",
+        "physique": {"body_type": "athletic", "height": "tall"},
+    },
+    "Blackheart": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a minimal black costume with hellish design elements, clawed hands and "
+                   "feet, small horns on the forehead, dark demonic markings, and an aura "
+                   "of dark energy, over an even, smooth coat of dark grey demon skin",
+        "eyes": "burning red",
+        "signature": {"hair_color": "jet black", "hair_length": "very long"},
+        "physique": {"body_type": "slender", "height": "very tall"},
+    },
+    "Blink": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a sleek black-and-purple tactical suit with light boots, sharp facial "
+                   "markings, and a faint teleportation shimmer, over an even, smooth coat "
+                   "of vibrant magenta body paint",
+        "eyes": "glowing green",
+        "signature": {"hair_color": "magenta", "hair_length": "short pixie"},
+        "physique": {"body_type": "lean", "height": "average height"},
+        "prop": "a pair of glowing energy javelins",
+    },
+    "Crystal": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a form-fitting green-and-white costume with cape elements and Inhuman "
+                   "design accents",
+        "signature": {"hair_color": "auburn", "hair_length": "slightly past shoulders",
+                      "hair_texture": "loosely wavy", "eye_color": "green"},
+        "physique": {"body_type": "slender", "height": "average height", "skin_tone": "fair"},
+    },
+    "Krystalin": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a futuristic blue-and-silver armored bodysuit with shimmering "
+                   "hard-light crystalline shards forming along the arms and shoulders",
+        "signature": {"hair_color": "dark brown", "hair_length": "long",
+                      "hair_style": "box braids", "eye_color": "dark brown"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "warm brown"},
+    },
+    "Lady Sif": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "Asgardian armor in gold and blue with Norse designs, a flowing cape, "
+                   "and armored boots",
+        "signature": {"hair_color": "raven black", "hair_length": "very long",
+                      "eye_color": "deep blue"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "golden tan"},
+        "prop": "a double-bladed Asgardian sword",
+    },
+    "Magic": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "revealing metallic bikini-style armor pieces, thigh-high boots, and a "
+                   "cape with demonic and mystical designs, over an even, smooth coat of "
+                   "blue demon-form body paint",
+        "signature": {"hair_color": "golden blonde", "hair_length": "very long",
+                      "eye_color": "bright blue"},
+        "physique": {"body_type": "slender", "height": "petite", "skin_tone": "fair"},
+    },
+    "Magik": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a black-and-gold armored bodysuit with spiked pauldrons and thigh-high boots",
+        "signature": {"hair_color": "platinum blonde", "hair_length": "long",
+                      "hair_style": "blunt bangs", "hair_texture": "sleek straight",
+                      "eye_color": "ice blue"},
+        "physique": {"body_type": "lean", "height": "average height", "skin_tone": "very pale"},
+        "prop": "the Soulsword, a long blade of crackling arcane soul-energy",
+    },
+    "Mary Jane Watson": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "fashionable chic clothing in colors that complement red hair, from "
+                   "casual to glamorous evening wear",
+        "signature": {"hair_color": "bright red", "hair_length": "very long",
+                      "hair_texture": "thick and voluminous", "eye_color": "bright green"},
+        "physique": {"body_type": "hourglass", "height": "tall", "skin_tone": "fair"},
+    },
+    "Mistress Death": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a tattered dark cosmic shroud draping the frame like living darkness, "
+                   "with a cold silent aura that seems to bend light, over an even, smooth "
+                   "coat of pale bone-white skin",
+        "eyes": "hollow void-black",
+        "signature": {"hair_color": "jet black", "hair_length": "very long",
+                      "hair_style": "worn down"},
+        "physique": {"body_type": "very slim", "height": "tall"},
+    },
+    "Moonstone": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a form-fitting white bodysuit with geometric patterns, silver accents "
+                   "and cosmic-energy designs, white boots and gloves, and a subtle "
+                   "luminescent glow to the skin",
+        "eyes": "glowing white",
+        "signature": {"hair_color": "platinum blonde", "hair_length": "long",
+                      "hair_texture": "loosely wavy"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "pale"},
+    },
+    "Morgan le Fay": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "an elaborate medieval gown in deep green and gold with Celtic knotwork "
+                   "embroidery and flowing sleeves, an ornate golden circlet, and mystical "
+                   "amulets and rings",
+        "eyes": "glowing green",
+        "signature": {"hair_color": "jet black", "hair_length": "waist length",
+                      "hair_texture": "sleek straight"},
+        "physique": {"body_type": "slender", "height": "tall", "skin_tone": "very pale"},
+    },
+    "Nocturne": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a form-fitting dark bodysuit with red accents and a high collar, with "
+                   "three-fingered hands, two-toed feet, and a long prehensile tail, over "
+                   "an even, all-over coat of dark indigo fur",
+        "eyes": "solid glowing yellow",
+        "signature": {"hair_color": "navy blue", "hair_length": "short pixie"},
+        "physique": {"body_type": "lean", "height": "average height"},
+    },
+    "Nova (Frankie Raye)": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a costume of living cosmic energy with flame patterns, fire-trail "
+                   "boots, and golden flame for hair, over an even, smooth coat of glowing "
+                   "golden energy body paint",
+        "eyes": "burning cosmic fire",
+        "physique": {"body_type": "athletic", "height": "tall"},
+    },
+    "Satana": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a revealing black-and-red costume emphasizing a demonic nature, with "
+                   "minimal coverage and demonic accessories, over an even, smooth coat of "
+                   "red demon-form body paint",
+        "eyes": "glowing hellfire red",
+        "signature": {"hair_color": "jet black", "hair_length": "very long"},
+        "physique": {"body_type": "hourglass", "height": "average height"},
+    },
+    "Snowbird": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a white-and-blue costume with Arctic animal motifs, fur trim, feather "
+                   "patterns, and traditional Inuit design elements",
+        "signature": {"hair_color": "jet black", "hair_length": "very long",
+                      "hair_style": "half up half down", "eye_color": "ice blue"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "bronze"},
+    },
+    "Spectrum": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "an iconic black-and-white suit with a starburst emblem on the chest, "
+                   "surrounded by radiant photon-energy effects giving a luminous glow",
+        "eyes": "glowing white",
+        "signature": {"hair_color": "dark brown", "hair_length": "slightly past shoulders",
+                      "hair_texture": "loosely curled"},
+        "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "brown"},
+    },
+    "Spiral": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a revealing costume in metallics and blacks with technological "
+                   "elements, visible cybernetic implants, and four additional mechanical "
+                   "arms extending from the shoulders alongside the natural pair",
+        "signature": {"hair_color": "platinum blonde", "hair_length": "very long"},
+        "physique": {"body_type": "athletic", "height": "very tall", "skin_tone": "pale"},
+        "prop": "a cluster of high-tech blades and energy weapons held across the extra arms",
+    },
+    "Sunfire (Exiles)": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a sleek red-and-white armored suit with a Rising Sun motif and "
+                   "heat-resistant plating, segmented gauntlets and boots, and a radiant "
+                   "ember-glow aura, with black hair tipped in flame-red streaks",
+        "eyes": "crimson",
+        "signature": {"hair_color": "jet black", "hair_length": "short pixie",
+                      "hair_style": "windswept"},
+        "physique": {"body_type": "lean", "height": "average height", "skin_tone": "golden tan"},
+    },
+    "Typhoid Mary": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a black leather jacket over tight dark clothing with torn fabric and "
+                   "an exposed midriff, fingerless gloves, buckled boots, one side of the "
+                   "face painted stark white, and vivid red lipstick",
+        "signature": {"hair_color": "bright red", "hair_length": "long",
+                      "hair_texture": "thick and voluminous", "hair_style": "windswept",
+                      "eye_color": "dark brown"},
+        "physique": {"body_type": "lean", "height": "average height", "skin_tone": "fair"},
+    },
+    "Viper": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a tight dark-green bodysuit with matching gloves and boots, a high "
+                   "collar, and serpent-themed accents",
+        "signature": {"hair_color": "emerald green", "hair_length": "very long",
+                      "hair_texture": "sleek straight", "eye_color": "green"},
+        "physique": {"body_type": "slender", "height": "tall", "skin_tone": "fair"},
+    },
+    "White Widow": {
+        "franchise": "Marvel",
+        "gender": "Female",
+        "costume": "a form-fitting white tactical bodysuit with subtle gray paneling, a "
+                   "lightweight utility belt, white gloves and boots, and minimalist "
+                   "silver accents",
+        "signature": {"hair_color": "platinum white", "hair_length": "slightly past shoulders",
+                      "hair_texture": "sleek straight", "eye_color": "ice blue"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "porcelain"},
+    },
+
+    # === Video Games (MK, Mass Effect, WoW, RE, LoL, and more) ===========
+    "Astarte": {
+        "franchise": "Divinity: Original Sin",
+        "gender": "Female",
+        "costume": "gossamer divine robes woven of shimmering iridescent blues and "
+                   "violets and soft starlight, with silver constellation markings, on a "
+                   "celestial six-foot goddess frame, over an even, smooth coat of "
+                   "moon-pale body paint",
+        "eyes": "swirling nebula",
+        "signature": {"hair_color": "platinum white", "hair_length": "very long",
+                      "hair_texture": "loosely wavy"},
+        "physique": {"body_type": "slender", "height": "very tall"},
+    },
+    "Cetrion": {
+        "franchise": "Mortal Kombat",
+        "gender": "Female",
+        "costume": "flowing robes formed of earth, water, air, and light, nature-inspired "
+                   "armor pieces, leg wrappings of living root and vine, and a crown of "
+                   "living branches and crystals, on a towering seven-foot elemental-goddess "
+                   "frame, over an even, smooth coat of pale luminescent skin marked with "
+                   "glowing elemental sigils",
+        "eyes": "glowing blue-white",
+        "signature": {"hair_color": "platinum white", "hair_length": "very long",
+                      "hair_texture": "wavy"},
+        "physique": {"body_type": "athletic", "height": "very tall"},
+    },
+    "Cortana": {
+        "franchise": "Halo",
+        "gender": "Female",
+        "costume": "a slender luminous holographic body of flowing code and light in blue "
+                   "and purple, with short swept-back hair blending into the form, over an "
+                   "even, smooth coat of translucent blue holographic body paint",
+        "eyes": "glowing blue",
+        "signature": {"hair_color": "navy blue", "hair_length": "short pixie",
+                      "hair_style": "slicked back"},
+        "physique": {"body_type": "slender", "height": "average height"},
+    },
+    "D'Vorah": {
+        "franchise": "Mortal Kombat",
+        "gender": "Female",
+        "costume": "dark organic Kytinn attire in black, yellow, and green chitin, a "
+                   "chitinous head crest, and four large insectoid ovipositors extending "
+                   "from the back, over an even, all-over coat of pale yellow-green chitin",
+        "eyes": "large solid black insectoid",
+        "physique": {"body_type": "slender", "height": "average height"},
+    },
+    "Daisy": {
+        "franchise": "Super Mario",
+        "gender": "Female",
+        "costume": "a yellow-and-orange dress with daisy patterns, white gloves, orange "
+                   "high heels, flower hair accessories, and floral jewelry",
+        "signature": {"hair_color": "warm brown", "hair_length": "long",
+                      "hair_texture": "loosely wavy", "eye_color": "bright blue"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "fair"},
+    },
+    "Evelynn": {
+        "franchise": "League of Legends",
+        "gender": "Female",
+        "costume": "a skin-hugging bodysuit of shadow-lace and velvet, claw-like horns "
+                   "framing the face, shimmering lashes, and scythe-like tendrils "
+                   "slithering behind, over an even, smooth coat of iridescent "
+                   "obsidian-black body paint",
+        "eyes": "hot pink",
+        "signature": {"hair_color": "jet black", "hair_length": "very long",
+                      "hair_style": "worn down"},
+        "physique": {"body_type": "hourglass", "height": "tall"},
+    },
+    "Jaina Proudmoore": {
+        "franchise": "World of Warcraft",
+        "gender": "Female",
+        "costume": "elaborate white, blue, and gold Archmage robes with intricate "
+                   "embroidery, flowing sleeves, a high collar, and a white streak through "
+                   "the hair",
+        "signature": {"hair_color": "platinum blonde", "hair_length": "very long",
+                      "hair_texture": "loosely wavy", "eye_color": "bright blue"},
+        "physique": {"body_type": "slender", "height": "tall", "skin_tone": "fair"},
+        "prop": "a glowing runed archmage staff",
+    },
+    "Lady Dimitrescu": {
+        "franchise": "Resident Evil",
+        "gender": "Female",
+        "costume": "a champagne-colored 1930s-inspired evening gown cinched at the waist "
+                   "with a black rose brooch, long silk gloves tipped with black claw-like "
+                   "nails, and a wide-brimmed ivory sunhat over vintage black waves, on an "
+                   "impossibly tall nine-and-a-half-foot frame that looms over everything "
+                   "in the scene",
+        "eyes": "liquid gold",
+        "signature": {"hair_color": "jet black", "hair_length": "very long",
+                      "hair_texture": "loosely wavy"},
+        "physique": {"body_type": "slender", "height": "very tall", "skin_tone": "porcelain"},
+    },
+    "Mad Moxxi": {
+        "franchise": "Borderlands",
+        "gender": "Female",
+        "costume": "a revealing red-and-black ringmaster corset cinched impossibly tight, "
+                   "mismatched striped stockings, thigh-high boots, long gloves, and heavy "
+                   "theatrical makeup with smudged bright-red lipstick",
+        "signature": {"hair_color": "dark brown", "hair_length": "long",
+                      "hair_style": "pigtails", "eye_color": "bright blue"},
+        "physique": {"body_type": "hourglass", "height": "average height", "skin_tone": "pale"},
+    },
+    "Miranda Lawson": {
+        "franchise": "Mass Effect",
+        "gender": "Female",
+        "costume": "a form-fitting white catsuit with black paneling and hexagonal "
+                   "patterns, integrated white heeled boots, and black fingerless gloves",
+        "signature": {"hair_color": "jet black", "hair_length": "chin length bob",
+                      "hair_texture": "sleek straight", "eye_color": "bright blue"},
+        "physique": {"body_type": "hourglass", "height": "tall", "skin_tone": "fair"},
+    },
+    "Morrigan (Dragon Age)": {
+        "franchise": "Dragon Age",
+        "gender": "Female",
+        "costume": "layered dark robes in deep purple, brown, and black with a prominent "
+                   "cowl, feathers on the shoulders, beaded accents, and gold jewelry",
+        "eyes": "golden yellow",
+        "signature": {"hair_color": "jet black", "hair_length": "long",
+                      "hair_style": "blunt bangs", "hair_texture": "sleek straight"},
+        "physique": {"body_type": "slender", "height": "average height", "skin_tone": "fair"},
+    },
+    "Palutena": {
+        "franchise": "Kid Icarus",
+        "gender": "Female",
+        "costume": "a white dress with blue-and-gold accents that seems made of light, "
+                   "golden arm guards, a blue jeweled crown, sandals, and green hair "
+                   "flowing past the feet",
+        "eyes": "glowing green",
+        "signature": {"hair_color": "emerald green", "hair_length": "hip length",
+                      "hair_texture": "loosely wavy"},
+        "physique": {"body_type": "slender", "height": "very tall", "skin_tone": "fair"},
+        "prop": "a tall golden staff topped with a glowing emblem",
+    },
+    "Rosalina": {
+        "franchise": "Super Mario",
+        "gender": "Female",
+        "costume": "a floor-length turquoise dress patterned with stars, white gloves, a "
+                   "small crown, a cosmic shimmer to the skin, and platinum starlight hair "
+                   "sweeping past the waist and partly over one eye, on a towering "
+                   "seven-foot cosmic-guardian frame",
+        "signature": {"hair_color": "platinum blonde", "hair_length": "waist length",
+                      "hair_texture": "sleek straight", "eye_color": "bright blue"},
+        "physique": {"body_type": "slender", "height": "very tall", "skin_tone": "pale"},
+        "prop": "a star-topped wand trailing cosmic sparkles",
+    },
+    "Sarah Kerrigan": {
+        "franchise": "StarCraft",
+        "gender": "Female",
+        "costume": "a bio-organic exoskeleton of purple, brown, and bone-white carapace "
+                   "with large segmented insectoid wings and long tendril-like dreadlocks, "
+                   "over an even, all-over coat of purplish carapace skin",
+        "eyes": "glowing orange",
+        "physique": {"body_type": "athletic", "height": "tall"},
+    },
+    "Sheeva": {
+        "franchise": "Mortal Kombat",
+        "gender": "Female",
+        "costume": "minimal practical red-and-brown bikini-style warrior attire with "
+                   "armored bracers and greaves, a dark topknot, and four powerful arms, "
+                   "over an even, smooth coat of red Shokan skin",
+        "eyes": "glowing orange",
+        "signature": {"hair_color": "jet black", "hair_length": "long", "hair_style": "top knot"},
+        "physique": {"body_type": "athletic", "height": "very tall"},
+    },
+    "SHODAN": {
+        "franchise": "System Shock",
+        "gender": "Female",
+        "costume": "a glitching spectral humanoid silhouette with fractal skin of "
+                   "streaming data and jagged synthetic contours that pulse and flicker, "
+                   "over an even, smooth coat of green-tinged data-stream body paint",
+        "eyes": "glowing green",
+        "physique": {"body_type": "slender", "height": "tall"},
+    },
+    "Sylvanas Windrunner": {
+        "franchise": "World of Warcraft",
+        "gender": "Female",
+        "costume": "midnight-purple armor with skull motifs and gothic elements, an "
+                   "arrow-filled quiver across the back, a tattered crimson cloak with a "
+                   "deep trailing hood, and silver tribal markings, over an even, smooth "
+                   "coat of pale blue-grey undead skin",
+        "eyes": "glowing red",
+        "signature": {"hair_color": "white", "hair_length": "very long", "hair_style": "worn down"},
+        "physique": {"body_type": "slender", "height": "tall"},
+        "prop": "a black-and-bone ranger's bow",
+    },
+    "Twintelle": {
+        "franchise": "ARMS",
+        "gender": "Female",
+        "costume": "a pearl-gilded red catsuit with art-deco flourishes, a rose-gold opera "
+                   "mask, sharp heels, and voluminous white twin-tails of gravity-defying hair",
+        "eyes": "violet",
+        "signature": {"hair_color": "white", "hair_length": "very long", "hair_style": "pigtails"},
+        "physique": {"body_type": "hourglass", "height": "very tall", "skin_tone": "dark brown"},
+    },
+    "Tyrande Whisperwind": {
+        "franchise": "World of Warcraft",
+        "gender": "Female",
+        "costume": "ornate elven robes and light armor in white, silver, and purple with "
+                   "moon symbols, feathers, and intricate patterns, over an even, smooth "
+                   "coat of pale lavender body paint",
+        "eyes": "glowing silver",
+        "signature": {"hair_color": "teal", "hair_length": "very long"},
+        "physique": {"body_type": "slender", "height": "tall"},
+    },
+    "Lilith Aensland": {
+        "franchise": "Darkstalkers",
+        "gender": "Female",
+        "costume": "a form-fitting red-and-blue bodysuit with bat motifs, and red-and-green "
+                   "bat wings rising from the back and the head",
+        "signature": {"hair_color": "lavender", "hair_length": "chin length bob",
+                      "eye_color": "green"},
+        "physique": {"body_type": "petite and curvy", "height": "petite", "skin_tone": "fair"},
+    },
+
+    # === DC (more) =======================================================
+    "Cheshire": {
+        "franchise": "DC",
+        "gender": "Female",
+        "covers_face": True,
+        "costume": "a form-fitting green bodysuit with darker green accents, black boots "
+                   "and gloves, and various hidden weapons",
+        "mask": "a white porcelain mask covering the entire face with red lips and black "
+                "markings forming a Cheshire-cat grin",
+        "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "olive"},
+    },
+    "Lois Lane": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a fitted blouse and a high-waisted skirt with clean tailored lines, "
+                   "modest heels, a press badge at the hip, a feminine hair bow, and "
+                   "classic red lipstick",
+        "signature": {"hair_color": "dark brown", "hair_length": "shoulder length",
+                      "hair_texture": "softly curled", "eye_color": "bright blue"},
+        "physique": {"body_type": "slender", "height": "average height", "skin_tone": "fair"},
+    },
+    "Supergirl (DCAU)": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a white cropped top with a red-and-yellow 'S' shield, a short blue "
+                   "skirt, red boots, and a flowing red cape",
+        "signature": {"hair_color": "golden blonde", "hair_length": "slightly past shoulders",
+                      "hair_texture": "sleek straight", "eye_color": "bright blue"},
+        "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "fair"},
+    },
+
+    # === Anime & Manga (more) ============================================
+    "Homura Akemi (Devil)": {
+        "franchise": "Madoka Magica",
+        "gender": "Female",
+        "costume": "an elaborate dark gothic-Lolita dress in black with dark purple and "
+                   "red accents, a feathered collar, a full skirt, and dark feathered wings",
+        "eyes": "glowing violet",
+        "signature": {"hair_color": "jet black", "hair_length": "waist length",
+                      "hair_texture": "sleek straight"},
+        "physique": {"body_type": "slender", "height": "tall", "skin_tone": "pale"},
+    },
+    "Madoka Kaname (Ultimate)": {
+        "franchise": "Madoka Magica",
+        "gender": "Female",
+        "costume": "a flowing white-and-pink magical dress that blends into the cosmos, "
+                   "wing-like adornments, and a long train patterned with stars and "
+                   "galaxies, with very long cosmic-pink hair",
+        "eyes": "glowing pink",
+        "signature": {"hair_color": "baby pink", "hair_length": "waist length",
+                      "hair_texture": "loosely wavy"},
+        "physique": {"body_type": "slender", "height": "average height", "skin_tone": "fair"},
+        "prop": "a rose-and-gold celestial bow",
+    },
+    "Lust": {
+        "franchise": "Fullmetal Alchemist",
+        "gender": "Female",
+        "costume": "a black dress with a plunging neckline, black elbow-length gloves, "
+                   "black high heels, and an Ouroboros tattoo above the chest",
+        "eyes": "glowing violet",
+        "signature": {"hair_color": "jet black", "hair_length": "waist length",
+                      "hair_texture": "sleek straight"},
+        "physique": {"body_type": "voluptuous", "height": "tall", "skin_tone": "pale"},
+    },
+    "Princess Mononoke": {
+        "franchise": "Studio Ghibli",
+        "gender": "Female",
+        "costume": "a minimal white sleeveless tunic and shorts, brown arm guards and leg "
+                   "wrappings, red-and-blue war-paint face markings, and a fur cape with a "
+                   "carved wolf mask",
+        "signature": {"hair_color": "dark brown", "hair_length": "long",
+                      "hair_texture": "thick and voluminous", "eye_color": "dark brown"},
+        "physique": {"body_type": "lean", "height": "short", "skin_tone": "warm tan"},
+        "prop": "a stone dagger",
+    },
+    "Totoro": {
+        "franchise": "Studio Ghibli",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a large round grey-furred body with a cream-white belly marked with "
+                   "grey chevron arrowheads, tiny arms, and small clawed feet",
+        "mask": "a huge round grey Totoro head with wide round eyes, small pointed ears, "
+                "and a wide fanged grin",
+        "physique": {"body_type": "plump", "height": "very tall"},
+    },
+
+    # === Monster High / indie comics =====================================
+    "Abbey Bominable": {
+        "franchise": "Monster High",
+        "gender": "Female",
+        "costume": "white fur-trimmed clothing with snowflake patterns, ice-crystal "
+                   "accessories in blue, purple, and pink tones, small tusks at the lower "
+                   "lip, and long white hair streaked with pink, purple, and blue, over an "
+                   "even, smooth coat of light icy-blue body paint",
+        "eyes": "light purple",
+        "signature": {"hair_color": "white", "hair_length": "very long"},
+        "physique": {"body_type": "stocky", "height": "tall"},
+    },
+    "Frankie Stein": {
+        "franchise": "Monster High",
+        "gender": "Female",
+        "costume": "preppy-punk fashion in plaid, black, white, and yellow, with visible "
+                   "stitches on the limbs and neck, small neck bolts, and long black hair "
+                   "streaked with white sections, over an even, smooth coat of pale "
+                   "mint-green body paint",
+        "eyes": "one blue and one green",
+        "signature": {"hair_color": "jet black", "hair_length": "very long",
+                      "hair_texture": "sleek straight"},
+        "physique": {"body_type": "slim", "height": "tall"},
+    },
+    "Aspen Matthews": {
+        "franchise": "Fathom",
+        "gender": "Female",
+        "costume": "a sleek form-fitting iridescent metallic aquatic suit with shimmering "
+                   "blue accents",
+        "signature": {"hair_color": "jet black", "hair_length": "very long",
+                      "eye_color": "bright blue"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "golden tan"},
+    },
+    "Lady Death": {
+        "franchise": "Chaos! Comics",
+        "gender": "Female",
+        "costume": "minimal black-and-silver armor with skull motifs and bone accessories, "
+                   "black thigh-high studded boots, a flowing dark cape, and ornate skull "
+                   "jewelry and crown, over an even, smooth coat of deathly-white skin",
+        "eyes": "glowing pale white",
+        "signature": {"hair_color": "white", "hair_length": "waist length",
+                      "hair_texture": "loosely wavy"},
+        "physique": {"body_type": "hourglass", "height": "statuesque"},
+    },
+    "Shana the She-Devil": {
+        "franchise": "Comics",
+        "gender": "Female",
+        "costume": "a minimal red barbarian bikini-style top and brief bottom, leather "
+                   "boots and bracers, and fire-red battle-flung hair, over an even coat of "
+                   "sun-and-battle-bronzed skin",
+        "signature": {"hair_color": "bright red", "hair_length": "very long",
+                      "hair_texture": "thick and voluminous", "eye_color": "green"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "bronze"},
+        "prop": "a broad-bladed barbarian sword",
+    },
+    "Lunatica": {
+        "franchise": "Comics",
+        "gender": "Female",
+        "costume": "black leather straps and armored pieces, clawed gauntlets, and heavy "
+                   "boots, with wild red hair, over an even, smooth coat of pale lavender "
+                   "skin with darker markings",
+        "eyes": "yellow reptilian slit",
+        "signature": {"hair_color": "bright red", "hair_length": "very long",
+                      "hair_texture": "thick and voluminous"},
+        "physique": {"body_type": "athletic", "height": "tall"},
+    },
+
+    # === Classic cartoons (Simpsons, Family Guy, Flintstones, etc.) ======
+    "Betty Boop": {
+        "franchise": "Betty Boop",
+        "gender": "Female",
+        "costume": "a strapless red curve-hugging dress ending mid-thigh, red high heels, "
+                   "large hoop earrings, and a thigh garter",
+        "signature": {"hair_color": "jet black", "hair_length": "chin length bob",
+                      "hair_texture": "curly", "eye_color": "dark brown"},
+        "physique": {"body_type": "petite and curvy", "height": "petite", "skin_tone": "porcelain"},
+    },
+    "Betty Rubble": {
+        "franchise": "The Flintstones",
+        "gender": "Female",
+        "costume": "a simple blue knee-length dress with a scalloped neckline, a blue "
+                   "necklace, blue shoes, and a small white hair accessory",
+        "signature": {"hair_color": "jet black", "hair_length": "chin length bob",
+                      "eye_color": "dark brown"},
+        "physique": {"body_type": "petite and slim", "height": "petite", "skin_tone": "fair"},
+    },
+    "Wilma Flintstone": {
+        "franchise": "The Flintstones",
+        "gender": "Female",
+        "costume": "a white one-shoulder knee-length dress with a scalloped neckline and "
+                   "an asymmetrical design, a pearl necklace, and a bone hair ornament",
+        "signature": {"hair_color": "bright red", "hair_length": "long",
+                      "hair_style": "updo", "hair_texture": "curly"},
+        "physique": {"body_type": "slender", "height": "average height", "skin_tone": "fair"},
+    },
+    "Judy Jetson": {
+        "franchise": "The Jetsons",
+        "gender": "Female",
+        "costume": "futuristic 1960s clothing in bright colors with go-go boots, "
+                   "retro-future accessories, and hair in a high bouffant",
+        "signature": {"hair_color": "white blonde", "hair_length": "long",
+                      "hair_style": "updo", "eye_color": "dark brown"},
+        "physique": {"body_type": "slim", "height": "average height", "skin_tone": "fair"},
+    },
+    "Lisa Simpson": {
+        "franchise": "The Simpsons",
+        "gender": "Female",
+        "costume": "a red sleeveless dress reaching the knees, red shoes, a pearl "
+                   "necklace, and tall spiky pointed hair, over an even, smooth coat of "
+                   "bright yellow body paint",
+        "signature": {"hair_color": "yellow", "hair_length": "short pixie"},
+        "physique": {"body_type": "petite and slim", "height": "very petite"},
+    },
+    "Marge Simpson": {
+        "franchise": "The Simpsons",
+        "gender": "Female",
+        "costume": "a strapless green dress reaching the ankles, red low-heeled shoes, a "
+                   "pearl necklace, and an extremely tall blue beehive of hair, over an "
+                   "even, smooth coat of bright yellow body paint",
+        "signature": {"hair_color": "electric blue", "hair_length": "very long",
+                      "hair_style": "updo"},
+        "physique": {"body_type": "slender", "height": "tall"},
+    },
+    "Lois Griffin": {
+        "franchise": "Family Guy",
+        "gender": "Female",
+        "costume": "a green long-sleeved sweater, tan pants, and brown shoes",
+        "signature": {"hair_color": "copper", "hair_length": "long",
+                      "hair_texture": "loosely wavy", "eye_color": "dark brown"},
+        "physique": {"body_type": "slim", "height": "tall", "skin_tone": "fair"},
+    },
+    "Meg Griffin": {
+        "franchise": "Family Guy",
+        "gender": "Female",
+        "costume": "a pink beanie hat, a white shirt, blue jeans, white sneakers, and "
+                   "thick round glasses",
+        "signature": {"hair_color": "warm brown", "hair_length": "long",
+                      "hair_texture": "fine and wispy", "eye_color": "dark brown"},
+        "physique": {"body_type": "average", "height": "petite", "skin_tone": "fair"},
+    },
+    "Leela": {
+        "franchise": "Futurama",
+        "gender": "Female",
+        "costume": "a white tank top, black pants, black boots, a yellow jacket, a digital "
+                   "wrist device, and a single large central eye",
+        "eyes": "a single large blue eye",
+        "signature": {"hair_color": "purple", "hair_length": "very long",
+                      "hair_style": "high ponytail"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "fair"},
+    },
+    "Jem": {
+        "franchise": "Jem and the Holograms",
+        "gender": "Female",
+        "costume": "flashy 1980s outfits in bright pink, purple, and gold with metallic "
+                   "fabrics and bold patterns, star-shaped earrings, and voluminous "
+                   "shimmering pink 80s waves",
+        "eyes": "bright magenta",
+        "signature": {"hair_color": "hot pink", "hair_length": "very long",
+                      "hair_texture": "thick and voluminous"},
+        "physique": {"body_type": "slender", "height": "tall", "skin_tone": "fair"},
+    },
+
+    # === Literature & fairy tales ========================================
+    "Anne of Green Gables": {
+        "franchise": "Anne of Green Gables",
+        "gender": "Female",
+        "costume": "a simple brown dress with a white collar and cuffs, black stockings, "
+                   "practical brown boots, a straw hat, and a freckled face",
+        "signature": {"hair_color": "bright red", "hair_length": "long",
+                      "hair_style": "pigtails", "eye_color": "green"},
+        "physique": {"body_type": "petite and slim", "height": "petite", "skin_tone": "fair"},
+    },
+    "Pippi Longstocking": {
+        "franchise": "Pippi Longstocking",
+        "gender": "Female",
+        "costume": "mismatched long stockings (one red, one blue), a short patched dress, "
+                   "enormous oversized shoes, a freckled face, and bright red pigtails "
+                   "sticking straight out",
+        "signature": {"hair_color": "bright red", "hair_length": "long",
+                      "hair_style": "pigtails", "eye_color": "bright blue"},
+        "physique": {"body_type": "petite and slim", "height": "very petite", "skin_tone": "fair"},
+    },
+    "Dorothy Gale": {
+        "franchise": "The Wizard of Oz",
+        "gender": "Female",
+        "costume": "a blue-and-white gingham dress with a white apron and puffy sleeves, "
+                   "white stockings, ruby-red slippers, and twin braids tied with blue ribbons",
+        "signature": {"hair_color": "dark brown", "hair_length": "shoulder length",
+                      "hair_style": "pigtails", "eye_color": "medium brown"},
+        "physique": {"body_type": "petite and slim", "height": "petite", "skin_tone": "fair"},
+        "prop": "a wicker picnic basket",
+    },
+    "Little Red Riding Hood": {
+        "franchise": "Fairy Tales",
+        "gender": "Female",
+        "costume": "a vibrant red hooded cloak over a simple earthy-toned dress with a "
+                   "white apron and leather shoes",
+        "signature": {"hair_color": "warm brown", "hair_length": "long",
+                      "hair_texture": "loosely wavy", "eye_color": "hazel"},
+        "physique": {"body_type": "petite and slim", "height": "petite", "skin_tone": "fair"},
+        "prop": "a wicker basket covered with a checkered cloth",
+    },
+    "White Queen (Alice in Wonderland)": {
+        "franchise": "Alice in Wonderland",
+        "gender": "Female",
+        "costume": "a flowing white gown with intricate baroque patterns, white gloves "
+                   "past the elbows, white flowers and ornaments in an elaborate period "
+                   "updo, pale lip color, and a powdered ghostly-pale complexion, over an "
+                   "even, smooth coat of chalk-white skin",
+        "signature": {"hair_color": "platinum blonde", "hair_length": "very long",
+                      "hair_style": "updo", "eye_color": "pale blue"},
+        "physique": {"body_type": "slender", "height": "tall"},
+    },
+
+    # === Disney (more) ===================================================
+    "Minnie Mouse": {
+        "franchise": "Disney",
+        "gender": "Female",
+        "costume": "large round black mouse ears, a big yellow bow, a yellow puffy-sleeved "
+                   "dress with a flowing skirt, yellow heeled shoes, and white gloves, over "
+                   "an even, all-over coat of black fur with a peachy face",
+        "signature": {"eye_color": "dark brown"},
+        "physique": {"body_type": "petite and slim", "height": "very petite"},
+    },
+    "Mary Poppins": {
+        "franchise": "Disney",
+        "gender": "Female",
+        "costume": "a tailored Edwardian navy coat over a high-necked white blouse, a "
+                   "smart hat adorned with flowers, white gloves, and ankle boots",
+        "signature": {"hair_color": "dark brown", "hair_length": "shoulder length",
+                      "hair_style": "updo", "eye_color": "bright blue"},
+        "physique": {"body_type": "slender", "height": "average height", "skin_tone": "fair"},
+        "prop": "a parrot-headed umbrella and a bottomless carpet bag",
+    },
+    "Wendy Darling": {
+        "franchise": "Disney",
+        "gender": "Female",
+        "costume": "a light blue floor-length nightgown with long sleeves, a slightly "
+                   "ruffled neckline, a darker blue waist sash, and a blue hair ribbon",
+        "signature": {"hair_color": "warm brown", "hair_length": "long",
+                      "hair_texture": "loosely wavy", "eye_color": "bright blue"},
+        "physique": {"body_type": "petite and slim", "height": "petite", "skin_tone": "fair"},
+    },
+    "Kim Possible": {
+        "franchise": "Disney",
+        "gender": "Female",
+        "costume": "a black crop top showing the midriff, dark green cargo pants with "
+                   "pockets, black fingerless gloves, and black boots",
+        "signature": {"hair_color": "bright red", "hair_length": "slightly past shoulders",
+                      "hair_texture": "loosely wavy", "eye_color": "green"},
+        "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "fair"},
+    },
+    "Judy Hopps": {
+        "franchise": "Zootopia",
+        "gender": "Female",
+        "costume": "a blue ZPD police uniform with a badge, dark blue pants, a black "
+                   "utility belt, tall grey rabbit ears, over an even, all-over coat of "
+                   "grey fur with a white belly and inner ears",
+        "eyes": "large violet",
+        "physique": {"body_type": "athletic", "height": "petite"},
+    },
+    "Star Butterfly": {
+        "franchise": "Star vs. the Forces of Evil",
+        "gender": "Female",
+        "costume": "a whimsical colorful A-line dress in teal, green, pink, and purple "
+                   "with playful patterns, a magenta devil-horn headband, and small pink "
+                   "heart marks on the cheeks",
+        "signature": {"hair_color": "golden blonde", "hair_length": "waist length",
+                      "eye_color": "bright blue"},
+        "physique": {"body_type": "slim", "height": "average height", "skin_tone": "fair"},
+        "prop": "a crystal-topped magic wand",
+    },
+
+    # === Movies & TV (more) ==============================================
+    "Princess Fiona": {
+        "franchise": "Shrek",
+        "gender": "Female",
+        "costume": "a green medieval dress with gold trim and a brown corset",
+        "signature": {"hair_color": "copper", "hair_length": "very long",
+                      "hair_texture": "loosely curled", "eye_color": "green"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "fair"},
+    },
+    "The 50 Foot Woman": {
+        "franchise": "Attack of the 50 Foot Woman",
+        "gender": "Female",
+        "costume": "a torn white dress stretched over a colossal fifty-foot frame that "
+                   "towers over buildings and dwarfs everything in the scene, with normal "
+                   "human coloring despite the giant size",
+        "signature": {"hair_color": "golden blonde", "hair_length": "very long",
+                      "hair_texture": "loosely wavy", "eye_color": "bright blue"},
+        "physique": {"body_type": "curvy", "height": "very tall", "skin_tone": "fair"},
+    },
 }
 
 
@@ -5042,16 +6225,16 @@ _CATEGORY_FRANCHISES: dict[str, tuple[str, ...]] = {
         "My Hero Academia", "JoJo's Bizarre Adventure", "Fullmetal Alchemist", "Death Note",
         "Cowboy Bebop", "Fate/stay night", "Kill la Kill", "Neon Genesis Evangelion",
         "Sailor Moon", "Attack on Titan", "One Punch Man", "Ghost in the Shell", "Vocaloid",
-        "Pokemon",
+        "Pokemon", "Madoka Magica", "Studio Ghibli",
     ),
     "Marvel": ("Marvel",),
-    "DC": ("DC", "DC (Teen Titans)", "Watchmen", "The Sandman"),
+    "DC": ("DC", "DC (Teen Titans)", "Watchmen", "The Sandman", "Fables"),
     "Star Wars": ("Star Wars",),
     "Disney": (
         "Disney", "The Little Mermaid", "Sleeping Beauty", "Frozen", "Snow White", "Tangled",
         "Pocahontas", "Mulan", "Moana", "The Princess and the Frog", "Peter Pan", "Cinderella",
         "Beauty and the Beast", "Aladdin", "Brave", "Alice in Wonderland", "101 Dalmatians",
-        "Big Hero 6", "The Incredibles",
+        "Big Hero 6", "The Incredibles", "Zootopia", "Star vs. the Forces of Evil",
     ),
     "Video Games": (
         "Final Fantasy", "Final Fantasy VII", "Final Fantasy X", "Final Fantasy XV",
@@ -5061,22 +6244,27 @@ _CATEGORY_FRANCHISES: dict[str, tuple[str, ...]] = {
         "Super Mario", "Metroid", "Resident Evil", "Tomb Raider", "Mass Effect", "Halo",
         "Metal Gear", "God of War", "Kingdom Hearts", "Baldur's Gate 3", "The Witcher",
         "Horizon", "Hitman", "Hellblade", "Doom", "Portal", "Silent Hill", "Darkstalkers",
-        "The King of Fighters", "Bayonetta",
+        "The King of Fighters", "Bayonetta", "Divinity: Original Sin", "World of Warcraft",
+        "StarCraft", "Borderlands", "Dragon Age", "Kid Icarus", "ARMS", "System Shock",
     ),
     "Fantasy & Literature": (
         "The Lord of the Rings", "Harry Potter", "Game of Thrones", "The Hunger Games",
+        "Anne of Green Gables", "Pippi Longstocking", "The Wizard of Oz", "Fairy Tales",
     ),
     "Movies & TV": (
         "Star Trek", "The Terminator", "Alien", "Predator", "RoboCop", "Judge Dredd", "Mad Max",
         "Escape from New York", "Pirates of the Caribbean", "Movie", "The Addams Family",
         "Scooby-Doo", "Who Framed Roger Rabbit", "Mistress of the Dark", "Xena: Warrior Princess",
         "A Nightmare on Elm Street", "Friday the 13th", "Halloween", "IT", "Hellraiser",
-        "The Texas Chain Saw Massacre", "Scream", "Child's Play",
+        "The Texas Chain Saw Massacre", "Scream", "Child's Play", "Shrek",
+        "Attack of the 50 Foot Woman",
     ),
     "Comics & Cartoons": (
         "Avatar: The Last Airbender", "The Legend of Korra", "Masters of the Universe",
         "Invincible", "Image", "Hellboy", "Transformers", "Vampirella", "Rainbow Brite",
-        "The Smurfs", "Adventure Time", "Thundercats", "G.I. Joe", "TMNT",
+        "The Smurfs", "Adventure Time", "Thundercats", "G.I. Joe", "TMNT", "Monster High",
+        "Fathom", "Chaos! Comics", "Comics", "Betty Boop", "The Flintstones", "The Jetsons",
+        "The Simpsons", "Family Guy", "Futurama", "Jem and the Holograms",
     ),
 }
 _FRANCHISE_CATEGORY: dict[str, str] = {

@@ -449,12 +449,16 @@ class CosplayerTests(unittest.TestCase):
 
     def test_eyes_override_renders_free_text(self):
         # A canonical non-standard eye colour ("eyes" override) is voiced verbatim,
-        # without being a selectable option on the main node's eye_color dropdown.
+        # without being a selectable option on the main node's eye_color dropdown, and
+        # the otherwise-random eye_shape word is suppressed so it reads clean.
         doc = json.loads(build_cosplayer_json("Sukuna", 0))
         self.assertEqual(doc["Face"]["eye_color"], "crimson")
+        self.assertEqual(doc["Face"]["eye_shape"], "None")  # random shape locked out
         locked, label, _ = self._locked_and_label("Sukuna")
-        prose, _ = generate_character(1, "Male", locked, cosplay_label=label)
-        self.assertIn("crimson", prose)
+        for person_seed in range(5):
+            prose, out = generate_character(person_seed, "Male", locked, cosplay_label=label)
+            self.assertIn("crimson eyes", prose)   # no shape word between colour and "eyes"
+            self.assertNotIn("eye_shape", out)     # locked-absent, dropped from the JSON
 
     def test_random_unknown_pool_returns_empty(self):
         # A Random pick over an empty pool must still degrade gracefully to "{}".

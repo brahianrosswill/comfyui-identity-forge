@@ -183,6 +183,16 @@ def build_cosplayer_json(
         ("covers_face", covers and not unmask),
     ])
     document.update(group_fields(fields))
+    # When an eye-colour override is in play, lock eye_shape to absent so the override
+    # reads clean downstream ("crimson eyes", not "crimson deep-set eyes"). Injected
+    # here, after group_fields (which strips "None" on the build side), because the
+    # engine keeps a locked "None" as the absent state and omits it from its own prose
+    # and JSON. setdefault preserves an explicit signature eye_shape if one was set.
+    if entry.get("eyes"):
+        for group_values in document.values():
+            if isinstance(group_values, dict) and "eye_color" in group_values:
+                group_values.setdefault("eye_shape", "None")
+                break
     return json.dumps(document, indent=2)
 
 

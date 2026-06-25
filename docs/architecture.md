@@ -96,7 +96,9 @@ Conventions (keep the data coherent):
 - **Iconic non-standard eyes** (red/violet/gold cat-slit) use the free-text `eyes` override
   (a top-level entry key, not the signature) — it replaces `eye_color` and is voiced verbatim,
   passing the gender gate because `eye_color`'s pools are identical. The main node's dropdown
-  stays believable (no fantasy colours added there).
+  stays believable (no fantasy colours added there). The cosplayer also locks `eye_shape` to
+  `None` (injected after `group_fields`, which strips it on the build side) so the random shape
+  word is suppressed — the engine keeps the locked `None` as absent and drops it from prose/JSON.
 - **Random scope.** `_FRANCHISE_CATEGORY` maps every franchise to one of nine broad categories
   (Anime & Manga, Marvel, DC, Star Wars, Disney, Video Games, Fantasy & Literature, Movies & TV,
   Comics & Cartoons). The Cosplayer node's `random_scope` control narrows the `Random — …` picks
@@ -148,5 +150,5 @@ creature loader copies only the standard slots).
 - A locked physique doesn't constrain `fitness`/`muscle` (known loose coherence).
 - Adding RNG draws in the creature node mid-sequence shifts seed→creature mapping — append draws
   at the end.
-- The roster is large (~250 cosplayers, ~90 creatures): always grep the current keys before
+- The roster is large (~640 cosplayers, ~130 creatures): always grep the current keys before
   adding to avoid silent overrides.

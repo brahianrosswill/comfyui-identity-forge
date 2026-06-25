@@ -96,7 +96,9 @@ franchise falls back to a default so a new entry still scopes sensibly.
    overrides `eye_color` and is voiced verbatim. It works because `eye_color`'s two
    gender pools are identical, so the gender gate passes the free text straight through;
    `validate_data` only checks that it is a non-empty string (and not also pinned in the
-   signature). No effect on `covers_face` characters, whose eyes are hidden.
+   signature). The override also locks `eye_shape` to absent, so the random shape word never
+   piggybacks on it — you get *"crimson eyes"*, not *"crimson deep-set eyes"*. No effect on
+   `covers_face` characters, whose eyes are hidden.
 
 6. **Costume overrides suppress auto garment fields.** When a costume is supplied,
    the separately-randomized `outfit_style` / `footwear` / `clothing_color` /
