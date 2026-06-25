@@ -48,9 +48,12 @@ The **`creature`** dropdown is the whole scoping control:
 
 ### Detail & free text
 
-`palette` recolours the integument (default is the source creature's own colour);
-`integument_finish` adds a surface (matte / glossy / iridescent / slimy /
-bioluminescent…); `size_scale` scales the subject (tiny … towering). The
+`palette` recolours the integument: **Auto** uses the creature's own colour — except
+amorphous, colour-variable creatures (blob alien, slime, energy being, jellyfish,
+crystalline alien), which ship a `palette_pool` and draw a **seed-varied** hue from it,
+so they aren't the same colour every run; **Random** rolls any colour with the seed; or
+pick a specific colour. `integument_finish` adds a surface (matte / glossy / iridescent /
+slimy / bioluminescent…); `size_scale` scales the subject (tiny … towering). The
 **`more_features`** box takes `slot: phrase` lines (override a slot verbatim) or bare
 lines (extra features), for unlimited detail without more widgets.
 

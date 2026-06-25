@@ -184,7 +184,7 @@ def validate() -> list[str]:
     # field engine), so only structure is checked here, not value membership.
     if len(CREATURES) < 40:
         errors.append(f"CREATURES has {len(CREATURES)}; need >= 40")
-    allowed_keys = {"class", "palette"} | set(CREATURE_SLOTS)
+    allowed_keys = {"class", "palette", "palette_pool"} | set(CREATURE_SLOTS)
     class_counts = {cls: 0 for cls in CREATURE_CLASSES}
     for name, entry in CREATURES.items():
         if not isinstance(entry, dict):
@@ -201,6 +201,11 @@ def validate() -> list[str]:
         for key, value in entry.items():
             if key not in allowed_keys:
                 errors.append(f"creature '{name}': unexpected key {key!r}")
+            elif key == "palette_pool":
+                if not isinstance(value, list) or not value or not all(
+                    isinstance(v, str) and v for v in value
+                ):
+                    errors.append(f"creature '{name}': 'palette_pool' must be a non-empty list of strings")
             elif value is not None and (not isinstance(value, str) or not value):
                 errors.append(f"creature '{name}': slot {key!r} must be a non-empty string")
     thin = [cls for cls, count in class_counts.items() if count < 3]

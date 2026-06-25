@@ -74,6 +74,8 @@ _RANDOM_SLOT = "Random"
 
 # --- detail sentinels ------------------------------------------------------
 _AUTO = "Auto"
+#: Palette combo: roll a colour from _PALETTES with the seed (works on any creature).
+_RANDOM_PALETTE = "Random"
 _FINISHES = ["matte", "glossy", "iridescent", "slimy", "bioluminescent",
              "translucent", "metallic", "wet", "fuzzy"]
 _PALETTES = ["emerald", "crimson", "sapphire blue", "royal violet", "gold", "obsidian black",
@@ -286,12 +288,21 @@ def build_creature_json(
         for drop in _SUBTLE_DROP_SLOTS:
             slots.pop(drop, None)
 
-    # Recolour / retexture the integument: palette (override, else the source
-    # creature's own colour) goes on first, then the finish sits outermost.
+    # Recolour / retexture the integument. Palette resolves last — after every
+    # creature / slot / form pick — so a given seed keeps its creature and only the
+    # colour shifts: an explicit colour wins; "Random" rolls any palette; "Auto" uses
+    # the source creature's own colour, or, for amorphous creatures that ship a
+    # ``palette_pool`` (blobs, slimes, energy beings…), a seed-varied hue from it, so
+    # they are not the same colour every run. The finish then sits outermost.
     if slots.get("integument"):
-        palette_value = palette if palette != _AUTO else (
-            get_creature(integument_source).get("palette") if integument_source else None
-        )
+        src = get_creature(integument_source) if integument_source else {}
+        if palette == _RANDOM_PALETTE:
+            palette_value = rng.choice(_PALETTES)
+        elif palette != _AUTO:
+            palette_value = palette
+        else:
+            pool = src.get("palette_pool")
+            palette_value = rng.choice(pool) if pool else src.get("palette")
         if palette_value:
             slots["integument"] = _prepend_descriptor(slots["integument"], palette_value)
         if integument_finish != _AUTO:
@@ -404,9 +415,12 @@ if _COMFY_AVAILABLE:
                                    default=_AUTO,
                                    tooltip="Surface finish on the skin/hide (matte, glossy, "
                                            "iridescent, slimy, bioluminescent, …)."),
-                    io.Combo.Input("palette", options=[_AUTO] + _PALETTES, default=_AUTO,
+                    io.Combo.Input("palette", options=[_AUTO, _RANDOM_PALETTE] + _PALETTES,
+                                   default=_AUTO,
                                    tooltip="Recolour the integument. 'Auto' uses the "
-                                           "creature's own colour."),
+                                           "creature's own colour (amorphous creatures like "
+                                           "the blob alien vary it each seed); 'Random' rolls "
+                                           "any colour with the seed; or pick a specific one."),
                     io.Combo.Input("size_scale", options=[_AUTO] + _SIZES, default=_AUTO,
                                    tooltip="Scale of the subject (tiny … towering). "
                                            "'Auto' leaves it unstated."),

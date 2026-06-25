@@ -35,6 +35,11 @@ Curation rules (so the data stays coherent with the engine):
   ``palette`` — the node prepends the palette (and any finish) onto the integument, so a
   user can recolour it ("crimson" instead of "emerald") without fighting baked-in text.
   Texture words (chitinous, scaled, furred, plated) stay in ``integument``.
+* **Amorphous / colour-variable creatures may add an optional ``palette_pool``** — a list
+  of hues. With the node's palette on ``Auto`` it draws a seed-varied colour from this pool
+  instead of the single ``palette`` (so a blob alien is not always cyan); ``palette`` stays
+  as the required fallback. Use it only where many colours are plausible (blobs, slimes,
+  energy beings, jellyfish, crystals), not for naturalistic animals whose colour is fixed.
 * ``head`` and ``integument`` drive suppression: a creature head hides the human
   Face / Hair / Makeup; a creature integument hides the human skin fields. ``arms`` /
   ``hands`` / ``legs_feet`` have no human field to hide (the body is humanoid under an
@@ -343,6 +348,8 @@ CREATURES: dict[str, dict] = {
     },
     "jellyfish": {
         "class": "Marine Life", "palette": "translucent rose",
+        "palette_pool": ["rose", "cyan", "violet", "amber", "milky white",
+                         "soft pink", "pale blue", "lilac"],
         "head": "a translucent domed bell of a head",
         "eyes": "no distinct eyes, only faint light-sensing rims",
         "integument": "gelatinous translucent flesh",
@@ -435,6 +442,8 @@ CREATURES: dict[str, dict] = {
     },
     "slime": {
         "class": "Monsters", "palette": "translucent lime",
+        "palette_pool": ["lime green", "cyan", "rose", "amber", "violet",
+                         "bubblegum pink", "aqua", "tangerine"],
         "head": "a soft rounded head that holds its shape only loosely",
         "eyes": "two simple dark spots for eyes",
         "integument": "a translucent gelatinous body",
@@ -477,6 +486,8 @@ CREATURES: dict[str, dict] = {
     },
     "energy being": {
         "class": "Aliens", "palette": "electric cyan",
+        "palette_pool": ["electric cyan", "electric blue", "plasma violet", "solar gold",
+                         "ember orange", "emerald green", "magenta", "crimson"],
         "head": "a head of coalesced glowing plasma",
         "eyes": "two brighter cores where eyes would be",
         "integument": "a body of luminous semi-transparent energy",
@@ -497,6 +508,8 @@ CREATURES: dict[str, dict] = {
     },
     "crystalline alien": {
         "class": "Aliens", "palette": "amethyst",
+        "palette_pool": ["amethyst", "emerald", "sapphire blue", "ruby red", "citrine gold",
+                         "rose quartz", "aquamarine", "obsidian black"],
         "head": "a faceted angular crystal head",
         "eyes": "glowing geometric eye-facets",
         "integument": "a body of translucent growing crystal",
@@ -925,6 +938,8 @@ CREATURES: dict[str, dict] = {
     },
     "blob alien": {
         "class": "Aliens", "palette": "translucent cyan",
+        "palette_pool": ["cyan", "lime green", "rose", "amber", "violet", "magenta",
+                         "aqua", "pale pink", "lilac", "acid green"],
         "head": "a featureless rounded head that ripples constantly",
         "eyes": "dark spots that surface and submerge as eyes",
         "integument": "a semi-fluid translucent gelatinous body",

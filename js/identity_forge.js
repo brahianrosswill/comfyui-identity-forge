@@ -138,12 +138,10 @@ const GENDER_POOLS = {
   "facial_hair": {
     "Female": [
       "Random",
-      "clean shaven",
       "None"
     ],
     "Male": [
       "Random",
-      "clean shaven",
       "stubble",
       "short beard",
       "full beard",
@@ -157,7 +155,6 @@ const GENDER_POOLS = {
     ],
     "Any": [
       "Random",
-      "clean shaven",
       "stubble",
       "short beard",
       "full beard",
@@ -173,7 +170,6 @@ const GENDER_POOLS = {
   "makeup_style": {
     "Female": [
       "Random",
-      "no makeup",
       "barely there natural makeup",
       "soft natural makeup",
       "fresh-faced dewy look",
@@ -192,7 +188,6 @@ const GENDER_POOLS = {
     ],
     "Male": [
       "Random",
-      "no makeup",
       "barely there natural makeup",
       "soft natural makeup",
       "fresh-faced dewy look",
@@ -201,7 +196,6 @@ const GENDER_POOLS = {
     ],
     "Any": [
       "Random",
-      "no makeup",
       "barely there natural makeup",
       "soft natural makeup",
       "fresh-faced dewy look",

@@ -224,8 +224,8 @@ FIELD_DEFINITIONS: OrderedDict[str, dict] = OrderedDict([
     }),
     ("other_jewelry", {
         "group": 'Jewelry & Nails',
-        "female_options": ['no other jewelry', 'simple gold bracelet', 'silver cuff bracelet', 'stacked bracelets', 'thin rings on multiple fingers', 'cocktail ring', 'plain band ring', 'watch', 'layered rings', 'no additional jewelry'],
-        "male_options": ['no other jewelry', 'simple gold bracelet', 'silver cuff bracelet', 'stacked bracelets', 'thin rings on multiple fingers', 'cocktail ring', 'plain band ring', 'watch', 'layered rings', 'no additional jewelry'],
+        "female_options": ['no other jewelry', 'simple gold bracelet', 'silver cuff bracelet', 'stacked bracelets', 'thin rings on multiple fingers', 'cocktail ring', 'plain band ring', 'watch', 'layered rings'],
+        "male_options": ['no other jewelry', 'simple gold bracelet', 'silver cuff bracelet', 'stacked bracelets', 'thin rings on multiple fingers', 'cocktail ring', 'plain band ring', 'watch', 'layered rings'],
         "optional": False
     }),
     ("piercings", {

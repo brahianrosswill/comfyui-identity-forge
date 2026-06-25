@@ -1191,15 +1191,22 @@ if _COMFY_AVAILABLE:
             ]
 
             # One COMBO per randomizable field, in group order. Every field
-            # offers "None" so any of them — including scene fields like
+            # offers a single "None" so any of them — including scene fields like
             # location / lighting / framing — can be omitted from the output
             # entirely (e.g. to describe a character only and add your own scene).
+            # In-pool "absent" values ("no earrings", "none", "bare nails", "clean
+            # shaven", …) are hidden from the widget: the engine already treats them
+            # identically to "None" (see _is_absent), so showing them would be a
+            # redundant second "nothing" entry. They stay in the pools below for
+            # randomization / accessory_density, which read the pools, not the widget.
             for field_name, field_def in FIELD_DEFINITIONS.items():
                 if field_name in _HIDDEN_FIELDS or field_name in _CONTROL_FIELDS:
                     continue
-                options = ["Random"] + _dedupe(
-                    field_def["female_options"] + field_def["male_options"]
-                ) + ["None"]
+                visible = [
+                    v for v in _dedupe(field_def["female_options"] + field_def["male_options"])
+                    if not _is_absent(v)
+                ]
+                options = ["Random"] + visible + ["None"]
                 inputs.append(
                     io.Combo.Input(
                         field_name,

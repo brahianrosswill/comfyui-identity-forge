@@ -108,6 +108,14 @@ string (kept out of `costume`) so the *Unmask* toggle can drop it. Keep costume
 text and names plain ASCII (no em dashes / smart quotes) so text-to-image
 tokenizers don't mangle them.
 
+For a **bald / shaven-headed character** (Mace Windu, Saitama, Professor X, Lex
+Luthor, Dhalsim), state the bald head in `costume` (e.g. `"…, and a clean-shaven bald
+head"`) and do **not** give the entry a `hair_length` / `hair_style` signature —
+locking a short cut like `"buzzed very short"` makes the character render *with* hair
+(a buzz cut). The costume text carries the baldness; the unlocked hair fields under it
+simply randomize and read as absent. A clean-shaven `facial_hair` lock is fine and
+keeps the male randomizer from adding a beard.
+
 For a **non-natural skin colour** (green, blue, chrome, …), word it as
 `"an even, smooth coat of <colour> body paint"` rather than `"all-over <colour>
 body paint"` — the "even, smooth coat" wording renders as a uniform colour instead
