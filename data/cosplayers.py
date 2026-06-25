@@ -1619,6 +1619,7 @@ COSPLAYERS: dict[str, dict] = {
         "signature": {"hair_color": "jet black", "hair_length": "buzzed very short",
                       "facial_hair": "stubble", "eye_color": "dark brown"},
         "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "dark brown"},
+        "prop": "a silver katana worn across the back",
     },
 
     # --- DC (male) --------------------------------------------------------
@@ -6212,6 +6213,871 @@ COSPLAYERS: dict[str, dict] = {
                       "hair_texture": "loosely wavy", "eye_color": "bright blue"},
         "physique": {"body_type": "curvy", "height": "very tall", "skin_tone": "fair"},
     },
+
+    # Expansion (June 2026): comic / movie / game / cartoon icon pass ========
+
+    # --- Marvel (more heroes/villains) ------------------------------------
+    "Quicksilver": {
+        "franchise": "Marvel",
+        "gender": "Male",
+        "costume": "a blue bodysuit with a white lightning chevron on the chest and "
+                   "silver boots, with a motion-blurred speed trail",
+        "signature": {"hair_color": "silver", "hair_length": "very short",
+                      "hair_style": "slicked back", "eye_color": "bright blue"},
+        "physique": {"body_type": "lean", "height": "tall", "skin_tone": "fair"},
+    },
+    "Nick Fury": {
+        "franchise": "Marvel",
+        "gender": "Male",
+        "costume": "a long black leather trench coat over black tactical gear, with a "
+                   "black eye patch over the left eye and a clean-shaven bald head",
+        "signature": {"facial_hair": "clean shaven", "eye_color": "dark brown"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "dark brown"},
+    },
+    "Moon Knight": {
+        "franchise": "Marvel",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a hooded pure-white cloak and bodysuit with a crescent-moon emblem "
+                   "on the chest",
+        "mask": "a smooth white face wrapping with no visible features",
+        "physique": {"body_type": "athletic", "height": "tall"},
+        "prop": "a silver crescent-moon throwing dart",
+    },
+    "Iron Fist": {
+        "franchise": "Marvel",
+        "gender": "Male",
+        "costume": "a green sleeveless martial-arts tunic with a high collar and a yellow "
+                   "chest sash, a yellow mask over the eyes, and soft yellow slippers, "
+                   "with one fist glowing white-gold",
+        "signature": {"hair_color": "golden blonde", "hair_length": "very short",
+                      "eye_color": "bright blue"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "fair"},
+    },
+    "Luke Cage": {
+        "franchise": "Marvel",
+        "gender": "Male",
+        "costume": "a yellow open-collar shirt with a silver chain-link belt",
+        "signature": {"hair_color": "near black", "hair_length": "buzzed very short",
+                      "eye_color": "dark brown"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "dark brown"},
+    },
+    "Namor": {
+        "franchise": "Marvel",
+        "gender": "Male",
+        "costume": "green scaled swim trunks, pointed ears, and tiny feathered wings at "
+                   "the ankles, on a bare muscular chest",
+        "signature": {"hair_color": "jet black", "hair_length": "very short",
+                      "hair_style": "slicked back", "eye_color": "dark brown"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "fair"},
+        "prop": "a three-pronged golden trident",
+    },
+    "Nova (Richard Rider)": {
+        "franchise": "Marvel",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a dark blue bodysuit with gold trim and a gold starburst chest "
+                   "emblem, with the fists wreathed in cosmic energy",
+        "mask": "a glowing gold dome helmet",
+        "physique": {"body_type": "athletic", "height": "tall"},
+    },
+    "Sandman": {
+        "franchise": "Marvel",
+        "gender": "Male",
+        "costume": "a green-and-brown horizontal-striped shirt and brown trousers, over "
+                   "an even, all-over coat of yellow-tan sand skin, with one arm morphed "
+                   "into a giant sand hammer",
+        "signature": {"hair_color": "warm brown", "hair_length": "very short",
+                      "eye_color": "medium brown"},
+        "physique": {"body_type": "stocky", "height": "very tall"},
+    },
+    "Vulture": {
+        "franchise": "Marvel",
+        "gender": "Male",
+        "costume": "a green flight suit with a feathered ruff collar, enormous mechanical "
+                   "feathered wings, talon-tipped boots, and a bald head",
+        "signature": {"facial_hair": "clean shaven", "eye_color": "gray"},
+        "physique": {"body_type": "lean", "height": "average height", "skin_tone": "fair"},
+    },
+    "Kraven the Hunter": {
+        "franchise": "Marvel",
+        "gender": "Male",
+        "costume": "a lion-mane vest worn open over a bare chest, leopard-print trousers, "
+                   "and a beaded belt of fangs",
+        "signature": {"hair_color": "dark brown", "hair_length": "ear length",
+                      "facial_hair": "full beard", "eye_color": "dark brown"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "tan"},
+        "prop": "a long hunting spear with a leaf-shaped blade",
+    },
+    "Rhino": {
+        "franchise": "Marvel",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a thick grey rhino-hide armor suit with plated forearms, on a "
+                   "towering massively muscled frame",
+        "mask": "a grey rhino helmet with a single horn",
+        "physique": {"body_type": "stocky", "height": "very tall"},
+    },
+    "Electro": {
+        "franchise": "Marvel",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a green bodysuit crackling with blue-white electricity, with sparks "
+                   "arcing off the hands",
+        "mask": "a green-and-yellow lightning-bolt mask radiating from the face",
+        "physique": {"body_type": "lean", "height": "average height"},
+    },
+
+    # --- DC (more) --------------------------------------------------------
+    "Swamp Thing": {
+        "franchise": "DC",
+        "gender": "Male",
+        "costume": "a towering body of mossy green vegetation and bark, with trailing "
+                   "vines and roots and leaves and fungus sprouting from the shoulders",
+        "eyes": "glowing red",
+        "signature": {},
+        "physique": {"body_type": "stocky", "height": "very tall"},
+    },
+    "Etrigan the Demon": {
+        "franchise": "DC",
+        "gender": "Male",
+        "costume": "a red tunic with a cape and a high collar, over an even, all-over "
+                   "coat of yellow scaled skin, with pointed ears, small horns, a fanged "
+                   "grin, and flames at the hands",
+        "eyes": "red",
+        "signature": {},
+        "physique": {"body_type": "athletic", "height": "tall"},
+    },
+    "Static Shock": {
+        "franchise": "DC",
+        "gender": "Male",
+        "costume": "a yellow-and-black jacket with a lightning emblem and a backwards "
+                   "cap, riding a flying metal disc and crackling with electricity",
+        "signature": {"hair_color": "jet black", "hair_length": "very short",
+                      "eye_color": "dark brown"},
+        "physique": {"body_type": "lean", "height": "average height", "skin_tone": "dark brown"},
+    },
+    "Kid Flash": {
+        "franchise": "DC",
+        "gender": "Male",
+        "costume": "a yellow bodysuit with red sleeves and a red lightning emblem, red "
+                   "goggles pushed up, and a trailing lightning blur",
+        "signature": {"hair_color": "bright red", "hair_length": "very short",
+                      "eye_color": "bright blue"},
+        "physique": {"body_type": "lean", "height": "average height", "skin_tone": "fair"},
+    },
+
+    # --- Other comics (Dark Horse / 2000 AD / indie) ---------------------
+    "V (V for Vendetta)": {
+        "franchise": "V for Vendetta",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a long black cloak, a black wig, and a wide-brimmed black hat, with a "
+                   "bandolier of daggers across the chest",
+        "mask": "a smiling white Guy Fawkes mask with a thin curled mustache and a "
+                "pointed beard",
+        "physique": {"body_type": "lean", "height": "tall"},
+    },
+    "The Tick": {
+        "franchise": "Comics",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a bright blue muscular bodysuit",
+        "mask": "a blue head-cowl with two long wavy antennae and large blank white eyes",
+        "physique": {"body_type": "stocky", "height": "very tall"},
+    },
+    "Abe Sapien": {
+        "franchise": "Hellboy",
+        "gender": "Male",
+        "costume": "trunks and a breathing harness, over an even, all-over coat of "
+                   "blue-green scaled skin, with red feathery gills at the neck and webbed "
+                   "three-fingered hands",
+        "eyes": "large solid black",
+        "signature": {},
+        "physique": {"body_type": "lean", "height": "tall"},
+    },
+    "The Mask": {
+        "franchise": "The Mask",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a yellow zoot suit with a wide tie and a yellow fedora",
+        "mask": "a smooth bright-green bald head with an enormous toothy grin and "
+                "bulging white eyes",
+        "physique": {"body_type": "lean", "height": "average height"},
+    },
+
+    # --- Star Wars (more) -------------------------------------------------
+    "Qui-Gon Jinn": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "costume": "layered earth-brown Jedi robes with a leather belt and a hooded cloak",
+        "signature": {"hair_color": "gray-streaked dark hair", "hair_length": "shoulder length",
+                      "hair_style": "low ponytail", "facial_hair": "short beard",
+                      "eye_color": "bright blue"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "fair"},
+        "prop": "a lightsaber with a green energy blade",
+    },
+    "Lando Calrissian": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "costume": "a blue shirt with a long flowing blue cape lined in gold and orange",
+        "signature": {"hair_color": "near black", "hair_length": "very short",
+                      "facial_hair": "mustache", "eye_color": "dark brown"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "dark brown"},
+    },
+    "Darth Revan": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a flowing dark hooded robe with a cape",
+        "mask": "a distinctive red-and-black Sith face mask",
+        "physique": {"body_type": "athletic", "height": "tall"},
+        "prop": "a lightsaber with a red energy blade",
+    },
+    "Jabba the Hutt": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "costume": "an enormous slug-like body of green-brown leathery skin with a huge "
+                   "wide mouth, stubby arms, and a long coiling tail",
+        "eyes": "small yellow reptilian",
+        "signature": {},
+        "physique": {"body_type": "plus size", "height": "average height"},
+    },
+    "Jar Jar Binks": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "costume": "a ragged leather vest and trousers, over an even, all-over coat of "
+                   "orange amphibian skin, with long floppy ear-flaps, eyes on stalks, "
+                   "and a duck-billed snout",
+        "eyes": "yellow on long stalks",
+        "signature": {},
+        "physique": {"body_type": "lean", "height": "tall"},
+    },
+    "R2-D2": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a riveted white-and-blue cylindrical droid body with three "
+                   "mechanical legs",
+        "mask": "a white-and-blue rotating dome head with a single blue photoreceptor eye",
+        "physique": {"body_type": "stocky", "height": "short"},
+    },
+    "C-3PO": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a humanoid golden metallic droid body with exposed wires at the "
+                   "midriff and stiff jointed limbs",
+        "mask": "a golden protocol-droid face with glowing yellow eyes",
+        "physique": {"body_type": "slim", "height": "average height"},
+    },
+    "BB-8": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a rolling spherical white-and-orange droid body",
+        "mask": "a domed white-and-orange head with a single round eye that stays on top "
+                "as it rolls",
+        "physique": {"body_type": "stocky", "height": "petite"},
+    },
+    "Captain Rex": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "costume": "white clone-trooper armor with blue markings, over a black flight "
+                   "suit, with a shaved head",
+        "signature": {"hair_color": "golden blonde", "hair_length": "buzzed very short",
+                      "facial_hair": "clean shaven", "eye_color": "dark brown"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "fair"},
+        "prop": "a pair of dual blaster pistols",
+    },
+    "Wedge Antilles": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "costume": "an orange rebel flight suit with a white chest harness",
+        "signature": {"hair_color": "medium brown", "hair_length": "very short",
+                      "eye_color": "dark brown"},
+        "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "fair"},
+    },
+
+    # --- Anime / classic toons (Astro Boy / Speed Racer) -----------------
+    "Astro Boy": {
+        "franchise": "Anime",
+        "gender": "Male",
+        "costume": "red shorts and tall black boots on a smooth-skinned robotic boy's "
+                   "frame, with rocket jets at the feet and a bare chest",
+        "signature": {"hair_color": "jet black", "hair_length": "very short",
+                      "eye_color": "nearly black", "eye_shape": "round"},
+        "physique": {"body_type": "slim", "height": "petite", "skin_tone": "fair"},
+    },
+    "Speed Racer": {
+        "franchise": "Anime",
+        "gender": "Male",
+        "costume": "a white racing shirt with a red scarf and a yellow M scarf-pin",
+        "signature": {"hair_color": "jet black", "hair_length": "very short",
+                      "eye_color": "dark brown"},
+        "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "fair"},
+    },
+
+    # --- Video game mascots / icons --------------------------------------
+    "Sonic the Hedgehog": {
+        "franchise": "Sega",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "an even, all-over coat of bright blue fur with a peach muzzle and "
+                   "arms, white gloves, and red-and-white running shoes with gold buckles",
+        "mask": "a blue hedgehog head with six swept-back spiky quills and large "
+                "connected green eyes",
+        "physique": {"body_type": "slim", "height": "short"},
+    },
+    "Bowser": {
+        "franchise": "Nintendo",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a green-and-tan spiked turtle shell, a spiked black collar and arm "
+                   "cuffs, and clawed hands and feet",
+        "mask": "a horned green Koopa head with a shock of red hair, two curved horns, "
+                "and fangs",
+        "physique": {"body_type": "stocky", "height": "very tall"},
+    },
+    "Donkey Kong": {
+        "franchise": "Nintendo",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "an even, all-over coat of brown gorilla fur on a towering muscular "
+                   "frame, with a red necktie bearing yellow DK initials",
+        "mask": "a brown gorilla face with small dark eyes",
+        "physique": {"body_type": "stocky", "height": "very tall"},
+    },
+    "Yoshi": {
+        "franchise": "Nintendo",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "an even, all-over coat of green dinosaur skin with a cream belly, a "
+                   "spiny orange back-ridge, a red saddle-shell, and orange boots",
+        "mask": "a round green dinosaur head with big friendly eyes and a wide snout",
+        "physique": {"body_type": "stocky", "height": "average height"},
+    },
+    "Toad": {
+        "franchise": "Nintendo",
+        "gender": "Male",
+        "costume": "a large white mushroom cap with red spots, a blue vest with a white "
+                   "collar, and white trousers",
+        "signature": {"eye_color": "nearly black"},
+        "physique": {"body_type": "stocky", "height": "petite", "skin_tone": "fair"},
+    },
+    "Wario": {
+        "franchise": "Nintendo",
+        "gender": "Male",
+        "costume": "a yellow cap with a blue W, a yellow shirt, and purple overalls, with "
+                   "a big pink nose and a zigzag scowl",
+        "signature": {"hair_color": "jet black", "hair_length": "very short",
+                      "facial_hair": "mustache", "eye_color": "dark brown"},
+        "physique": {"body_type": "stocky", "height": "short", "skin_tone": "fair"},
+    },
+    "Kirby": {
+        "franchise": "Nintendo",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a small round pink ball-shaped body with stubby arms and red "
+                   "rounded feet",
+        "mask": "a round pink face with large dark oval eyes and rosy oval cheeks",
+        "physique": {"body_type": "plump", "height": "very petite"},
+    },
+    "Fox McCloud": {
+        "franchise": "Nintendo",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a white-and-green flight jacket with a red neckerchief and a wrist "
+                   "communicator, over an even, all-over coat of orange-and-white fur",
+        "mask": "an orange-and-white fox head with pointed ears and green eyes",
+        "physique": {"body_type": "athletic", "height": "average height"},
+        "prop": "a compact blaster pistol",
+    },
+    "Captain Falcon": {
+        "franchise": "Nintendo",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a blue racing bodysuit with shoulder pads, a yellow scarf, and "
+                   "knee-high boots",
+        "mask": "a blue-and-red full-face racing helmet with a golden falcon emblem",
+        "physique": {"body_type": "athletic", "height": "tall"},
+    },
+    "Pac-Man": {
+        "franchise": "Namco",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a round bright-yellow disc-shaped body",
+        "mask": "a yellow circular face with a wide open wedge mouth and a single dot eye",
+        "physique": {"body_type": "plump", "height": "average height"},
+    },
+    "Big Daddy": {
+        "franchise": "BioShock",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a riveted bronze deep-sea diving suit on a towering hulking frame, "
+                   "with a massive arm-mounted drill",
+        "mask": "a round brass porthole diving helmet with glowing yellow portholes",
+        "physique": {"body_type": "stocky", "height": "very tall"},
+    },
+
+    # --- Looney Tunes -----------------------------------------------------
+    "Bugs Bunny": {
+        "franchise": "Looney Tunes",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "an even, all-over coat of grey fur with a white belly and muzzle, and "
+                   "white gloves, on a tall lanky frame",
+        "mask": "a grey rabbit head with very long upright ears, half-lidded eyes, and "
+                "buck teeth",
+        "physique": {"body_type": "lean", "height": "tall"},
+        "prop": "a half-eaten orange carrot",
+    },
+    "Daffy Duck": {
+        "franchise": "Looney Tunes",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "an even, all-over coat of glossy black feathers with a white neck "
+                   "ring and orange webbed feet",
+        "mask": "a black duck head with an orange bill and wide white eyes",
+        "physique": {"body_type": "slim", "height": "short"},
+    },
+    "Yosemite Sam": {
+        "franchise": "Looney Tunes",
+        "gender": "Male",
+        "costume": "a red shirt and chaps, tall boots, and a cowboy hat over a shock of "
+                   "red hair",
+        "signature": {"hair_color": "bright red", "hair_length": "very short",
+                      "facial_hair": "mustache", "eye_color": "dark brown"},
+        "physique": {"body_type": "stocky", "height": "short", "skin_tone": "fair"},
+        "prop": "a pair of holstered six-shooter pistols",
+    },
+
+    # --- Disney / Pixar (more) -------------------------------------------
+    "Mickey Mouse": {
+        "franchise": "Disney",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "red shorts with two white buttons, white gloves, and big yellow "
+                   "shoes, on a small round mouse frame",
+        "mask": "a black mouse head with two large round ears, a peach face, and cheerful "
+                "eyes",
+        "physique": {"body_type": "slim", "height": "short"},
+    },
+    "Donald Duck": {
+        "franchise": "Disney",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a blue sailor shirt and a blue sailor cap with a red bow, over an "
+                   "even, all-over coat of white feathers with orange webbed feet, and no "
+                   "trousers",
+        "mask": "a white duck head with an orange bill and blue eyes",
+        "physique": {"body_type": "stocky", "height": "short"},
+    },
+    "Goofy": {
+        "franchise": "Disney",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "an orange turtleneck under a black vest, blue trousers, a tall green "
+                   "hat, white gloves, and oversized brown shoes",
+        "mask": "a black dog face with long droopy ears, two buck teeth, and kind eyes",
+        "physique": {"body_type": "lean", "height": "very tall"},
+    },
+    "Genie": {
+        "franchise": "Aladdin",
+        "gender": "Male",
+        "costume": "golden wrist cuffs and a black topknot on a bald head, over an even, "
+                   "smooth coat of bright blue skin, with a wispy blue tail instead of "
+                   "legs on a large floating muscular frame",
+        "signature": {"facial_hair": "goatee", "eye_color": "dark brown"},
+        "physique": {"body_type": "athletic", "height": "very tall"},
+    },
+    "Peter Pan": {
+        "franchise": "Peter Pan",
+        "gender": "Male",
+        "costume": "a green tunic with a jagged hem, green tights, and a green pointed "
+                   "cap with a red feather",
+        "signature": {"hair_color": "copper", "hair_length": "very short",
+                      "eye_color": "green"},
+        "physique": {"body_type": "lean", "height": "average height", "skin_tone": "fair"},
+        "prop": "a small dagger",
+    },
+    "Stitch": {
+        "franchise": "Lilo and Stitch",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "an even, all-over coat of blue fur on a small sturdy koala-like alien "
+                   "frame, with two extra arms and retractable back spines",
+        "mask": "a blue koala-like alien head with large notched pointed ears, big black "
+                "eyes, and a wide toothy mouth",
+        "physique": {"body_type": "stocky", "height": "petite"},
+    },
+    "Gru": {
+        "franchise": "Despicable Me",
+        "gender": "Male",
+        "costume": "a grey-and-black horizontal-striped scarf, a long dark coat, a tan "
+                   "turtleneck, and a bald head with a long pointed nose",
+        "signature": {"facial_hair": "clean shaven", "eye_color": "dark brown"},
+        "physique": {"body_type": "average", "height": "tall", "skin_tone": "fair"},
+    },
+    "Buzz Lightyear": {
+        "franchise": "Toy Story",
+        "gender": "Male",
+        "costume": "a white space-ranger suit with green and purple panels, a clear dome "
+                   "helmet, a green chin and chest control panel, retractable white wings, "
+                   "and a wrist communicator",
+        "signature": {"hair_color": "dark brown", "hair_length": "very short",
+                      "eye_color": "dark brown"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "fair"},
+    },
+    "Woody": {
+        "franchise": "Toy Story",
+        "gender": "Male",
+        "costume": "a yellow plaid shirt, a cow-print vest, blue jeans with a brown belt, "
+                   "an empty holster, brown cowboy boots, and a brown cowboy hat",
+        "signature": {"hair_color": "medium brown", "hair_length": "very short",
+                      "eye_color": "dark brown"},
+        "physique": {"body_type": "lean", "height": "tall", "skin_tone": "fair"},
+    },
+    "Jiminy Cricket": {
+        "franchise": "Pinocchio",
+        "gender": "Male",
+        "costume": "a black top hat, a blue tailcoat over a yellow vest, white gloves, "
+                   "and spats, on a tiny cricket frame",
+        "signature": {"eye_color": "dark brown"},
+        "physique": {"body_type": "slim", "height": "very petite", "skin_tone": "fair"},
+        "prop": "a small umbrella",
+    },
+
+    # --- Nickelodeon / Cartoon Network -----------------------------------
+    "SpongeBob SquarePants": {
+        "franchise": "Nickelodeon",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a white shirt with a red tie, brown square shorts, white knee socks "
+                   "with stripes, and black shoes, on a square porous yellow sponge body",
+        "mask": "a square porous yellow face with big blue eyes and prominent buck teeth",
+        "physique": {"body_type": "slim", "height": "short"},
+    },
+    "Patrick Star": {
+        "franchise": "Nickelodeon",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "green-and-purple flowered shorts on a chunky pink starfish body",
+        "mask": "a pink starfish face with small eyes and thick eyebrows",
+        "physique": {"body_type": "plump", "height": "average height"},
+    },
+    "Squidward": {
+        "franchise": "Nickelodeon",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a brown short-sleeved shirt on a tall lanky teal octopus body with "
+                   "six legs",
+        "mask": "a teal octopus head with a long drooping nose and half-lidded eyes",
+        "physique": {"body_type": "lean", "height": "tall"},
+    },
+    "Finn the Human": {
+        "franchise": "Adventure Time",
+        "gender": "Male",
+        "costume": "a white hat with two round bear-like ears, a light-blue shirt and "
+                   "shorts, and a green backpack",
+        "signature": {"eye_color": "nearly black"},
+        "physique": {"body_type": "lean", "height": "average height", "skin_tone": "fair"},
+        "prop": "a golden sword",
+    },
+    "Jake the Dog": {
+        "franchise": "Adventure Time",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "an even, all-over coat of yellow-orange fur on a stretchy, elastic "
+                   "dog body that can morph and grow",
+        "mask": "a yellow-orange dog face with simple dot eyes and a wide muzzle",
+        "physique": {"body_type": "average", "height": "average height"},
+    },
+
+    # --- The Simpsons / Rick and Morty -----------------------------------
+    "Homer Simpson": {
+        "franchise": "The Simpsons",
+        "gender": "Male",
+        "costume": "a white short-sleeved shirt and blue trousers, over an even, smooth "
+                   "coat of yellow skin, with a bald head bearing two stray top hairs",
+        "eyes": "large round white",
+        "signature": {"facial_hair": "five o'clock shadow"},
+        "physique": {"body_type": "plus size", "height": "average height"},
+    },
+    "Bart Simpson": {
+        "franchise": "The Simpsons",
+        "gender": "Male",
+        "costume": "an orange short-sleeved t-shirt, blue shorts, and blue sneakers, over "
+                   "an even, smooth coat of yellow skin, with spiky yellow hair",
+        "eyes": "large round white",
+        "signature": {"hair_color": "yellow", "hair_length": "very short"},
+        "physique": {"body_type": "slim", "height": "petite"},
+    },
+    "Rick Sanchez": {
+        "franchise": "Rick and Morty",
+        "gender": "Male",
+        "costume": "a white lab coat over a light-blue shirt and brown trousers, with a "
+                   "constant line of drool",
+        "signature": {"hair_color": "electric blue", "hair_length": "very short",
+                      "eye_color": "pale blue"},
+        "physique": {"body_type": "lean", "height": "tall", "skin_tone": "pale"},
+    },
+    "Morty Smith": {
+        "franchise": "Rick and Morty",
+        "gender": "Male",
+        "costume": "a yellow shirt, light-blue trousers, and white sneakers, with an "
+                   "anxious open-mouthed expression",
+        "signature": {"hair_color": "medium brown", "hair_length": "very short",
+                      "eye_color": "dark brown"},
+        "physique": {"body_type": "slim", "height": "petite", "skin_tone": "fair"},
+    },
+    "Mumen Rider": {
+        "franchise": "One Punch Man",
+        "gender": "Male",
+        "costume": "a light-blue bodysuit with a green chest emblem, knee and elbow pads, "
+                   "and a green bicycle helmet with goggles",
+        "signature": {"eye_color": "dark brown"},
+        "physique": {"body_type": "average", "height": "average height", "skin_tone": "fair"},
+    },
+
+    # --- Hanna-Barbera classics ------------------------------------------
+    "Fred Flintstone": {
+        "franchise": "The Flintstones",
+        "gender": "Male",
+        "costume": "an orange tunic with black spots, a blue necktie, and bare feet",
+        "signature": {"hair_color": "jet black", "hair_length": "very short",
+                      "eye_color": "nearly black"},
+        "physique": {"body_type": "stocky", "height": "average height", "skin_tone": "fair"},
+    },
+    "Barney Rubble": {
+        "franchise": "The Flintstones",
+        "gender": "Male",
+        "costume": "a brown furry one-shoulder tunic and bare feet",
+        "signature": {"hair_color": "golden blonde", "hair_length": "very short",
+                      "eye_color": "nearly black"},
+        "physique": {"body_type": "stocky", "height": "short", "skin_tone": "fair"},
+    },
+    "George Jetson": {
+        "franchise": "The Jetsons",
+        "gender": "Male",
+        "costume": "a white space-age tunic with a high collar and white gloves",
+        "signature": {"hair_color": "medium brown", "hair_length": "very short",
+                      "eye_color": "dark brown"},
+        "physique": {"body_type": "lean", "height": "average height", "skin_tone": "fair"},
+    },
+    "Shaggy": {
+        "franchise": "Scooby-Doo",
+        "gender": "Male",
+        "costume": "a faded green t-shirt and maroon bell-bottom trousers, with a "
+                   "slouching posture",
+        "signature": {"hair_color": "dirty blonde", "hair_length": "ear length",
+                      "facial_hair": "stubble", "eye_color": "dark brown"},
+        "physique": {"body_type": "lean", "height": "tall", "skin_tone": "fair"},
+    },
+    "Fred Jones": {
+        "franchise": "Scooby-Doo",
+        "gender": "Male",
+        "costume": "a white sweater with blue accents, an orange ascot, and blue trousers",
+        "signature": {"hair_color": "golden blonde", "hair_length": "very short",
+                      "eye_color": "bright blue"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "fair"},
+    },
+
+    # --- Folklore / legend / literature ----------------------------------
+    "Robin Hood": {
+        "franchise": "Folklore",
+        "gender": "Male",
+        "costume": "a green hooded tunic and hose with a wide belt and a green feathered "
+                   "cap",
+        "signature": {"hair_color": "medium brown", "hair_length": "ear length",
+                      "facial_hair": "short beard", "eye_color": "dark brown"},
+        "physique": {"body_type": "lean", "height": "tall", "skin_tone": "fair"},
+        "prop": "a longbow with a quiver of arrows",
+    },
+    "King Arthur": {
+        "franchise": "Legend",
+        "gender": "Male",
+        "costume": "silver chainmail and plate armor over a blue tabard, with a golden "
+                   "crown",
+        "signature": {"hair_color": "medium brown", "hair_length": "ear length",
+                      "facial_hair": "short beard", "eye_color": "bright blue"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "fair"},
+        "prop": "Excalibur, a gleaming broadsword with a golden cross-hilt",
+    },
+    "Merlin": {
+        "franchise": "Legend",
+        "gender": "Male",
+        "costume": "deep-blue robes patterned with golden stars and moons and a tall "
+                   "pointed hat",
+        "signature": {"hair_color": "white", "hair_length": "very long",
+                      "facial_hair": "full beard", "eye_color": "pale blue"},
+        "physique": {"body_type": "slim", "height": "tall", "skin_tone": "fair"},
+        "prop": "a long gnarled wooden staff",
+    },
+    "Santa Claus": {
+        "franchise": "Folklore",
+        "gender": "Male",
+        "costume": "a red suit and hat with white fur trim, a wide black belt, and black "
+                   "boots",
+        "signature": {"hair_color": "white", "hair_length": "ear length",
+                      "facial_hair": "full beard", "eye_color": "bright blue"},
+        "physique": {"body_type": "plus size", "height": "average height", "skin_tone": "fair"},
+        "prop": "a bulging sack of toys",
+    },
+    "Paddington Bear": {
+        "franchise": "Literature",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a blue duffle coat with toggles and a battered red wide-brimmed hat, "
+                   "over an even, all-over coat of brown fur",
+        "mask": "a brown bear face with kind dark eyes",
+        "physique": {"body_type": "stocky", "height": "short"},
+        "prop": "a small worn suitcase",
+    },
+    "Curious George": {
+        "franchise": "Literature",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "an even, all-over coat of brown fur on a small monkey frame with a "
+                   "long tail and no clothing",
+        "mask": "a brown monkey face with big curious eyes",
+        "physique": {"body_type": "slim", "height": "petite"},
+    },
+
+    # --- Dr. Seuss --------------------------------------------------------
+    "The Grinch": {
+        "franchise": "Dr. Seuss",
+        "gender": "Male",
+        "costume": "a tattered red-and-white Santa coat and hat, over an even, all-over "
+                   "coat of shaggy green fur, with a sour pointed grin",
+        "eyes": "narrow yellow",
+        "signature": {},
+        "physique": {"body_type": "lean", "height": "tall"},
+    },
+    "Horton": {
+        "franchise": "Dr. Seuss",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "an even, smooth coat of grey elephant skin on a large frame",
+        "mask": "a grey elephant head with oversized floppy ears, a long trunk, and kind "
+                "round eyes",
+        "physique": {"body_type": "stocky", "height": "very tall"},
+    },
+    "The Lorax": {
+        "franchise": "Dr. Seuss",
+        "gender": "Male",
+        "costume": "an even, all-over coat of orange fur on a small stout frame, with "
+                   "thick yellow eyebrows",
+        "signature": {"hair_color": "yellow", "facial_hair": "mustache",
+                      "eye_color": "amber"},
+        "physique": {"body_type": "stocky", "height": "petite"},
+    },
+
+    # --- Winnie the Pooh --------------------------------------------------
+    "Winnie the Pooh": {
+        "franchise": "Winnie the Pooh",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a short red t-shirt that does not reach the belly, over an even, "
+                   "all-over coat of golden-yellow fur",
+        "mask": "a round golden-yellow bear face with small black eyes",
+        "physique": {"body_type": "plump", "height": "short"},
+    },
+    "Tigger": {
+        "franchise": "Winnie the Pooh",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "an even, all-over coat of orange fur with black stripes and a big "
+                   "springy coiled tail",
+        "mask": "an orange-and-black tiger face with large eyes and a wide grin",
+        "physique": {"body_type": "athletic", "height": "average height"},
+    },
+    "Eeyore": {
+        "franchise": "Winnie the Pooh",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "an even, all-over coat of grey fur on a small droopy donkey frame, "
+                   "with a thin tail tied with a pink bow",
+        "mask": "a grey donkey face with sad half-lidded eyes and a long muzzle",
+        "physique": {"body_type": "average", "height": "short"},
+    },
+    "Piglet": {
+        "franchise": "Winnie the Pooh",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a pink-and-magenta striped pullover on a tiny piglet body",
+        "mask": "a small pink piglet face with large ears",
+        "physique": {"body_type": "slim", "height": "very petite"},
+    },
+
+    # --- Movie monsters / action icons -----------------------------------
+    "Dracula": {
+        "franchise": "Movie",
+        "gender": "Male",
+        "costume": "a black formal suit with a high-collared cape lined in red, and two "
+                   "long fangs",
+        "signature": {"hair_color": "jet black", "hair_length": "ear length",
+                      "hair_style": "slicked back", "eye_color": "dark brown"},
+        "physique": {"body_type": "lean", "height": "tall", "skin_tone": "very pale"},
+    },
+    "Frankenstein's Monster": {
+        "franchise": "Movie",
+        "gender": "Male",
+        "costume": "an ill-fitting dark suit and heavy elevated boots, over an even, "
+                   "smooth coat of pale green-grey skin, with a flat-topped head, stitched "
+                   "scars, and two neck bolts",
+        "eyes": "dark and sunken",
+        "signature": {},
+        "physique": {"body_type": "stocky", "height": "very tall"},
+    },
+    "The Wolf Man": {
+        "franchise": "Movie",
+        "gender": "Male",
+        "costume": "a torn shirt and trousers, over an even, all-over coat of brown fur, "
+                   "with a fanged snout, pointed ears, and clawed hands",
+        "eyes": "yellow",
+        "signature": {},
+        "physique": {"body_type": "athletic", "height": "tall"},
+    },
+    "The Mummy": {
+        "franchise": "Movie",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a body wrapped head to toe in tattered grey ancient bandages, with "
+                   "dried preserved skin showing through, one arm outstretched",
+        "mask": "a bandage-wrapped face with hollow dark eye sockets",
+        "physique": {"body_type": "lean", "height": "tall"},
+    },
+    "Godzilla": {
+        "franchise": "Movie",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "an even, all-over coat of charcoal-grey scaled hide with rows of "
+                   "jagged white-glowing dorsal fins and a thick powerful tail, on a "
+                   "colossal frame",
+        "mask": "a charcoal-grey reptilian head with small glowing eyes and rows of teeth",
+        "physique": {"body_type": "stocky", "height": "very tall"},
+    },
+    "Rambo": {
+        "franchise": "Movie",
+        "gender": "Male",
+        "costume": "a red headband, torn fatigues, and an ammo bandolier across a bare "
+                   "sweat-sheened chest",
+        "signature": {"hair_color": "dark brown", "hair_length": "shoulder length",
+                      "eye_color": "dark brown"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "tan"},
+        "prop": "a large survival knife",
+    },
+    "William Wallace": {
+        "franchise": "Braveheart",
+        "gender": "Male",
+        "costume": "a tartan kilt and leather armor, with blue woad war paint streaked "
+                   "across the face",
+        "signature": {"hair_color": "dark brown", "hair_length": "shoulder length",
+                      "hair_texture": "wavy", "eye_color": "bright blue"},
+        "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "fair"},
+        "prop": "a great two-handed claymore",
+    },
 }
 
 
@@ -6225,7 +7091,7 @@ _CATEGORY_FRANCHISES: dict[str, tuple[str, ...]] = {
         "My Hero Academia", "JoJo's Bizarre Adventure", "Fullmetal Alchemist", "Death Note",
         "Cowboy Bebop", "Fate/stay night", "Kill la Kill", "Neon Genesis Evangelion",
         "Sailor Moon", "Attack on Titan", "One Punch Man", "Ghost in the Shell", "Vocaloid",
-        "Pokemon", "Madoka Magica", "Studio Ghibli",
+        "Pokemon", "Madoka Magica", "Studio Ghibli", "Anime",
     ),
     "Marvel": ("Marvel",),
     "DC": ("DC", "DC (Teen Titans)", "Watchmen", "The Sandman", "Fables"),
@@ -6235,6 +7101,7 @@ _CATEGORY_FRANCHISES: dict[str, tuple[str, ...]] = {
         "Pocahontas", "Mulan", "Moana", "The Princess and the Frog", "Peter Pan", "Cinderella",
         "Beauty and the Beast", "Aladdin", "Brave", "Alice in Wonderland", "101 Dalmatians",
         "Big Hero 6", "The Incredibles", "Zootopia", "Star vs. the Forces of Evil",
+        "Toy Story", "Lilo and Stitch", "Pinocchio",
     ),
     "Video Games": (
         "Final Fantasy", "Final Fantasy VII", "Final Fantasy X", "Final Fantasy XV",
@@ -6246,10 +7113,12 @@ _CATEGORY_FRANCHISES: dict[str, tuple[str, ...]] = {
         "Horizon", "Hitman", "Hellblade", "Doom", "Portal", "Silent Hill", "Darkstalkers",
         "The King of Fighters", "Bayonetta", "Divinity: Original Sin", "World of Warcraft",
         "StarCraft", "Borderlands", "Dragon Age", "Kid Icarus", "ARMS", "System Shock",
+        "Sega", "Namco", "BioShock",
     ),
     "Fantasy & Literature": (
         "The Lord of the Rings", "Harry Potter", "Game of Thrones", "The Hunger Games",
         "Anne of Green Gables", "Pippi Longstocking", "The Wizard of Oz", "Fairy Tales",
+        "Literature", "Folklore", "Legend", "Dr. Seuss", "Winnie the Pooh",
     ),
     "Movies & TV": (
         "Star Trek", "The Terminator", "Alien", "Predator", "RoboCop", "Judge Dredd", "Mad Max",
@@ -6265,6 +7134,7 @@ _CATEGORY_FRANCHISES: dict[str, tuple[str, ...]] = {
         "The Smurfs", "Adventure Time", "Thundercats", "G.I. Joe", "TMNT", "Monster High",
         "Fathom", "Chaos! Comics", "Comics", "Betty Boop", "The Flintstones", "The Jetsons",
         "The Simpsons", "Family Guy", "Futurama", "Jem and the Holograms",
+        "Looney Tunes", "Nickelodeon", "Rick and Morty", "Despicable Me", "The Mask",
     ),
 }
 _FRANCHISE_CATEGORY: dict[str, str] = {
