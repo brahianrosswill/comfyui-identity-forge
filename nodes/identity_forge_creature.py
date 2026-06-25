@@ -264,6 +264,8 @@ def build_creature_json(
         form_token = rng.choice([_FORM_ANTHRO, _FORM_FERAL, _FORM_SUBTLE])
 
     base_name = _resolve_creature(creature, rng)
+    if base_name is None:  # master switch off ("None") -> inactive, pass upstream through
+        return "{}"
 
     overrides = {
         "head": head, "eyes": eyes, "integument": integument, "arms": arms,

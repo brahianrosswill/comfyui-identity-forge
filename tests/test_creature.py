@@ -51,6 +51,15 @@ class BuildBasicsTests(unittest.TestCase):
     def test_unknown_name_is_inactive(self):
         self.assertEqual(build_creature_json("definitely-not-a-creature"), "{}")
 
+    def test_none_ignores_slot_and_freetext_overrides(self):
+        # The 'creature' dropdown is the master on/off switch: 'None' emits nothing
+        # even when hybrid slots or the free-text box still carry leftover overrides.
+        self.assertEqual(build_creature_json(_NONE, head="sloth"), "{}")
+        self.assertEqual(build_creature_json(_NONE, head=_RANDOM_SLOT, seed=5), "{}")
+        self.assertEqual(
+            build_creature_json(_NONE, more_features="a crown of bone spurs"), "{}"
+        )
+
     def test_specific_creature_fills_core_slots(self):
         doc = _doc(build_creature_json("praying mantis", seed=1))
         anatomy = doc[_SPECIES_GROUP]
