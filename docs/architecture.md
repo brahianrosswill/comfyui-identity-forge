@@ -92,9 +92,10 @@ Conventions (keep the data coherent):
 - **Full masks/helmets:** `covers_face: True` **and** the head covering in a separate `mask`
   string (kept out of `costume`) so the *Unmask* toggle can drop it. IdentityForge then
   suppresses Face/Hair/Makeup (+ earrings/piercings). Omit both when the face shows.
-- **Bald / shaven-headed:** state it in `costume` (e.g. "…, and a clean-shaven bald head"); do
-  **not** lock a `hair_length`/`hair_style` (locking `buzzed very short` renders a buzz cut —
-  the Mace Windu bug). A `facial_hair: "clean shaven"` lock is fine.
+- **Bald / shaven-headed:** state it in `costume` (e.g. "…, and a clean-shaven bald head") — the
+  builder auto-detects it and locks the scalp-hair (and, for "clean-shaven", facial-hair) fields
+  absent (see the Bald / Clean-shaven notes below). Do **not** lock a `hair_length`/`hair_style`
+  (locking `buzzed very short` renders a buzz cut — the Mace Windu bug).
 - **Non-human skin / body paint:** word as `"an even, smooth coat of <colour> body paint"`
   (textured: `"an even, all-over coat of …"` + keep the texture word); leave `skin_tone` out so
   the person underneath randomizes. The builder **auto-detects this `an even … coat of …` marker**
@@ -104,15 +105,25 @@ Conventions (keep the data coherent):
   absent — otherwise a random human skin tone/complexion *or* a randomized `makeup_style`
   ("soft glam" with no foundation colour) renders the *face* pale under the paint (the
   She-Hulk green-body/pale-face bug). An explicit `body_paint: True/False` entry key
-  overrides the auto-detection. See `_BODY_PAINT_RE` / `_BODY_PAINT_SUPPRESS` in
+  overrides the auto-detection. This suppression **also runs when the face is masked**
+  (`covers_face`): `covers_face` hides the Face/Hair/Makeup groups but **not** the Body-group
+  `skin_tone`, so an all-over coat (Human Torch flame) would otherwise still report a stray
+  skin tone under it. See `_BODY_PAINT_RE` / `_BODY_PAINT_SUPPRESS` in
   `nodes/identity_forge_cosplayer.py`.
+- **Bald characters:** state it in `costume` ("a bald head", "a clean-shaven bald scalp"). The
+  builder **auto-detects `\bbald\b`** (won't catch "baldric") and locks the scalp-hair fields
+  (`hair_color/length/texture/style/part/volume/highlights/accessory`) absent, so a random
+  "His hair is …" line can't contradict the bald head (the Doctor Manhattan / Voldemort bug).
+  Auto-detected bald is **scalp-only** (a bald man may keep a beard). For a *fully* hairless
+  head (creatures/aliens — Kilowog, King Shark, Despero) set the explicit `bald: True` key,
+  which also clears `facial_hair`. `setdefault` semantics: a deliberate signature lock (topknot,
+  stray hairs, a beard) still wins. See `_BALD_RE` / `_BALD_SUPPRESS`.
+- **Clean-shaven faces:** `"clean-shaven"`/`"clean shaven"` in `costume` **auto-locks**
+  `facial_hair` absent so a random beard can't sprout on a bare face. See `_CLEAN_SHAVEN_RE`.
 - **Elemental / energy beings whose head is also covered** (Human Torch flame, Ghost Rider
-  skull): prefer the `covers_face` + `mask` mechanism (head described in `mask`) over a plain
-  body-paint coat. `covers_face` drops the Face/Hair/Makeup groups, so no random hair/face
-  contradicts the effect (a plain body-paint coat suppresses skin but **not** hair, leaving a
-  "bald head in costume + random hair in prose" mismatch — see Doctor Manhattan / Voldemort).
-  Trade-off: `covers_face` does not suppress the Body-group `skin_tone`, so a faint "X skin"
-  can still appear in Costume-only mode; the dominant effect prose overrides it in practice.
+  skull): use the `covers_face` + `mask` mechanism (head described in `mask`) so no random
+  hair/face contradicts the effect, and keep the `an even … coat of …` body-paint phrasing in
+  `costume` so the Body-group `skin_tone` is suppressed too (see body-paint note above).
 - **Extreme-size characters** (Giganta, Titania, Giant-Man): put the scale in `costume` prose
   ("towering 50-foot stature, …") — there is no size field for humans.
 - **Plain ASCII only** in names and text (no em/en dashes, smart quotes, accents — e.g. use

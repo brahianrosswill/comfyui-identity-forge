@@ -649,6 +649,7 @@ COSPLAYERS: dict[str, dict] = {
     "King Shark": {
         "franchise": "DC",
         "gender": "Male",
+        "bald": True,
         "costume": "only torn cargo shorts, with an even, all-over coat of grey-and-white "
                    "shark skin, a massive great-white shark head with rows of jagged "
                    "teeth and a dorsal fin down the back, on a huge muscular frame",
@@ -677,6 +678,7 @@ COSPLAYERS: dict[str, dict] = {
     "Despero": {
         "franchise": "DC",
         "gender": "Male",
+        "bald": True,
         "costume": "a minimal warrior harness with gold trim, over an even, all-over "
                    "coat of pink-red alien skin, with a large third eye set in the "
                    "forehead and a tall white finned crest over the head, on a towering "
@@ -2612,7 +2614,7 @@ COSPLAYERS: dict[str, dict] = {
         "franchise": "Watchmen",
         "gender": "Male",
         "costume": "a hydrogen-atom symbol glowing on the forehead, with an even, smooth coat of glowing "
-                   "blue body paint, a bald head, and blank white eyes",
+                   "blue body paint, a clean-shaven bald head, and blank white eyes",
         "physique": {"body_type": "lean", "height": "tall"},
     },
     "Rorschach": {
@@ -3936,9 +3938,10 @@ COSPLAYERS: dict[str, dict] = {
         "franchise": "Marvel",
         "gender": "Male",
         "covers_face": True,
-        "costume": "a body made entirely of living yellow-orange flame, glowing "
-                   "white-hot at the core and trailing fire off the shoulders and arms, "
-                   "with a circular Fantastic Four '4' emblem burning brighter on the chest",
+        "costume": "an even, all-over coat of living yellow-orange flame over the whole "
+                   "body, glowing white-hot at the core and trailing fire off the "
+                   "shoulders and arms, with a circular Fantastic Four '4' emblem "
+                   "burning brighter on the chest",
         "mask": "a head of living yellow-orange flame with glowing white eyes and no "
                 "solid features",
         "physique": {"body_type": "athletic", "height": "tall"},
@@ -4014,6 +4017,7 @@ COSPLAYERS: dict[str, dict] = {
     "Abomination": {
         "franchise": "Marvel",
         "gender": "Male",
+        "bald": True,
         "costume": "torn dark trousers, with an even, all-over coat of green-grey scaly "
                    "reptilian skin, ridged bony plates over the brow and spine, pointed "
                    "finned ears, and a gaunt monstrous face, on a towering muscular frame",
@@ -4146,6 +4150,7 @@ COSPLAYERS: dict[str, dict] = {
     "Kilowog": {
         "franchise": "DC",
         "gender": "Male",
+        "bald": True,
         "costume": "a black-and-green Green Lantern uniform with a circular lantern "
                    "emblem and a glowing green power ring worn on the finger, over an "
                    "even, all-over coat of pink-grey ridged Bolovaxian skin, with a heavy "
@@ -4156,6 +4161,7 @@ COSPLAYERS: dict[str, dict] = {
     "Tomar-Re": {
         "franchise": "DC",
         "gender": "Male",
+        "bald": True,
         "costume": "a black-and-green Green Lantern uniform with a circular lantern "
                    "emblem and a glowing green power ring worn on the finger, over an "
                    "even, all-over coat of orange Xudarian skin, with a tall red fin-like "
@@ -4166,6 +4172,7 @@ COSPLAYERS: dict[str, dict] = {
     "Salaak": {
         "franchise": "DC",
         "gender": "Male",
+        "bald": True,
         "costume": "a black-and-green Green Lantern uniform on a gaunt four-armed frame, "
                    "with a circular lantern emblem and a glowing green power ring worn on "
                    "the finger, over an even, all-over coat of orange-brown alien skin, "
@@ -4176,6 +4183,7 @@ COSPLAYERS: dict[str, dict] = {
     "Ch'p": {
         "franchise": "DC",
         "gender": "Male",
+        "bald": True,
         "costume": "a stylized small-statured Green Lantern cosplay with an even, "
                    "all-over coat of brown squirrel-like fur, a bushy tail, large dark "
                    "eyes, and rounded ears, wearing a green-and-black tunic with a "
@@ -4186,6 +4194,7 @@ COSPLAYERS: dict[str, dict] = {
     "Atrocitus": {
         "franchise": "DC",
         "gender": "Male",
+        "bald": True,
         "costume": "a red-and-black Red Lantern uniform with a clawed red lantern emblem "
                    "and a glowing red power ring worn on the finger, over an even, all-over "
                    "coat of deep-red skin with bony ridges, on a towering muscular frame",
@@ -4195,6 +4204,7 @@ COSPLAYERS: dict[str, dict] = {
     "Larfleeze": {
         "franchise": "DC",
         "gender": "Male",
+        "bald": True,
         "costume": "tattered orange Agent Orange robes with a glowing orange power ring "
                    "worn on the finger, over an even, all-over coat of leathery orange "
                    "skin, with a gaunt hunched frame, pointed ears, and a wide jagged grin",

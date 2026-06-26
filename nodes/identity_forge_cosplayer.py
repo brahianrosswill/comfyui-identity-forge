@@ -140,6 +140,55 @@ def _is_body_paint(entry: dict, costume: str) -> bool:
     return bool(_BODY_PAINT_RE.search(costume))
 
 
+#: A bald character states it in the costume by convention ("a bald head", "a
+#: clean-shaven bald scalp"). ``\bbald\b`` matches that without catching "baldric"
+#: (the 'r' after 'd' breaks the word boundary). When present the builder locks the
+#: scalp-hair fields absent so a randomized "His hair is ..." line cannot contradict
+#: the bald head (the Doctor Manhattan / Voldemort bald-but-random-hair bug). An
+#: explicit ``bald`` entry key overrides the auto-detection. ``facial_hair`` is left
+#: alone (bald + beard is natural); "clean-shaven" handles that separately below.
+_BALD_RE = re.compile(r"\bbald\b", re.IGNORECASE)
+_BALD_SUPPRESS: dict[str, str] = {
+    "hair_color": "None",
+    "hair_length": "None",
+    "hair_texture": "None",
+    "hair_style": "None",
+    "hair_part": "None",
+    "hair_volume": "None",
+    "hair_highlights": "None",
+    "hair_accessory": "None",
+}
+
+#: "clean-shaven" / "clean shaven" in the costume locks ``facial_hair`` absent so a
+#: random beard does not sprout on a face the costume explicitly calls bare.
+_CLEAN_SHAVEN_RE = re.compile(r"clean[ -]?shaven", re.IGNORECASE)
+_CLEAN_SHAVEN_SUPPRESS: dict[str, str] = {"facial_hair": "clean shaven"}
+
+
+def _is_bald(entry: dict, costume: str) -> bool:
+    """Whether the costume describes a bald head (so scalp hair must be hidden)."""
+    override = entry.get("bald")
+    if override is not None:
+        return bool(override)
+    return bool(_BALD_RE.search(costume))
+
+
+def _apply_suppress(
+    document: "OrderedDict[str, Any]", suppress: dict[str, str], *, override: bool
+) -> None:
+    """Lock each field in ``suppress`` to its absent token in ``document``.
+
+    ``override`` replaces an existing locked value (used by body paint, which must
+    beat an explicit physique skin tone); otherwise an explicit signature/physique
+    lock is preserved (used by bald / clean-shaven, which only fill randomized gaps).
+    """
+    for field_name, absent in suppress.items():
+        group = FIELD_DEFINITIONS.get(field_name, {}).get("group", "Other")
+        bucket = document.setdefault(group, OrderedDict())
+        if override or field_name not in bucket:
+            bucket[field_name] = absent
+
+
 def _resolve_character(
     character: str, rng: random.Random, category: str = _SCOPE_ANY
 ) -> str | None:
@@ -244,16 +293,28 @@ def build_cosplayer_json(
                 # off too so a random size doesn't contradict it in the JSON.
                 group_values.setdefault("eye_size", "None")
                 break
-    # Body-paint characters (face shows but the colour covers it): force the human
-    # skin tone / complexion / skin marks / skin-toned makeup absent so only the
-    # costume's paint colour describes the skin — otherwise the face renders pale
-    # under the paint. Skipped when the face is masked away (those fields are hidden
-    # already). Injected here for the same reason as the eye locks above: group_fields
-    # strips "None", but the engine keeps a locked "None" as the absent state.
-    if not (covers and not unmask) and _is_body_paint(entry, costume):
-        for field_name, absent in _BODY_PAINT_SUPPRESS.items():
-            group = FIELD_DEFINITIONS.get(field_name, {}).get("group", "Other")
-            document.setdefault(group, OrderedDict())[field_name] = absent
+    # Costume-driven suppressions: lock fields absent that the costume prose has
+    # already settled, so the engine's randomizer can't add a value that contradicts
+    # the look. Injected here for the same reason as the eye locks above: group_fields
+    # strips "None" on the build side, but the engine keeps a locked "None"/absent
+    # token as the absent state and omits it from prose and JSON.
+    #
+    # Body paint runs even for a masked face: covers_face hides the Face/Hair/Makeup
+    # groups but NOT the Body-group skin_tone, so an all-over coat ("flame", "scaled
+    # skin") would otherwise still report a stray human skin tone under it.
+    if _is_body_paint(entry, costume):
+        _apply_suppress(document, _BODY_PAINT_SUPPRESS, override=True)
+    # Bald / clean-shaven only fill randomized gaps (override=False) so an entry can
+    # still lock a deliberate topknot or stray hairs via its signature. Auto-detected
+    # "bald" in the prose suppresses scalp hair only (a bald man may keep a beard); an
+    # explicit ``bald: True`` is the stronger "fully hairless head" assertion used for
+    # creatures/aliens, so it also clears facial hair.
+    if _is_bald(entry, costume):
+        _apply_suppress(document, _BALD_SUPPRESS, override=False)
+        if entry.get("bald") is True:
+            _apply_suppress(document, _CLEAN_SHAVEN_SUPPRESS, override=False)
+    if _CLEAN_SHAVEN_RE.search(costume):
+        _apply_suppress(document, _CLEAN_SHAVEN_SUPPRESS, override=False)
     return json.dumps(document, indent=2)
 
 
