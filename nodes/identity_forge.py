@@ -28,14 +28,14 @@ from typing import Any
 # the generic "data"/"nodes" names), absolute when run standalone for tests.
 try:
     from ..data.fields import (
-        FIELD_DEFINITIONS, OUTFIT_DESCRIPTIONS, SKIN_TONE_BANDS, ETHNICITY_REGION,
-        OUTDOOR_LOCATIONS, STUDIO_BACKDROPS,
+        FIELD_DEFINITIONS, HAIR_STYLE_FAMILIES, OUTFIT_DESCRIPTIONS, SKIN_TONE_BANDS,
+        ETHNICITY_REGION, OUTDOOR_LOCATIONS, STUDIO_BACKDROPS,
     )
     from ..data.constraints import CONSTRAINT_RULES
 except ImportError:  # pragma: no cover — standalone/test context
     from data.fields import (
-        FIELD_DEFINITIONS, OUTFIT_DESCRIPTIONS, SKIN_TONE_BANDS, ETHNICITY_REGION,
-        OUTDOOR_LOCATIONS, STUDIO_BACKDROPS,
+        FIELD_DEFINITIONS, HAIR_STYLE_FAMILIES, OUTFIT_DESCRIPTIONS, SKIN_TONE_BANDS,
+        ETHNICITY_REGION, OUTDOOR_LOCATIONS, STUDIO_BACKDROPS,
     )
     from data.constraints import CONSTRAINT_RULES
 
@@ -156,6 +156,7 @@ _WARDROBE_BY_GENDER: dict[str, str] = {
 _EXTRA_ABSENCE: dict[str, tuple[str, float]] = {
     "bag": ("no bag", 0.65),
     "accessories": ("no accessories", 0.55),
+    "hair_accessory": ("no hair accessory", 0.55),
     "watch_type": ("none", 0.60),
     "piercings": ("no piercings beyond ears", 0.60),
     "other_jewelry": ("no other jewelry", 0.50),
@@ -319,6 +320,26 @@ def _bias_skin_tone(pool: list[str], ethnicity: str | None, rng: random.Random) 
     return in_band or pool
 
 
+def _pick_hair_style(pool: list[str], rng: random.Random) -> str:
+    """Weighted two-tier hair-style pick: choose a family (weighted by its frozen
+    original size), then a variant uniformly within it.
+
+    This keeps each family's overall share independent of how many variants it
+    holds, so adding variants subdivides a family's slice instead of inflating it.
+    Variants are intersected with ``pool`` (and empty families dropped) so any
+    upstream filtering still applies; falls back to a flat pick if nothing maps.
+    """
+    families = [
+        (fam["weight"], [v for v in fam["variants"] if v in pool])
+        for fam in HAIR_STYLE_FAMILIES.values()
+    ]
+    families = [(weight, variants) for weight, variants in families if variants]
+    if not families:
+        return rng.choice(pool)
+    chosen = rng.choices(families, weights=[weight for weight, _ in families])[0]
+    return rng.choice(chosen[1])
+
+
 def _randomize_fields(
     locked: dict[str, str],
     gender: str,
@@ -348,6 +369,9 @@ def _randomize_fields(
         pool = _build_option_pool(field_name, field_def, gender, resolved)
         if field_name == "skin_tone":
             pool = _bias_skin_tone(pool, resolved.get("ethnicity"), rng)
+        if field_name == "hair_style" and pool:
+            resolved[field_name] = _pick_hair_style(pool, rng)
+            continue
         forced_absent = _maybe_absent(field_name, pool, accessory_density, rng)
         if forced_absent is not None:
             resolved[field_name] = forced_absent
@@ -622,6 +646,11 @@ def _format_prose(
         hair_extra.append(hl if "highlight" in hl else f"{hl} highlights")
     if g("facial_hair"):
         hair_extra.append(g("facial_hair"))
+    if g("hair_accessory"):
+        acc = g("hair_accessory")
+        # Plural pieces ("decorative hair pins") and "... in/over hair" phrases read
+        # naturally bare; singular pieces take an article.
+        hair_extra.append(acc if acc.endswith("s") else _an(acc))
     if hair_extra:
         sentences.append(f"{subj} {has} " + _join(hair_extra))
 

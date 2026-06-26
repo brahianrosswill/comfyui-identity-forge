@@ -40,9 +40,10 @@ from __future__ import annotations
 #: Hair styles that physically require enough length to braid, pin, or tie up.
 _LONG_HAIR_STYLES: list[str] = [
     "side braid", "fishtail braid", "French braid", "dutch braids", "crown braid",
-    "loose braids", "box braids", "locs", "updo", "French twist", "top knot",
-    "high ponytail", "low ponytail", "messy bun", "sleek bun", "space buns",
-    "pigtails", "half up half down", "twist-out", "afro",
+    "waterfall braid", "loose braids", "box braids", "locs", "updo", "French twist",
+    "top knot", "chignon", "high ponytail", "low ponytail", "side ponytail",
+    "messy bun", "sleek bun", "space buns", "pigtails", "braided pigtails",
+    "half up half down", "twist-out", "afro",
 ]
 
 CONSTRAINT_RULES: list[dict] = [
@@ -85,8 +86,9 @@ CONSTRAINT_RULES: list[dict] = [
     {"type": "exclusion", "field": "hair_length", "value": "short pixie",
      "excludes_field": "hair_style",
      "excludes_values": ["side braid", "fishtail braid", "French braid",
-                         "loose braids", "updo", "French twist", "space buns",
-                         "pigtails", "high ponytail", "low ponytail"],
+                         "waterfall braid", "loose braids", "updo", "French twist",
+                         "space buns", "pigtails", "braided pigtails",
+                         "high ponytail", "low ponytail", "side ponytail"],
      "reason": "a pixie cut is too short to braid or tie back"},
     {"type": "exclusion", "field": "hair_length", "value": "buzzed very short",
      "excludes_field": "hair_volume", "excludes_values": ["voluminous", "big hair"],
@@ -281,8 +283,8 @@ _MALE_EXCLUDED_VALUES: dict[str, list[str]] = {
     "rings": ["stacked thin bands", "delicate gemstone"],
     "bracelet": ["tennis bracelet", "charm bracelet"],
     "hair_style": [
-        "space buns", "pigtails", "updo", "French twist", "crown braid",
-        "fishtail braid", "half up half down",
+        "space buns", "pigtails", "braided pigtails", "updo", "French twist",
+        "crown braid", "fishtail braid", "half up half down",
     ],
     "hair_length": ["chin length bob", "waist length", "hip length"],
     "hair_highlights": ["subtle balayage", "face framing", "ombre", "sombre"],

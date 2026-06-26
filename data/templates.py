@@ -203,7 +203,7 @@ ARCHETYPES: dict[str, dict[str, str]] = {
         "makeup_style": "soft glam",
         "lips_makeup": "pink",
         "outfit_style": "evening formal",
-        "accessories": "silk headband",
+        "hair_accessory": "silk headband",
         "expression": "warm smile",
         "location": "sunlit sunroom",
         "lighting": "soft morning light",

@@ -6437,8 +6437,8 @@ COSPLAYERS: dict[str, dict] = {
     "Jabba the Hutt": {
         "franchise": "Star Wars",
         "gender": "Male",
-        "costume": "an enormous slug-like body of green-brown leathery skin with a huge "
-                   "wide mouth, stubby arms, and a long coiling tail",
+        "costume": "an enormous slug-like body of slimy green-brown leathery skin with a "
+                   "huge wide mouth, stubby arms, and a long coiling tail",
         "eyes": "small yellow reptilian",
         "signature": {},
         "physique": {"body_type": "plus size", "height": "average height"},
@@ -6497,6 +6497,184 @@ COSPLAYERS: dict[str, dict] = {
         "signature": {"hair_color": "medium brown", "hair_length": "very short",
                       "eye_color": "dark brown"},
         "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "fair"},
+    },
+
+    # --- Star Wars (Imperials, troopers, and creatures) ------------------
+    "Grogu": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "costume": "a loose tan woven robe, with smooth green skin, very large pointed "
+                   "ears, and a few wisps of fine white hair",
+        "eyes": "enormous dark glossy",
+        "signature": {},
+        "physique": {"body_type": "slim", "height": "very petite"},
+    },
+    "Stormtrooper": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "white plastoid armor plates over a black bodysuit, with a utility belt",
+        "mask": "a white stormtrooper helmet with black eye lenses and a vented "
+                "frown-shaped mouth grille",
+        "physique": {"body_type": "athletic", "height": "average height"},
+        "prop": "an E-11 blaster rifle with a folding stock and a stubby barrel",
+    },
+    "Scout Trooper": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "lightweight white shoulder, chest, and shin armor plates over a "
+                   "black bodysuit",
+        "mask": "a white scout-trooper helmet with a low brow and large angular black "
+                "goggle lenses",
+        "physique": {"body_type": "athletic", "height": "average height"},
+        "prop": "a compact hold-out blaster pistol",
+    },
+    "Imperial Royal Guard": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "flowing deep crimson robes and a hooded cloak over crimson armor",
+        "mask": "a smooth crimson helmet with a narrow vertical visor slit",
+        "physique": {"body_type": "athletic", "height": "average height"},
+        "prop": "a tall force pike with a slender black shaft and a gleaming metal "
+                "blade tip",
+    },
+    "Praetorian Guard": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "articulated crimson plate armor with a layered crimson fabric skirt",
+        "mask": "a crimson helmet with a fin-like crest and a dark narrow visor",
+        "physique": {"body_type": "athletic", "height": "tall"},
+        "prop": "a vibro-voulge, a long black polearm with a glinting bladed head",
+    },
+    "TIE Pilot": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a black Imperial flight suit with a ribbed chest control box and a "
+                   "harness of cables",
+        "mask": "a black flight helmet with a slotted face mask and ribbed breathing hoses",
+        "physique": {"body_type": "athletic", "height": "average height"},
+    },
+    "Death Trooper": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "matte black reinforced stormtrooper armor over a black bodysuit",
+        "mask": "a matte black trooper helmet with a narrow red visor strip",
+        "physique": {"body_type": "athletic", "height": "tall"},
+        "prop": "a black heavy blaster rifle with a long barrel",
+    },
+    "Dark Trooper": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "heavy matte black droid-trooper armor plates with thick segmented limbs",
+        "mask": "a faceless black droid-trooper helmet with a smooth blank visor",
+        "physique": {"body_type": "stocky", "height": "very tall"},
+    },
+    "IG-88": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a thin chrome assassin-droid body of exposed pistons and wiring, "
+                   "with a bandolier across the chest",
+        "mask": "a tall cylindrical chrome droid head with a band of small red "
+                "photoreceptors",
+        "physique": {"body_type": "slim", "height": "very tall"},
+    },
+    "Tusken Raider": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "layered tan desert robes and wrappings with a bandolier and a "
+                   "pouched belt",
+        "mask": "a bandage-wrapped face with round metal goggle eyes and a hooded "
+                "mouth grille",
+        "physique": {"body_type": "lean", "height": "average height"},
+        "prop": "a gaderffii war staff, a long staff with bladed and bludgeoning ends",
+    },
+    "Wampa": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "a hulking body covered in shaggy off-white fur, with long clawed arms",
+        "mask": "a fanged white-furred beast face with curved horns and small dark eyes",
+        "physique": {"body_type": "stocky", "height": "very tall"},
+    },
+    "Wicket the Ewok": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "all-over soft brown fur with a pointed orange hood and a slung satchel",
+        "mask": "a small round furry face with dark eyes peering out from under the hood",
+        "physique": {"body_type": "slim", "height": "very petite"},
+        "prop": "a short wooden spear with a bound stone tip",
+    },
+    "Chief Chirpa": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "covers_face": True,
+        "costume": "all-over grizzled grey fur with a horned headdress and a beaded pouch",
+        "mask": "a grey furry muzzled face with dark eyes under a horned headdress",
+        "physique": {"body_type": "slim", "height": "short"},
+        "prop": "a tall gnarled wooden staff topped with bone ornaments",
+    },
+    "Bib Fortuna": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "costume": "long dark layered robes, with pale waxy skin and two long tapering "
+                   "head-tails coiling over the shoulders",
+        "eyes": "sunken reddish",
+        "signature": {},
+        "physique": {"body_type": "slim", "height": "tall"},
+    },
+    "Greedo": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "costume": "a worn green jacket and trousers, with smooth green Rodian skin, a "
+                   "tapered snout, and short antennae",
+        "eyes": "large faceted dark",
+        "signature": {},
+        "physique": {"body_type": "lean", "height": "average height"},
+    },
+    "Admiral Ackbar": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "costume": "a white Mon Calamari officer's uniform, with salmon-orange amphibian "
+                   "skin and a high domed head",
+        "eyes": "large round amber fish",
+        "signature": {},
+        "physique": {"body_type": "stocky", "height": "average height"},
+    },
+    "Jawa": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "costume": "a heavy hooded brown robe cinched with a bandolier, the face lost in "
+                   "shadow beneath the hood",
+        "eyes": "glowing yellow",
+        "signature": {},
+        "physique": {"body_type": "slim", "height": "very petite"},
+    },
+    "Ithorian": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "costume": "simple flowing robes, with brown leathery skin and a long curving "
+                   "hammerhead neck rising to a domed head",
+        "eyes": "small dark wide-set",
+        "signature": {},
+        "physique": {"body_type": "slim", "height": "tall"},
+    },
+    "Max Rebo": {
+        "franchise": "Star Wars",
+        "gender": "Male",
+        "costume": "a round pale-blue Ortolan body with a short trunk-like snout and "
+                   "broad floppy ears, seated at a red keyboard organ",
+        "eyes": "small round dark",
+        "signature": {},
+        "physique": {"body_type": "plus size", "height": "petite"},
     },
 
     # --- Anime / classic toons (Astro Boy / Speed Racer) -----------------

@@ -143,8 +143,8 @@ FIELD_DEFINITIONS: OrderedDict[str, dict] = OrderedDict([
     }),
     ("hair_style", {
         "group": 'Hair',
-        "female_options": ['worn down', 'half up half down', 'high ponytail', 'low ponytail', 'messy bun', 'sleek bun', 'top knot', 'side braid', 'fishtail braid', 'French braid', 'dutch braids', 'crown braid', 'loose braids', 'box braids', 'cornrows', 'locs', 'space buns', 'pigtails', 'bantu knots', 'afro', 'twist-out', 'updo', 'French twist', 'slicked back', 'curtain bangs', 'blunt bangs', 'wet look', 'windswept', 'freshly blown out', 'natural and unstyled'],
-        "male_options": ['worn down', 'half up half down', 'high ponytail', 'low ponytail', 'messy bun', 'sleek bun', 'top knot', 'side braid', 'fishtail braid', 'French braid', 'dutch braids', 'crown braid', 'loose braids', 'box braids', 'cornrows', 'locs', 'space buns', 'pigtails', 'bantu knots', 'afro', 'twist-out', 'updo', 'French twist', 'slicked back', 'curtain bangs', 'blunt bangs', 'wet look', 'windswept', 'freshly blown out', 'natural and unstyled'],
+        "female_options": ['worn down', 'half up half down', 'high ponytail', 'low ponytail', 'side ponytail', 'messy bun', 'sleek bun', 'top knot', 'chignon', 'side braid', 'fishtail braid', 'French braid', 'dutch braids', 'crown braid', 'waterfall braid', 'loose braids', 'box braids', 'cornrows', 'locs', 'space buns', 'pigtails', 'braided pigtails', 'bantu knots', 'afro', 'twist-out', 'updo', 'French twist', 'slicked back', 'curtain bangs', 'blunt bangs', 'wet look', 'windswept', 'freshly blown out', 'natural and unstyled'],
+        "male_options": ['worn down', 'half up half down', 'high ponytail', 'low ponytail', 'side ponytail', 'messy bun', 'sleek bun', 'top knot', 'chignon', 'side braid', 'fishtail braid', 'French braid', 'dutch braids', 'crown braid', 'waterfall braid', 'loose braids', 'box braids', 'cornrows', 'locs', 'space buns', 'pigtails', 'braided pigtails', 'bantu knots', 'afro', 'twist-out', 'updo', 'French twist', 'slicked back', 'curtain bangs', 'blunt bangs', 'wet look', 'windswept', 'freshly blown out', 'natural and unstyled'],
         "optional": False
     }),
     ("hair_color_scope", {
@@ -164,6 +164,18 @@ FIELD_DEFINITIONS: OrderedDict[str, dict] = OrderedDict([
         "female_options": ['clean shaven'],
         "male_options": ['clean shaven', 'stubble', 'short beard', 'full beard', 'goatee', 'mustache', 'van dyke', 'soul patch', 'mutton chops', "five o'clock shadow"],
         "optional": True
+    }),
+    ("hair_accessory", {
+        "group": 'Hair',
+        # Gender-divergent like facial_hair: random women draw the full feminine
+        # range, random men only a small unisex set, so a bow never lands on a
+        # random male subject -- yet the widget exposes everything for manual
+        # locking. Absence ("no hair accessory") is density-gated in the engine's
+        # _EXTRA_ABSENCE so adding options diversifies which piece appears without
+        # changing how often a hair accessory appears at all.
+        "female_options": ['no hair accessory', 'hair bow', 'oversized hair bow', 'satin ribbon tied in hair', 'silk headband', 'knotted headband', 'padded headband', 'scrunchie', 'claw clip', 'small hair clip', 'decorative hair pins', 'jeweled hair comb', 'thin scarf tied in hair', 'flower crown'],
+        "male_options": ['no hair accessory', 'thin headband', 'bandana tied over hair'],
+        "optional": False
     }),
     ("makeup_style", {
         "group": 'Makeup',
@@ -260,8 +272,11 @@ FIELD_DEFINITIONS: OrderedDict[str, dict] = OrderedDict([
     }),
     ("accessories", {
         "group": 'Clothing',
-        "female_options": ['no accessories', 'classic black sunglasses', 'cat eye sunglasses', 'round sunglasses', 'aviator sunglasses', 'wide brim sun hat', 'baseball cap', 'beret', 'silk headband', 'knotted headband', 'thin scarf tied in hair', 'silk neck scarf', 'belt cinching waist', 'western belt', 'watch', 'smart watch', 'long pendant necklace layered over outfit', 'reading glasses pushed up on head', 'small hair clip', 'woven hat'],
-        "male_options": ['no accessories', 'classic black sunglasses', 'cat eye sunglasses', 'round sunglasses', 'aviator sunglasses', 'wide brim sun hat', 'baseball cap', 'beret', 'silk headband', 'knotted headband', 'thin scarf tied in hair', 'silk neck scarf', 'belt cinching waist', 'western belt', 'watch', 'smart watch', 'long pendant necklace layered over outfit', 'reading glasses pushed up on head', 'small hair clip', 'woven hat'],
+        # Hair-specific pieces (headbands, scarf-in-hair, hair clip) live in the
+        # dedicated ``hair_accessory`` field so they can co-exist with a hat or
+        # sunglasses and don't double up against this single clothing slot.
+        "female_options": ['no accessories', 'classic black sunglasses', 'cat eye sunglasses', 'round sunglasses', 'aviator sunglasses', 'wide brim sun hat', 'baseball cap', 'beret', 'silk neck scarf', 'belt cinching waist', 'western belt', 'watch', 'smart watch', 'long pendant necklace layered over outfit', 'reading glasses pushed up on head', 'woven hat'],
+        "male_options": ['no accessories', 'classic black sunglasses', 'cat eye sunglasses', 'round sunglasses', 'aviator sunglasses', 'wide brim sun hat', 'baseball cap', 'beret', 'silk neck scarf', 'belt cinching waist', 'western belt', 'watch', 'smart watch', 'long pendant necklace layered over outfit', 'reading glasses pushed up on head', 'woven hat'],
         "optional": False
     }),
     ("expression", {
@@ -489,6 +504,27 @@ FIELD_DEFINITIONS: OrderedDict[str, dict] = OrderedDict([
         "optional": False,
         "control": True
     }),
+])
+
+#: Hair styles grouped into families for weighted random selection. The flat
+#: ``hair_style`` option list above still drives the widget (every variant is
+#: lockable); this structure only steers the *random* pick. The engine first
+#: chooses a family (weighted by ``weight``), then a variant uniformly within it,
+#: so adding variants to a family subdivides that family's share instead of
+#: inflating it. Each ``weight`` is frozen to the family's original variant count
+#: (sum = 30), so the macro distribution matches the pre-families uniform pick;
+#: only the within-family split changes as variants are added. The union of all
+#: ``variants`` must equal the ``hair_style`` options exactly (checked in tests).
+HAIR_STYLE_FAMILIES: OrderedDict[str, dict] = OrderedDict([
+    ("loose", {"weight": 6, "variants": ['worn down', 'slicked back', 'wet look', 'windswept', 'freshly blown out', 'natural and unstyled']}),
+    ("half-up", {"weight": 1, "variants": ['half up half down']}),
+    ("ponytail", {"weight": 2, "variants": ['high ponytail', 'low ponytail', 'side ponytail']}),
+    ("bun", {"weight": 5, "variants": ['messy bun', 'sleek bun', 'top knot', 'chignon', 'updo', 'French twist']}),
+    ("braid", {"weight": 9, "variants": ['side braid', 'fishtail braid', 'French braid', 'dutch braids', 'crown braid', 'waterfall braid', 'loose braids', 'box braids', 'cornrows', 'locs']}),
+    ("knots", {"weight": 2, "variants": ['space buns', 'bantu knots']}),
+    ("pigtails", {"weight": 1, "variants": ['pigtails', 'braided pigtails']}),
+    ("texture", {"weight": 2, "variants": ['afro', 'twist-out']}),
+    ("bangs", {"weight": 2, "variants": ['curtain bangs', 'blunt bangs']}),
 ])
 
 #: Outfit descriptions keyed by outfit_style, split into gendered buckets.

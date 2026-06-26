@@ -54,8 +54,10 @@ Archetype ─▶ Cosplayer ─▶ Creature ─▶ Modifier ─▶ IdentityForge 
 - **Hidden fields** (`outfit_description`, `held_item`): free-form prose locks, no widget;
   `_HIDDEN_FIELDS` / `_PRESET_HIDDEN_FIELDS`.
 - **Gender-divergent fields** are the only ones whose female/male pools differ: **`bust`,
-  `facial_hair`, `makeup_style`**. These (and only these) are mirrored in the JS `GENDER_POOLS`
-  for live gender-swap — **edit both Python and JS when you touch them**.
+  `facial_hair`, `makeup_style`, `hair_accessory`** (`hair_accessory` gives random women the
+  full feminine range but random men only a small unisex set, so a bow never lands on a random
+  male). These (and only these) are mirrored in the JS `GENDER_POOLS` for live gender-swap —
+  **edit both Python and JS when you touch them**.
 - **Absence model (important).** `_is_absent(v)` treats `""`, `"None"`, `"Random"`, `"none"`,
   any `"no …"`, and `_ABSENCE_EXACT` (`bare nails`, `clean shaven`, `natural bare`,
   `bare natural lips`) as "omit from prose". `_EXTRA_ABSENCE` maps accessory fields to their
@@ -65,6 +67,14 @@ Archetype ─▶ Cosplayer ─▶ Creature ─▶ Modifier ─▶ IdentityForge 
 - **Widget building** (`define_schema`): each field combo = `["Random"] + <real options, with
   `_is_absent` values filtered out> + ["None"]`. Result: exactly one "omit" affordance
   (`None`). Picking `None` == any in-pool absent value == omit.
+- **Weighted hair-style pick.** `hair_style` is the one field that does **not** use a flat
+  `rng.choice`: `_pick_hair_style` first draws a family from `HAIR_STYLE_FAMILIES` (weighted by
+  `weight`, frozen to each family's original variant count, sum = 30), then a variant uniformly
+  within it. So adding a variant subdivides its family's share instead of inflating it (3
+  ponytails still total the same ~6.7% the 2 originals did). The flat option list still drives
+  the widget (every variant lockable); `validate_data` checks the families partition it exactly.
+  New variants must also be slotted into the relevant `data/constraints.py` length lists
+  (`_LONG_HAIR_STYLES`, the pixie exclusion) so they're culled on short hair like their siblings.
 
 ## cosplayers.py — characters as a worn look
 
@@ -96,9 +106,10 @@ Conventions (keep the data coherent):
 - **Iconic non-standard eyes** (red/violet/gold cat-slit) use the free-text `eyes` override
   (a top-level entry key, not the signature) — it replaces `eye_color` and is voiced verbatim,
   passing the gender gate because `eye_color`'s pools are identical. The main node's dropdown
-  stays believable (no fantasy colours added there). The cosplayer also locks `eye_shape` to
-  `None` (injected after `group_fields`, which strips it on the build side) so the random shape
-  word is suppressed — the engine keeps the locked `None` as absent and drops it from prose/JSON.
+  stays believable (no fantasy colours added there). The cosplayer also locks `eye_shape` **and
+  `eye_size`** to `None` (injected after `group_fields`, which strips them on the build side) so
+  no random shape/size word contradicts the free-text description — the engine keeps the locked
+  `None` as absent and drops it from prose/JSON.
 - **Random scope.** `_FRANCHISE_CATEGORY` maps every franchise to one of nine broad categories
   (Anime & Manga, Marvel, DC, Star Wars, Disney, Video Games, Fantasy & Literature, Movies & TV,
   Comics & Cartoons). The Cosplayer node's `random_scope` control narrows the `Random — …` picks
@@ -150,5 +161,5 @@ creature loader copies only the standard slots).
 - A locked physique doesn't constrain `fitness`/`muscle` (known loose coherence).
 - Adding RNG draws in the creature node mid-sequence shifts seed→creature mapping — append draws
   at the end.
-- The roster is large (~640 cosplayers, ~130 creatures): always grep the current keys before
+- The roster is large (~750 cosplayers, ~130 creatures): always grep the current keys before
   adding to avoid silent overrides.

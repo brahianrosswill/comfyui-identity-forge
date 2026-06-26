@@ -192,6 +192,9 @@ def build_cosplayer_json(
         for group_values in document.values():
             if isinstance(group_values, dict) and "eye_color" in group_values:
                 group_values.setdefault("eye_shape", "None")
+                # A free-text eye description already encodes size; lock eye_size
+                # off too so a random size doesn't contradict it in the JSON.
+                group_values.setdefault("eye_size", "None")
                 break
     return json.dumps(document, indent=2)
 

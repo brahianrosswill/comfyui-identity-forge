@@ -44,6 +44,7 @@ const FIELD_TO_GROUP = {
   "hair_texture": "Hair",
   "hair_style": "Hair",
   "facial_hair": "Hair",
+  "hair_accessory": "Hair",
   "makeup_style": "Makeup",
   "eye_makeup": "Makeup",
   "eyeliner": "Makeup",
@@ -210,6 +211,50 @@ const GENDER_POOLS = {
       "mod 1960s eye makeup",
       "gothic dark makeup",
       "club makeup",
+      "None"
+    ]
+  },
+  "hair_accessory": {
+    "Female": [
+      "Random",
+      "hair bow",
+      "oversized hair bow",
+      "satin ribbon tied in hair",
+      "silk headband",
+      "knotted headband",
+      "padded headband",
+      "scrunchie",
+      "claw clip",
+      "small hair clip",
+      "decorative hair pins",
+      "jeweled hair comb",
+      "thin scarf tied in hair",
+      "flower crown",
+      "None"
+    ],
+    "Male": [
+      "Random",
+      "thin headband",
+      "bandana tied over hair",
+      "None"
+    ],
+    "Any": [
+      "Random",
+      "hair bow",
+      "oversized hair bow",
+      "satin ribbon tied in hair",
+      "silk headband",
+      "knotted headband",
+      "padded headband",
+      "scrunchie",
+      "claw clip",
+      "small hair clip",
+      "decorative hair pins",
+      "jeweled hair comb",
+      "thin scarf tied in hair",
+      "flower crown",
+      "thin headband",
+      "bandana tied over hair",
       "None"
     ]
   }
