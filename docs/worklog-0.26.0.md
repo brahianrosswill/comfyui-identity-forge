@@ -32,7 +32,7 @@ Batch of roster/archetype fixes and additions. Status of each item below.
 - [x] **QA** — `validate_data.py` PASSED (128 archetypes, 844 cosplayers); 186
   unittests OK; manual checks confirm male drag keeps glam, Arisia ring in costume,
   Astro Boy removed, Beetle/Harley keys present.
-- [ ] **Commit + push.**
+- [x] **Commit + push.** Pushed as `3ddaddf` on `main`.
 
 ## Deferred (out of scope)
 - Per-archetype `{color}` slot sweep beyond existing usage.
