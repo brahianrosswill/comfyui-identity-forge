@@ -157,20 +157,23 @@ class GenderTests(unittest.TestCase):
                            "polish nails"):
                 self.assertNotIn(phrase, prose, f"'{phrase}' in male prose seed {seed}")
 
-    def test_male_stays_bare_faced_even_when_locked(self):
-        # makeup_style is gender-gated: a female-only value injected on a Male is
-        # dropped, and the masculine default keeps him bare-faced.
+    def test_male_locked_makeup_overrides_gender(self):
+        # Makeup is cosmetic and anatomically gender-neutral, so a value explicitly
+        # locked by a preset survives a Male override (a man can wear gothic glam —
+        # e.g. drag performers). Random men still default bare-faced, see
+        # test_male_random_never_feminine.
         _, js = generate_character(1, "Male", {"makeup_style": "gothic dark makeup"})
-        self.assertEqual(json.loads(js)["Makeup"]["makeup_style"], "no makeup")
+        self.assertEqual(json.loads(js)["Makeup"]["makeup_style"], "gothic dark makeup")
 
-    def test_male_archetype_makeup_dropped(self):
-        # The Vampire Noble archetype (a gothic Male) renders bare-faced as a Male;
-        # its makeup is intended for the Female crossplay rendering.
+    def test_male_archetype_makeup_preserved(self):
+        # The Vampire Noble archetype locks gothic makeup; as an explicit cosmetic
+        # lock it now survives the Male rendering, so a male crossplay keeps the
+        # styled look instead of being stripped to bare-faced.
         flat = _parse_archetype_json(build_archetype_json("Vampire Noble", 0, "Full preset"))
         self.assertEqual(flat.get("makeup_style"), "gothic dark makeup")
         locked = {k: v for k, v in flat.items() if k not in _CONTROL_FIELDS}
         _, js = generate_character(3, "Male", locked)
-        self.assertEqual(json.loads(js)["Makeup"]["makeup_style"], "no makeup")
+        self.assertEqual(json.loads(js)["Makeup"]["makeup_style"], "gothic dark makeup")
 
     def test_male_locked_feminine_value_is_preserved(self):
         # The masculine defaults govern only the RANDOM fill: a value locked by a

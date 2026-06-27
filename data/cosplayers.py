@@ -588,13 +588,32 @@ COSPLAYERS: dict[str, dict] = {
     "Harley Quinn": {
         "franchise": "DC",
         "gender": "Female",
-        "costume": "a tight white crop top, very short tattered shorts over fishnet "
-                   "stockings, studded accessories, and heavy punk-inspired makeup",
+        "costume": "a tight white 'Daddy's Lil Monster' crop top, very short tattered "
+                   "red-and-blue sequined shorts over ripped fishnet stockings, a black "
+                   "studded choker, fingerless gloves and studded accessories, with a "
+                   "pale powdered whitish face and high blonde pigtails dip-dyed pink at "
+                   "the tips on one side and blue on the other",
         "signature": {"hair_color": "platinum blonde", "hair_length": "shoulder length",
-                      "hair_style": "pigtails", "eye_color": "bright blue"},
+                      "hair_style": "pigtails", "eye_color": "bright blue",
+                      "makeup_style": "club makeup", "eye_makeup": "colorful bold eyeshadow",
+                      "eyeliner": "dramatic winged", "lashes": "dramatic falsies",
+                      "lips_makeup": "deep red", "expression": "wide toothy grin"},
         "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "fair"},
-        "prop": "an oversized wooden mallet with a red-and-black striped head, slung "
-                "over one shoulder",
+        "prop": "a wooden baseball bat covered in colorful spray-painted graffiti, "
+                "resting on one shoulder",
+    },
+    "Harley Quinn (Classic Jester)": {
+        "franchise": "DC",
+        "gender": "Female",
+        "costume": "a red-and-black harlequin jester catsuit split down the middle, a "
+                   "white ruffled collar, a two-pointed red-and-black jester hood with "
+                   "small bells framing the face, a black domino eye mask, a chalk-white "
+                   "painted face with a wide red-lipped grin, white gloves, and pointed "
+                   "jester boots",
+        "signature": {"lips_makeup": "classic red", "expression": "wide toothy grin"},
+        "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "fair"},
+        "prop": "an oversized cartoonish wooden mallet with a rounded head, slung over "
+                "one shoulder",
     },
     "Deadshot": {
         "franchise": "DC",
@@ -4987,19 +5006,31 @@ COSPLAYERS: dict[str, dict] = {
     "Booster Gold": {
         "franchise": "DC",
         "gender": "Male",
-        "costume": "a gold-and-blue futuristic suit with a star chest emblem, power-disc "
-                   "wristbands, and a flight collar",
+        "costume": "a black-and-blue late-1980s superhero bodysuit with a gold star "
+                   "emblem on the chest, a high gold flight collar, gold power-disc "
+                   "wristbands, and a yellow visor across the eyes, with the blue costume "
+                   "sweeping up around the sides, back, and top-front of the head to frame "
+                   "the exposed face and golden hair",
         "signature": {"hair_color": "golden blonde", "hair_length": "very short",
                       "eye_color": "bright blue"},
         "physique": {"body_type": "athletic", "height": "tall", "skin_tone": "fair"},
     },
-    "Blue Beetle": {
+    "Blue Beetle (Jaime Reyes)": {
         "franchise": "DC",
         "gender": "Male",
         "covers_face": True,
         "costume": "blue chitinous scarab armor with black accents and a clawed gauntlet",
         "mask": "a smooth blue beetle-carapace helmet with large round yellow eye-lenses",
         "physique": {"body_type": "athletic", "height": "average height"},
+    },
+    "Blue Beetle (Ted Kord)": {
+        "franchise": "DC",
+        "gender": "Male",
+        "costume": "a classic late-1980s blue spandex superhero bodysuit with black "
+                   "gloves and boots, a stylized black beetle emblem on the chest, a "
+                   "snug black cowl over the head, and large round black goggles, with "
+                   "the lower face exposed",
+        "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "fair"},
     },
     "Hawkman": {
         "franchise": "DC",
@@ -5495,13 +5526,12 @@ COSPLAYERS: dict[str, dict] = {
         "gender": "Female",
         "costume": "a white-and-green Green Lantern uniform with a cropped top, a bright "
                    "green miniskirt, and matching gloves and boots, with a glowing green "
-                   "Lantern emblem on the chest, over an even, smooth coat of warm "
-                   "yellow-green body paint",
+                   "Lantern emblem on the chest, and a glowing green power ring worn on "
+                   "the finger, over an even, smooth coat of warm yellow-green body paint",
         "eyes": "vivid green",
         "signature": {"hair_color": "golden blonde", "hair_length": "long",
                       "hair_texture": "loosely wavy"},
         "physique": {"body_type": "petite and slim", "height": "short"},
-        "prop": "a glowing green power ring on the right hand",
     },
     "Artemis": {
         "franchise": "DC",
@@ -5630,13 +5660,13 @@ COSPLAYERS: dict[str, dict] = {
         "franchise": "DC",
         "gender": "Female",
         "costume": "a sleek green-and-black form-fitting Green Lantern costume with a "
-                   "bright green chest emblem, integrated green gloves and boots, and a "
-                   "faint green energy aura",
+                   "bright green chest emblem, integrated green gloves and boots, a "
+                   "glowing green power ring worn on the finger, and a faint green "
+                   "energy aura",
         "eyes": "glowing green",
         "signature": {"hair_color": "dark brown", "hair_length": "shoulder length",
                       "hair_texture": "wavy"},
         "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "light medium"},
-        "prop": "a glowing green power ring",
     },
     "Jinx (Teen Titans)": {
         "franchise": "DC",
@@ -5653,12 +5683,12 @@ COSPLAYERS: dict[str, dict] = {
         "gender": "Female",
         "costume": "the green-and-black Green Lantern Corps uniform with a white waist band "
                    "and chest emblem, white forearm-length gloves, green knee-high boots, "
-                   "and a green domino mask, over an even, smooth coat of smooth purple body paint",
+                   "a green domino mask, and a glowing green power ring worn on the index "
+                   "finger, over an even, smooth coat of smooth purple body paint",
         "eyes": "vivid emerald green",
         "signature": {"hair_color": "jet black", "hair_length": "mid back",
                       "hair_texture": "sleek straight"},
         "physique": {"body_type": "athletic", "height": "tall"},
-        "prop": "a glowing green power ring on the index finger",
     },
     "Killer Frost": {
         "franchise": "DC",
@@ -5765,12 +5795,12 @@ COSPLAYERS: dict[str, dict] = {
         "franchise": "DC",
         "gender": "Female",
         "costume": "a form-fitting purple-and-pink costume that looks crystallized from "
-                   "violet light, with a star-sapphire emblem on the chest and sparkling gem boots",
+                   "violet light, with a star-sapphire emblem on the chest, sparkling gem "
+                   "boots, and a glowing violet star-sapphire power ring worn on the finger",
         "eyes": "glowing violet",
         "signature": {"hair_color": "golden blonde", "hair_length": "very long",
                       "hair_texture": "loosely wavy"},
         "physique": {"body_type": "hourglass", "height": "tall", "skin_tone": "fair"},
-        "prop": "a glowing violet star-sapphire power ring",
     },
     "Tala": {
         "franchise": "DC",
@@ -7640,16 +7670,7 @@ COSPLAYERS: dict[str, dict] = {
         "physique": {"body_type": "petite and slim", "height": "very petite"},
     },
 
-    # --- Anime / classic toons (Astro Boy / Speed Racer) -----------------
-    "Astro Boy": {
-        "franchise": "Anime",
-        "gender": "Male",
-        "costume": "red shorts and tall black boots on a smooth-skinned robotic boy's "
-                   "frame, with rocket jets at the feet and a bare chest",
-        "signature": {"hair_color": "jet black", "hair_length": "very short",
-                      "eye_color": "nearly black", "eye_shape": "round"},
-        "physique": {"body_type": "slim", "height": "petite", "skin_tone": "fair"},
-    },
+    # --- Anime / classic toons (Speed Racer) -----------------
     "Speed Racer": {
         "franchise": "Anime",
         "gender": "Male",

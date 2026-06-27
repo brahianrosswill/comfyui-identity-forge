@@ -61,6 +61,14 @@ _HIDDEN_FIELDS: frozenset[str] = frozenset({"outfit_description", "held_item"})
 #: override and a cosplayer's signature prop). Everything else hidden is engine-only.
 _PRESET_HIDDEN_FIELDS: frozenset[str] = frozenset({"outfit_description", "held_item"})
 
+#: Field groups that are cosmetic and anatomically gender-neutral: an *explicitly
+#: locked* value here (from an archetype/cosplayer preset) survives a downstream
+#: gender override, because a man can wear bold glam just as a woman can. This lets
+#: a forced-Male drag performer keep its glam makeup while *random* men still default
+#: to the natural male pool. Only fields whose pools actually differ by gender (e.g.
+#: makeup_style) are affected; identical-pool fields already pass the gate.
+_GENDER_FLEXIBLE_GROUPS: frozenset[str] = frozenset({"Makeup"})
+
 #: ``set_all_fields`` control values. "All to None" omits every field still on
 #: "Random" (a blank-slate baseline) so only locked fields appear; a wired
 #: character's signature look is exempt (see :func:`resolve_locked_fields`).
@@ -999,10 +1007,21 @@ def generate_character(
     # the JS widget filter. Drop such values so the field re-randomizes within the
     # correct gender pool. "None" (an explicit omit) is gender-neutral and stays.
     for name, value in list(locked_clean.items()):
-        if value != "None" and not _gender_permits(FIELD_DEFINITIONS[name], gender, value):
-            del locked_clean[name]
-            print(f"[IdentityForge] '{name}={value}' is not valid for gender "
-                  f"'{gender}'; re-randomizing within the {gender} pool.")
+        if value == "None":
+            continue
+        field_def = FIELD_DEFINITIONS[name]
+        if _gender_permits(field_def, gender, value):
+            continue
+        # A cosmetic field (makeup) that a preset explicitly locked is anatomically
+        # gender-neutral; keep it when it's a real option for *some* gender so a
+        # styled look (e.g. drag glam on a forced-Male subject) survives intact.
+        if field_def.get("group") in _GENDER_FLEXIBLE_GROUPS and _gender_permits(
+            field_def, "Any", value
+        ):
+            continue
+        del locked_clean[name]
+        print(f"[IdentityForge] '{name}={value}' is not valid for gender "
+              f"'{gender}'; re-randomizing within the {gender} pool.")
 
     resolved = _randomize_fields(
         locked_clean, gender, hair_color_scope, accessory_density, location_setting, rng
