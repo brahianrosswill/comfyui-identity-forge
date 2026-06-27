@@ -28,7 +28,8 @@ from nodes.identity_forge import (
     _SET_ALL_NONE,
 )
 from nodes.identity_forge import (
-    _COSPLAY_LABEL_KEY, _COVERS_FACE_KEY, _COVERS_BODY_KEY, _MODIFIERS_KEY,
+    _COSPLAY_LABEL_KEY, _COVERS_FACE_KEY, _COVERS_BODY_KEY, _COVERS_HAIR_KEY,
+    _MODIFIERS_KEY,
 )
 from nodes.identity_forge_archetype import build_archetype_json
 from nodes.identity_forge_cosplayer import (
@@ -1260,6 +1261,154 @@ class CoversBodyTests(unittest.TestCase):
             _, js = generate_character(seed, "Male", locked, covers_face=covers_face,
                                        covers_body=covers_body, accessory_density="Maximal")
             self.assertFalse(self._has_jewelry(js), f"seed {seed}")
+
+
+class CoversHairTests(unittest.TestCase):
+    """A hood / cowl / lekku (``covers_hair``) hides the Hair group but keeps the
+    face -- narrower than ``covers_face``."""
+
+    def _hair_fields(self):
+        return [n for n, m in FIELD_DEFINITIONS.items() if m.get("group") == "Hair"]
+
+    def test_covers_hair_drops_hair_group_keeps_face(self):
+        # Hair fields vanish; the Face group still renders (eyes/nose/lips described).
+        for seed in range(30):
+            _, js = generate_character(seed, "Female", {}, covers_hair=True)
+            doc = json.loads(js)
+            self.assertNotIn("Hair", doc, f"seed {seed}")
+            self.assertIn("Face", doc, f"seed {seed}")
+
+    def test_without_covers_hair_the_hair_group_is_present(self):
+        seen = any("Hair" in json.loads(generate_character(s, "Female", {})[1])
+                   for s in range(20))
+        self.assertTrue(seen)
+
+    def test_cosplayer_flag_round_trips_through_meta(self):
+        # Blue Beetle (Ted Kord) carries covers_hair; it must reach the engine and
+        # leave the face intact (lower face exposed).
+        meta = json.loads(build_cosplayer_json("Blue Beetle (Ted Kord)", 0))["_meta"]
+        self.assertTrue(meta["covers_hair"])
+        flat = _parse_archetype_json(build_cosplayer_json("Blue Beetle (Ted Kord)", 0))
+        self.assertIn(_COVERS_HAIR_KEY, flat)
+        covers_hair = bool(flat.pop(_COVERS_HAIR_KEY, None))
+        locked = {k: v for k, v in flat.items() if k not in _CONTROL_FIELDS}
+        _, js = generate_character(3, "Male", locked, covers_hair=covers_hair)
+        doc = json.loads(js)
+        self.assertNotIn("Hair", doc)
+        self.assertIn("Face", doc)
+
+
+class ShellSkinToneTests(unittest.TestCase):
+    """A fully-encased character (covers_face + full hard shell) shows no stray
+    human skin tone under the armour/droid plating."""
+
+    def test_masked_droid_drops_skin_tone(self):
+        costume = "a humanoid coppery medical-droid body with a transparent chest panel"
+        for seed in range(30):
+            _, js = generate_character(seed, "Male", {"outfit_description": costume},
+                                       covers_face=True)
+            self.assertNotIn("skin_tone", json.loads(js).get("Body", {}), f"seed {seed}")
+
+    def test_masked_only_keeps_skin_tone(self):
+        # covers_face without a hard shell still describes the body's skin tone.
+        seen = any("skin_tone" in json.loads(generate_character(
+                       s, "Male", {"outfit_description": "a plain cloth tunic"},
+                       covers_face=True)[1]).get("Body", {})
+                   for s in range(20))
+        self.assertTrue(seen)
+
+    def test_locked_skin_tone_survives_shell(self):
+        costume = "a towering humanoid war robot sheathed in chrome armor plating"
+        _, js = generate_character(1, "Male",
+                                   {"outfit_description": costume, "skin_tone": "olive"},
+                                   covers_face=True)
+        self.assertEqual(json.loads(js)["Body"]["skin_tone"], "olive")
+
+    def test_2_1b_end_to_end_has_no_skin_tone(self):
+        flat = _parse_archetype_json(build_cosplayer_json("2-1B Droid", 0))
+        flat.pop(_COSPLAY_LABEL_KEY, None)
+        covers_face = bool(flat.pop(_COVERS_FACE_KEY, None))
+        covers_body = bool(flat.pop(_COVERS_BODY_KEY, None))
+        locked = {k: v for k, v in flat.items() if k not in _CONTROL_FIELDS}
+        for seed in range(15):
+            _, js = generate_character(seed, "Male", locked, covers_face=covers_face,
+                                       covers_body=covers_body)
+            self.assertNotIn("skin_tone", json.loads(js).get("Body", {}), f"seed {seed}")
+
+
+def _node_locked(doc, **widgets):
+    """Reproduce IdentityForge.execute's locked-field build from a preset doc.
+
+    Mirrors the node path -- ``archetype_locked`` keeps every wired value except
+    "Random" (so an explicit "None" omit survives), then ``resolve_locked_fields``
+    overlays the widgets -- so tests exercise the same flow as the live node, not
+    the shortcut of passing the flat dict straight to ``generate_character``.
+    Returns ``(locked, label, covers_face, covers_hair)``.
+    """
+    flat = _parse_archetype_json(doc)
+    label = flat.pop(_COSPLAY_LABEL_KEY, None)
+    covers_face = bool(flat.pop(_COVERS_FACE_KEY, None))
+    covers_hair = bool(flat.pop(_COVERS_HAIR_KEY, None))
+    flat.pop(_COVERS_BODY_KEY, None)
+    archetype_locked = {
+        k: v for k, v in flat.items()
+        if k in FIELD_DEFINITIONS and k not in _CONTROL_FIELDS and v != "Random"
+    }
+    kwargs = {n: "Random" for n in FIELD_DEFINITIONS}
+    kwargs.update(widgets)
+    locked = resolve_locked_fields(kwargs, archetype_locked, _SET_ALL_OFF)
+    return locked, label, covers_face, covers_hair
+
+
+class SuppressionLockSurvivalTests(unittest.TestCase):
+    """A wired "None" omit (body paint, bald, eye locks) must survive the node's
+    locked-field build -- a default "Random" widget must not re-randomize it. Guards
+    the bug where She-Hulk rendered a human skin tone and Voldemort grew hair."""
+
+    def test_body_paint_suppresses_skin_through_node_path(self):
+        for name in ("She-Hulk", "Poison Ivy"):
+            locked, label, cf, ch = _node_locked(build_cosplayer_json(name, 0, "Costume only"))
+            for seed in range(15):
+                _, js = generate_character(seed, "Female", locked, cosplay_label=label,
+                                           covers_face=cf, covers_hair=ch)
+                doc = json.loads(js)
+                self.assertNotIn("skin_tone", doc.get("Body", {}), f"{name} seed {seed}")
+                self.assertNotIn("complexion", doc.get("Face", {}), f"{name} seed {seed}")
+
+    def test_bald_suppresses_scalp_hair_through_node_path(self):
+        # Saitama is fully bald: no scalp-hair field may survive (facial_hair, a
+        # separate Hair-group field, is allowed -- bald is scalp-only).
+        scalp = ("hair_color", "hair_length", "hair_style", "hair_texture",
+                 "hair_part", "hair_volume", "hair_highlights")
+        locked, label, cf, ch = _node_locked(build_cosplayer_json("Saitama", 0, "Costume only"))
+        for seed in range(15):
+            _, js = generate_character(seed, "Male", locked, cosplay_label=label,
+                                       covers_face=cf, covers_hair=ch)
+            hair = json.loads(js).get("Hair", {})
+            for field in scalp:
+                self.assertNotIn(field, hair, f"seed {seed}: {field} leaked")
+
+    def test_concrete_widget_still_overrides_wired_none(self):
+        # A user who explicitly sets skin_tone on the widget beats the wired omit.
+        locked, label, cf, ch = _node_locked(
+            build_cosplayer_json("She-Hulk", 0, "Costume only"), skin_tone="olive")
+        _, js = generate_character(1, "Female", locked, cosplay_label=label, covers_face=cf)
+        self.assertEqual(json.loads(js)["Body"]["skin_tone"], "olive")
+
+
+class BodyPaintLipColorTests(unittest.TestCase):
+    """Body-paint suppression forces ``makeup_style`` off, but a structured
+    ``lip_color`` (Face group) survives -- so Poison Ivy keeps her red lips."""
+
+    def test_poison_ivy_keeps_red_lips_on_green_body(self):
+        locked, label, cf, ch = _node_locked(build_cosplayer_json("Poison Ivy", 0, "Costume only"))
+        for seed in range(20):
+            _, js = generate_character(seed, "Female", locked, cosplay_label=label,
+                                       covers_face=cf, covers_hair=ch)
+            face = json.loads(js).get("Face", {})
+            self.assertEqual(face.get("lip_color"), "red", f"seed {seed}")
+            # The green body-paint coat still suppresses the human skin tone.
+            self.assertNotIn("skin_tone", json.loads(js).get("Body", {}), f"seed {seed}")
 
 
 class GrammarAgreementTests(unittest.TestCase):

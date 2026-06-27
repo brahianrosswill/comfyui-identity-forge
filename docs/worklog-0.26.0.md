@@ -36,9 +36,11 @@ Batch of roster/archetype fixes and additions. Status of each item below.
 
 ## Deferred (out of scope)
 - Per-archetype `{color}` slot sweep beyond existing usage.
-- A `covers_hair` flag for hooded characters (BTAS Harley, Ted Kord) — randomized
-  hair under the hood is accepted for now.
+- ~~A `covers_hair` flag for hooded characters (BTAS Harley, Ted Kord)~~ — **DONE in
+  0.27.0** (`covers_hair` flag added; applied to Harley Jester, Ted Kord, Bib Fortuna).
 
 ## Notes
 - Harley's two-tone pigtail tips are encoded in `costume` text (no structured
-  two-tone hair field exists).
+  two-tone hair field exists). **0.27.0 decision: kept as-is** — a structured
+  two-tone field would need fields.py + JS `GENDER_POOLS` + constraints sync,
+  disproportionate to the benefit.

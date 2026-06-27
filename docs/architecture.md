@@ -137,6 +137,16 @@ Conventions (keep the data coherent):
   explicit `covers_body: True` entry key for cases the prose doesn't spell out (Nebula,
   Man-At-Arms). Independent of `covers_face` (a face mask doesn't imply a covered body, and a
   covered body may still show the face). Body/demographics stay (the silhouette has a build).
+  **Fully encased** (`covers_face` **and** a full shell): the body's `skin_tone` is dropped too —
+  the only Body-group skin field `covers_face` doesn't already hide — so a masked droid/armour
+  (Iron Man, 2-1B) reports no stray human skin tone under the plating.
+- **Hood / cowl / lekku (`covers_hair`):** a head covering that fully encloses the scalp while the
+  **face still shows** (a snug cowl, a jester hood, a Twi'lek's lekku) has no visible hair, so a
+  randomized "Her hair is …" line only fights the look. The `covers_hair: True` entry key drops the
+  whole **Hair** group (engine `_CONCEALED_HAIR_GROUPS`) but keeps Face + Makeup — narrower than
+  `covers_face`. Apply it only when the covering truly encloses the scalp and **no signature hair
+  is locked** (an iconic fringe under the hood = leave it off): Harley (Classic Jester), Blue Beetle
+  (Ted Kord), Bib Fortuna. Independent of `covers_face` (which already drops Hair on its own).
 - **Elemental / energy beings whose head is also covered** (Human Torch flame, Ghost Rider
   skull): use the `covers_face` + `mask` mechanism (head described in `mask`) so no random
   hair/face contradicts the effect, and keep the `an even … coat of …` body-paint phrasing in
@@ -215,3 +225,12 @@ creature loader copies only the standard slots).
 - Adding options to a **flat** field shifts its distribution; prefer the density-gated
   `_EXTRA_ABSENCE` fields (variety changes, frequency doesn't). New feminine-coded values on a
   shared-pool field must also be added to `_MALE_EXCLUDED_VALUES` so a random Male skips them.
+- **Wired `"None"` is an explicit omit and survives to the engine.** `IdentityForge.execute`
+  builds `archetype_locked` from every wired value *except* `"Random"` — so a cosplayer/archetype
+  field set to `"None"` (the builder's body-paint, bald, and free-text-eye suppressions) reaches
+  the engine as an omit instead of being silently re-randomized by the default `"Random"` widget.
+  A deliberate concrete widget choice still overrides it. (Pre-0.27.0 the `"None"` was dropped, so
+  She-Hulk rendered a human skin tone under her green and bald characters grew hair — the
+  documented suppressions only worked when calling `generate_character` directly, not through the
+  node.) Tests that exercise suppression must route through `resolve_locked_fields`, not pass the
+  flat preset dict straight in (see `SuppressionLockSurvivalTests`).

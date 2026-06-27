@@ -253,6 +253,9 @@ def build_cosplayer_json(
     # so worn jewellery and nails don't belong. Independent of the mask: unmasking
     # reveals the head, but the body stays encased.
     covers_body = bool(entry.get("covers_body", False))
+    # A hood / cowl / lekku encloses the scalp while the face shows: hides the
+    # randomized hair only (the engine drops the Hair group). Independent of the mask.
+    covers_hair = bool(entry.get("covers_hair", False))
     unmask = covers and mask_mode == _MASK_OFF
     # The mask clause lives apart from the costume so it can be dropped on unmask.
     costume = entry["costume"]
@@ -283,6 +286,7 @@ def build_cosplayer_json(
         ("look_level", look_level),
         ("covers_face", covers and not unmask),
         ("covers_body", covers_body),
+        ("covers_hair", covers_hair),
     ])
     document.update(group_fields(fields))
     # When an eye-colour override is in play, lock eye_shape to absent so the override

@@ -88,6 +88,11 @@ _COVERS_FACE_KEY = "__covers_face__"
 #: jewellery to sit on).
 _COVERS_BODY_KEY = "__covers_body__"
 
+#: Reserved key carrying a cosplayer's ``covers_hair`` flag through the parsed dict
+#: (a hood / cowl / helmet liner / replacing head-tails fully encloses the scalp,
+#: but the face still shows — so hair is hidden while Face/Makeup stay).
+_COVERS_HAIR_KEY = "__covers_hair__"
+
 #: Top-level section name a Modifier node adds to the chained preset document,
 #: holding ``{field_or_group: descriptor}`` style modifiers.
 _MODIFIERS_DOC_KEY = "_modifiers"
@@ -132,6 +137,21 @@ _CONCEALED_FACE_FIELDS: frozenset[str] = frozenset({"earrings", "piercings"})
 #: render on top of the shell. Body and demographics stay (there is still a body,
 #: and the silhouette has a height/build).
 _CONCEALED_BODY_GROUPS: frozenset[str] = frozenset({"Jewelry & Nails"})
+
+#: Field groups suppressed when a cosplayer sets ``covers_hair`` — a hood / cowl /
+#: helmet-liner (or alien head-tails) fully encloses the scalp while the face still
+#: shows, so a randomized "Her hair is ..." line would only contradict the covering.
+#: Narrower than ``covers_face`` (which also drops Face + Makeup): here the face is
+#: visible, so only the Hair group goes.
+_CONCEALED_HAIR_GROUPS: frozenset[str] = frozenset({"Hair"})
+
+#: Body-group skin fields dropped when a character is BOTH fully masked
+#: (``covers_face``) AND a full hard shell (``covers_body`` / ``_FULL_COVER_RE``):
+#: the being is entirely encased, so a randomized human ``skin_tone`` would render as
+#: a stray patch of bare skin under the armour/droid plating (Iron Man, 2-1B, 4-LOM).
+#: ``covers_face`` already drops the other skin fields (complexion / skin_details /
+#: freckles are Face group; skin_finish is Makeup); only ``skin_tone`` (Body) leaks.
+_CONCEALED_SHELL_SKIN_FIELDS: frozenset[str] = frozenset({"skin_tone"})
 
 #: Control fields: read from their toggle, never randomized, never described.
 _CONTROL_FIELDS: frozenset[str] = frozenset(
@@ -957,6 +977,7 @@ def generate_character(
     cosplay_label: str | None = None,
     covers_face: bool = False,
     covers_body: bool = False,
+    covers_hair: bool = False,
     modifiers: dict[str, str] | None = None,
     species: dict | None = None,
 ) -> tuple[str, str]:
@@ -974,7 +995,13 @@ def generate_character(
 
     ``covers_body`` (set by a full hard-suit / armour / robot / exoskeleton
     cosplayer) drops the randomized Jewelry & Nails group so no necklace, ring or
-    nail polish renders on top of the shell.
+    nail polish renders on top of the shell. When a character is both ``covers_face``
+    and a full shell it is entirely encased, so the leaking Body ``skin_tone`` is
+    dropped too (no bare skin shows under the armour/droid plating).
+
+    ``covers_hair`` (set by a hooded / cowled / lekku cosplayer whose face still
+    shows) drops only the randomized Hair group, so no "Her hair is ..." line
+    contradicts the head covering while the face is still described.
 
     ``modifiers`` (set by a connected Modifier node) maps a field name or group
     header to a descriptor that is prepended to the matching resolved value(s),
@@ -1068,10 +1095,21 @@ def generate_character(
     # ``covers_body`` flag for a case the prose doesn't spell out). Auto-detection
     # here also covers full-plate archetypes (Holy Paladin, Human Knight). Explicit
     # user locks are respected, as with the glove rule above.
-    if covers_body or _FULL_COVER_RE.search(outfit_text):
+    full_shell = covers_body or bool(_FULL_COVER_RE.search(outfit_text))
+    if full_shell:
         for field in list(resolved):
             if (FIELD_DEFINITIONS.get(field, {}).get("group") in _CONCEALED_BODY_GROUPS
                     and field not in locked_clean):
+                resolved.pop(field, None)
+
+    # A character that is BOTH fully masked and a full hard shell is entirely
+    # encased: a randomized human skin_tone would render as a stray patch of bare
+    # skin under the armour/droid plating (Iron Man, 2-1B). covers_face already drops
+    # the Face/Makeup skin fields; only the Body-group skin_tone leaks, so drop it
+    # here. An explicit user skin_tone lock is respected, as elsewhere.
+    if covers_face and full_shell:
+        for field in _CONCEALED_SHELL_SKIN_FIELDS:
+            if field not in locked_clean:
                 resolved.pop(field, None)
 
     # A studio / solid backdrop wants clean, even studio light — a scene-specific
@@ -1091,6 +1129,15 @@ def generate_character(
         for field in list(resolved):
             if (FIELD_DEFINITIONS.get(field, {}).get("group") in _CONCEALED_FACE_GROUPS
                     or field in _CONCEALED_FACE_FIELDS):
+                resolved.pop(field, None)
+
+    # A hood / cowl / lekku covers only the scalp while the face shows: drop the Hair
+    # group so no randomized hair contradicts the covering, but keep Face and Makeup.
+    # (A character with both covers_face and covers_hair has its hair dropped by the
+    # covers_face block above already; this just handles the face-visible case.)
+    if covers_hair:
+        for field in list(resolved):
+            if FIELD_DEFINITIONS.get(field, {}).get("group") in _CONCEALED_HAIR_GROUPS:
                 resolved.pop(field, None)
 
     # A creature form suppresses the human fields it replaces — generalizing the
@@ -1198,6 +1245,8 @@ def _parse_archetype_json(raw: str) -> dict[str, str]:
                 flat[_COVERS_FACE_KEY] = "1"
             if meta.get("covers_body"):
                 flat[_COVERS_BODY_KEY] = "1"
+            if meta.get("covers_hair"):
+                flat[_COVERS_HAIR_KEY] = "1"
             # A creature preset carries its form + suppression here. ``form`` is
             # the marker that species data is present; slots arrive in the group.
             form = meta.get("form")
@@ -1391,6 +1440,7 @@ if _COMFY_AVAILABLE:
             cosplay_label = archetype.pop(_COSPLAY_LABEL_KEY, None)
             covers_face = bool(archetype.pop(_COVERS_FACE_KEY, None))
             covers_body = bool(archetype.pop(_COVERS_BODY_KEY, None))
+            covers_hair = bool(archetype.pop(_COVERS_HAIR_KEY, None))
             modifiers = archetype.pop(_MODIFIERS_KEY, None)
             species = archetype.pop(_SPECIES_KEY, None)
             if species is not None and not species.get("slots"):
@@ -1410,12 +1460,22 @@ if _COMFY_AVAILABLE:
             # Locked fields: the wired character's values, overridden by explicit
             # widgets. The 'set_all_fields' reset turns every untouched field into
             # an omit, while leaving the wired character's signature look intact.
+            #
+            # A wired "None" is an *explicit omit* the character chose -- the
+            # cosplayer builder injects them to suppress fields the costume already
+            # settles: skin_tone/complexion under body paint, scalp hair on a bald
+            # head, eye_shape/size under a free-text eye colour. They MUST survive to
+            # the engine; excluding them let a default "Random" widget re-randomize a
+            # human skin tone under She-Hulk's green or hair on Voldemort's bald head.
+            # Kept here so a deliberate concrete widget choice still overrides (handled
+            # in resolve_locked_fields), but an untouched "Random" widget preserves the
+            # omit. "Random" itself carries no information and stays excluded.
             archetype_locked: dict[str, str] = {
                 name: value
                 for name, value in archetype.items()
                 if name in FIELD_DEFINITIONS
                 and name not in _CONTROL_FIELDS
-                and value not in ("Random", "None")
+                and value != "Random"
             }
             set_all = kwargs.get("set_all_fields", _SET_ALL_OFF)
             locked = resolve_locked_fields(kwargs, archetype_locked, set_all)
@@ -1423,6 +1483,6 @@ if _COMFY_AVAILABLE:
             prose, json_output = generate_character(
                 seed, gender, locked, hair_color_scope, wardrobe,
                 accessory_density, location_setting, cosplay_label, covers_face,
-                covers_body, modifiers, species,
+                covers_body, covers_hair, modifiers, species,
             )
             return io.NodeOutput(prose, json_output)

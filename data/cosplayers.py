@@ -588,7 +588,7 @@ COSPLAYERS: dict[str, dict] = {
     "Harley Quinn": {
         "franchise": "DC",
         "gender": "Female",
-        "costume": "a tight white 'Daddy's Lil Monster' crop top, very short tattered "
+        "costume": "a tight white crop top, very short tattered "
                    "red-and-blue sequined shorts over ripped fishnet stockings, a black "
                    "studded choker, fingerless gloves and studded accessories, with a "
                    "pale powdered whitish face and high blonde pigtails dip-dyed pink at "
@@ -611,6 +611,7 @@ COSPLAYERS: dict[str, dict] = {
                    "painted face with a wide red-lipped grin, white gloves, and pointed "
                    "jester boots",
         "signature": {"lips_makeup": "classic red", "expression": "wide toothy grin"},
+        "covers_hair": True,  # two-pointed jester hood fully encloses the scalp; face shows
         "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "fair"},
         "prop": "an oversized cartoonish wooden mallet with a rounded head, slung over "
                 "one shoulder",
@@ -727,11 +728,12 @@ COSPLAYERS: dict[str, dict] = {
     "Poison Ivy": {
         "franchise": "DC",
         "gender": "Female",
-        "costume": "a form-fitting bodysuit of overlapping leaves and vines with an even coat of green "
-                   "body paint, and tiny leaves entwined in the hair",
+        "costume": "a form-fitting bodysuit of overlapping leaves and vines, an even, smooth coat "
+                   "of vivid green body paint covering her skin from head to toe including the "
+                   "face, with tiny leaves entwined in the hair",
         "signature": {"hair_color": "bright red", "hair_length": "waist length",
-                      "hair_style": "worn down", "eye_color": "green"},
-        "physique": {"body_type": "slender", "height": "tall"},
+                      "hair_style": "worn down", "eye_color": "green", "lip_color": "red"},
+        "physique": {"body_type": "voluptuous", "height": "tall"},
     },
     "Catwoman": {
         "franchise": "DC",
@@ -5030,6 +5032,7 @@ COSPLAYERS: dict[str, dict] = {
                    "gloves and boots, a stylized black beetle emblem on the chest, a "
                    "snug black cowl over the head, and large round black goggles, with "
                    "the lower face exposed",
+        "covers_hair": True,  # snug cowl encloses the scalp; lower face shows
         "physique": {"body_type": "athletic", "height": "average height", "skin_tone": "fair"},
     },
     "Hawkman": {
@@ -7101,55 +7104,69 @@ COSPLAYERS: dict[str, dict] = {
     "Bib Fortuna": {
         "franchise": "Star Wars",
         "gender": "Male",
+        # Twi'lek: humanoid face stays visible, but the lekku replace scalp hair
+        # (covers_hair) and the pale waxy skin must not be overridden by a random
+        # human skin tone (body_paint suppresses the Body skin_tone).
         "costume": "long dark layered robes, with pale waxy skin and two long tapering "
                    "head-tails coiling over the shoulders",
         "eyes": "sunken reddish",
         "signature": {},
+        "covers_hair": True,
+        "body_paint": True,
         "physique": {"body_type": "slim", "height": "tall"},
     },
     "Greedo": {
         "franchise": "Star Wars",
         "gender": "Male",
-        "costume": "a worn green jacket and trousers, with smooth green Rodian skin, a "
-                   "tapered snout, and short antennae",
-        "eyes": "large faceted dark",
+        "covers_face": True,
+        "costume": "a worn green jacket and trousers, with smooth green Rodian skin",
+        "mask": "a green Rodian face with a tapered snout, short antennae, and large "
+                "faceted dark eyes",
         "signature": {},
+        "body_paint": True,
         "physique": {"body_type": "lean", "height": "average height"},
     },
     "Admiral Ackbar": {
         "franchise": "Star Wars",
         "gender": "Male",
-        "costume": "a white Mon Calamari officer's uniform, with salmon-orange amphibian "
-                   "skin and a high domed head",
-        "eyes": "large round amber fish",
+        "covers_face": True,
+        "costume": "a white Mon Calamari officer's uniform, with salmon-orange amphibian skin",
+        "mask": "a salmon-orange Mon Calamari face with a high domed head and large round "
+                "amber fish eyes",
         "signature": {},
+        "body_paint": True,
         "physique": {"body_type": "stocky", "height": "average height"},
     },
     "Jawa": {
         "franchise": "Star Wars",
         "gender": "Male",
-        "costume": "a heavy hooded brown robe cinched with a bandolier, the face lost in "
-                   "shadow beneath the hood",
-        "eyes": "glowing yellow",
+        "covers_face": True,
+        "costume": "a heavy hooded brown robe cinched with a bandolier",
+        "mask": "a face lost in shadow beneath the hood, with glowing yellow eyes",
         "signature": {},
+        "body_paint": True,
         "physique": {"body_type": "slim", "height": "very petite"},
     },
     "Ithorian": {
         "franchise": "Star Wars",
         "gender": "Male",
-        "costume": "simple flowing robes, with brown leathery skin and a long curving "
-                   "hammerhead neck rising to a domed head",
-        "eyes": "small dark wide-set",
+        "covers_face": True,
+        "costume": "simple flowing robes, with brown leathery skin",
+        "mask": "a brown leathery Ithorian head on a long curving hammerhead neck rising "
+                "to a domed crown, with small dark wide-set eyes",
         "signature": {},
+        "body_paint": True,
         "physique": {"body_type": "slim", "height": "tall"},
     },
     "Max Rebo": {
         "franchise": "Star Wars",
         "gender": "Male",
-        "costume": "a round pale-blue Ortolan body with a short trunk-like snout and "
-                   "broad floppy ears",
-        "eyes": "small round dark",
+        "covers_face": True,
+        "costume": "a round pale-blue Ortolan body",
+        "mask": "a pale-blue Ortolan face with a short trunk-like snout, broad floppy "
+                "ears, and small round dark eyes",
         "signature": {},
+        "body_paint": True,
         "physique": {"body_type": "plus size", "height": "petite"},
     },
 
@@ -7167,11 +7184,13 @@ COSPLAYERS: dict[str, dict] = {
     "Nute Gunray": {
         "franchise": "Star Wars",
         "gender": "Male",
+        "covers_face": True,
         "costume": "elaborate layered Trade Federation viceroy robes with a tall ridged "
-                   "headdress and high collar, over mottled green-gray reptilian Neimoidian "
-                   "skin and a wide downturned mouth",
-        "eyes": "reddish-orange with narrow horizontal pupils",
+                   "headdress and high collar, over mottled green-gray reptilian Neimoidian skin",
+        "mask": "a mottled green-gray reptilian Neimoidian face with a wide downturned mouth "
+                "and reddish-orange eyes with narrow horizontal pupils",
         "signature": {},
+        "body_paint": True,
         "physique": {"body_type": "slim", "height": "tall"},
     },
     "Imperial Officer": {
@@ -7208,10 +7227,13 @@ COSPLAYERS: dict[str, dict] = {
     "Kuiil": {
         "franchise": "Star Wars",
         "gender": "Male",
+        "covers_face": True,
         "costume": "a simple brown leather smock and apron over a stout Ugnaught body with "
-                   "leathery pinkish skin, long drooping facial whiskers, and small tusks",
-        "eyes": "small dark deep-set",
+                   "leathery pinkish skin",
+        "mask": "a leathery pinkish Ugnaught face with long drooping facial whiskers, small "
+                "tusks, and small dark deep-set eyes",
         "signature": {},
+        "body_paint": True,
         "physique": {"body_type": "stocky", "height": "petite"},
     },
     "Cassian Andor": {
