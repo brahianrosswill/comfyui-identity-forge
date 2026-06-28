@@ -670,10 +670,11 @@ COSPLAYERS: dict[str, dict] = {
         "franchise": "DC",
         "gender": "Male",
         "bald": True,
+        "covers_face": True,
         "costume": "only torn cargo shorts, with an even, all-over coat of grey-and-white "
-                   "shark skin, a massive great-white shark head with rows of jagged "
-                   "teeth and a dorsal fin down the back, on a huge muscular frame",
-        "eyes": "small solid black",
+                   "shark skin and a dorsal fin down the back, on a huge muscular frame",
+        "mask": "a massive great-white shark head with rows of jagged teeth and small "
+                "solid black eyes",
         "physique": {"body_type": "stocky", "height": "very tall"},
     },
     "Polka-Dot Man": {
@@ -699,11 +700,11 @@ COSPLAYERS: dict[str, dict] = {
         "franchise": "DC",
         "gender": "Male",
         "bald": True,
+        "covers_face": True,
         "costume": "a minimal warrior harness with gold trim, over an even, all-over "
-                   "coat of pink-red alien skin, with a large third eye set in the "
-                   "forehead and a tall white finned crest over the head, on a towering "
-                   "muscular frame",
-        "eyes": "glowing red",
+                   "coat of pink-red alien skin, on a towering muscular frame",
+        "mask": "a pink-red alien face with a large third eye set in the forehead, a "
+                "tall white finned crest over the head, and glowing red eyes",
         "physique": {"body_type": "stocky", "height": "very tall"},
     },
     "Starro": {
@@ -3896,7 +3897,10 @@ COSPLAYERS: dict[str, dict] = {
                    "animated dark tribal tattoos, with a bone hook",
         "signature": {"hair_color": "jet black", "hair_length": "shoulder length",
                       "hair_texture": "thick and voluminous", "eye_color": "dark brown"},
-        "physique": {"body_type": "stocky", "height": "very tall", "skin_tone": "warm brown"},
+        # 'tattoos' isn't a material the colour-anchor regex catches, and the tattoo
+        # coat would otherwise suppress his brown skin entirely; anchor it explicitly.
+        "skin": "warm brown",
+        "physique": {"body_type": "stocky", "height": "very tall"},
         "prop": "a giant carved bone fish-hook",
     },
 
@@ -4800,6 +4804,7 @@ COSPLAYERS: dict[str, dict] = {
                    "with jagged icicle spikes along the shoulders and forearms",
         "eyes": "solid icy white",
         "signature": {},
+        "skin": "icy pale-blue",  # 'ice' isn't a material the anchor regex catches
         "physique": {"body_type": "lean", "height": "tall"},
     },
     "Beast": {
@@ -5321,10 +5326,11 @@ COSPLAYERS: dict[str, dict] = {
         "bald": True,
         "franchise": "TMNT",
         "gender": "Male",
+        "covers_face": True,
         "costume": "an even, all-over coat of green pebbled turtle skin with a tan "
-                   "plastron and a domed shell on the back, brown elbow and knee pads, and "
-                   "a blue bandana mask",
-        "eyes": "dark brown",
+                   "plastron and a domed shell on the back, and brown elbow and knee pads",
+        "mask": "a green pebbled turtle face with a beak-like mouth, dark brown eyes, "
+                "and a blue bandana tied across the eyes",
         "signature": {},
         "physique": {"body_type": "stocky", "height": "average height"},
         "prop": "twin katanas",
@@ -5333,10 +5339,11 @@ COSPLAYERS: dict[str, dict] = {
         "bald": True,
         "franchise": "TMNT",
         "gender": "Male",
+        "covers_face": True,
         "costume": "an even, all-over coat of green pebbled turtle skin with a tan "
-                   "plastron and a domed shell on the back, brown elbow and knee pads, and "
-                   "a red bandana mask",
-        "eyes": "dark brown",
+                   "plastron and a domed shell on the back, and brown elbow and knee pads",
+        "mask": "a green pebbled turtle face with a beak-like mouth, dark brown eyes, "
+                "and a red bandana tied across the eyes",
         "signature": {},
         "physique": {"body_type": "stocky", "height": "average height"},
         "prop": "a pair of three-pronged sai",
@@ -5345,10 +5352,11 @@ COSPLAYERS: dict[str, dict] = {
         "bald": True,
         "franchise": "TMNT",
         "gender": "Male",
+        "covers_face": True,
         "costume": "an even, all-over coat of green pebbled turtle skin with a tan "
-                   "plastron and a domed shell on the back, brown elbow and knee pads, and "
-                   "a purple bandana mask",
-        "eyes": "dark brown",
+                   "plastron and a domed shell on the back, and brown elbow and knee pads",
+        "mask": "a green pebbled turtle face with a beak-like mouth, dark brown eyes, "
+                "and a purple bandana tied across the eyes",
         "signature": {},
         "physique": {"body_type": "lean", "height": "average height"},
         "prop": "a long wooden bo staff",
@@ -5357,10 +5365,11 @@ COSPLAYERS: dict[str, dict] = {
         "bald": True,
         "franchise": "TMNT",
         "gender": "Male",
+        "covers_face": True,
         "costume": "an even, all-over coat of green pebbled turtle skin with a tan "
-                   "plastron and a domed shell on the back, brown elbow and knee pads, and "
-                   "an orange bandana mask",
-        "eyes": "dark brown",
+                   "plastron and a domed shell on the back, and brown elbow and knee pads",
+        "mask": "a green pebbled turtle face with a beak-like mouth, dark brown eyes, "
+                "and an orange bandana tied across the eyes",
         "signature": {},
         "physique": {"body_type": "athletic", "height": "average height"},
         "prop": "a pair of nunchaku",
@@ -6143,6 +6152,7 @@ COSPLAYERS: dict[str, dict] = {
                    "chitinous head crest, and four large insectoid ovipositors extending "
                    "from the back, over an even, all-over coat of pale yellow-green chitin",
         "eyes": "large solid black insectoid",
+        "skin": "pale yellow-green",  # 'chitin' isn't a material the anchor regex catches
         "physique": {"body_type": "slender", "height": "average height"},
     },
     "Daisy": {
@@ -6868,10 +6878,12 @@ COSPLAYERS: dict[str, dict] = {
         "bald": True,
         "franchise": "Hellboy",
         "gender": "Male",
+        "covers_face": True,
         "costume": "trunks and a breathing harness, over an even, all-over coat of "
                    "blue-green scaled skin, with red feathery gills at the neck and webbed "
                    "three-fingered hands",
-        "eyes": "large solid black",
+        "mask": "a smooth blue-green amphibian face with a finned head, red feathery "
+                "gill frills, and large solid black eyes",
         "signature": {},
         "physique": {"body_type": "lean", "height": "tall"},
     },
@@ -6925,10 +6937,11 @@ COSPLAYERS: dict[str, dict] = {
     "Jar Jar Binks": {
         "franchise": "Star Wars",
         "gender": "Male",
+        "covers_face": True,
         "costume": "a ragged leather vest and trousers, over an even, all-over coat of "
-                   "orange amphibian skin, with long floppy ear-flaps, eyes on stalks, "
-                   "and a duck-billed snout",
-        "eyes": "yellow on long stalks",
+                   "orange amphibian skin",
+        "mask": "a long orange Gungan face with floppy ear-flaps, yellow eyes on long "
+                "stalks, and a duck-billed snout",
         "signature": {},
         "physique": {"body_type": "lean", "height": "tall"},
     },
@@ -7113,6 +7126,7 @@ COSPLAYERS: dict[str, dict] = {
         "signature": {},
         "covers_hair": True,
         "body_paint": True,
+        "skin": "pale waxy",  # no "coat of" clause for the anchor regex to read
         "physique": {"body_type": "slim", "height": "tall"},
     },
     "Greedo": {

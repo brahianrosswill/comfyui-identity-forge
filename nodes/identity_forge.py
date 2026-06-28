@@ -629,7 +629,11 @@ def _format_prose(
     if g("height"):
         core.append(g("height"))
     if g("skin_tone"):
-        core.append(f"{g('skin_tone')} skin")
+        # Normally "{tone} skin" ("bronze skin"). A body-paint colour anchor may be a
+        # free-text value that already ends in its own material noun ("dark blue
+        # scaled-skin", "golden cheetah-fur") — don't double the noun in that case.
+        tone = g("skin_tone")
+        core.append(tone if re.search(r"\b(?:skin|fur|scales?|hide)$", tone) else f"{tone} skin")
     sentences.append(lead + (" with " + _join(core) if core else ""))
 
     # --- Creature anatomy ----------------------------------------------

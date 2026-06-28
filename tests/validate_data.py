@@ -196,6 +196,16 @@ def validate() -> list[str]:
             errors.append(f"cosplayer '{name}': 'eyes' must be a non-empty string")
         if eyes and entry.get("signature", {}).get("eye_color"):
             errors.append(f"cosplayer '{name}': set either 'eyes' or signature.eye_color, not both")
+        # Optional free-text skin-colour override: anchors the body-paint colour in the
+        # skin_tone slot (voiced verbatim, bypassing the human skin_tone pool). If
+        # present it must be a non-empty string and must not also pin signature/physique
+        # skin_tone. Only meaningful on a body-paint character (the anchor's home).
+        skin = entry.get("skin")
+        if skin is not None and (not isinstance(skin, str) or not skin):
+            errors.append(f"cosplayer '{name}': 'skin' must be a non-empty string")
+        if skin and (entry.get("signature", {}).get("skin_tone")
+                     or entry.get("physique", {}).get("skin_tone")):
+            errors.append(f"cosplayer '{name}': set either 'skin' or skin_tone, not both")
         # signature is applied in both modes; physique only in Full character.
         # Every key must be a real field and every value a valid option for it.
         for section in ("signature", "physique"):

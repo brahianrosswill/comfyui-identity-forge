@@ -1404,6 +1404,85 @@ ARCHETYPES: dict[str, dict[str, str]] = {
         "location": "forest trail", "lighting": "fire and flame warm flicker",
         "shot_type": "cowboy shot from mid-thigh up", "mood": "intense",
     },
+
+    # Everyday / sports (v0.28.0) -- gender-neutral unless strongly coded
+    "Tennis Player": {
+        "ethnicity": "Brazilian", "body_type": "athletic", "height": "tall",
+        "fitness_level": "very fit", "muscle_definition": "defined",
+        "hair_color": "dark brown", "hair_length": "shoulder length", "hair_style": "high ponytail",
+        "skin_tone": "warm tan", "outfit_style": "athletic", "accessories": "no accessories",
+        "expression": "determined", "location": "sunny city park",
+        "lighting": "harsh overhead midday sun", "shot_type": "full body shot", "mood": "confident",
+    },
+    "Gymnast": {
+        "ethnicity": "Korean", "body_type": "lean", "height": "petite",
+        "fitness_level": "very fit", "muscle_definition": "defined",
+        "hair_color": "jet black", "hair_length": "shoulder length", "hair_style": "high ponytail",
+        "skin_tone": "light", "outfit_style": "athletic", "accessories": "no accessories",
+        "expression": "determined", "location": "high school gymnasium",
+        "lighting": "high key bright even lighting", "shot_type": "full body shot", "mood": "intense",
+    },
+    "Baker": {
+        "ethnicity": "French", "body_type": "average", "height": "average height",
+        "hair_color": "warm brown", "hair_length": "very short", "hair_style": "worn down",
+        "skin_tone": "light medium", "outfit_style": "casual", "accessories": "no accessories",
+        "expression": "warm smile", "location": "farmhouse kitchen with open shelving",
+        "lighting": "warm incandescent lamp glow", "shot_type": "medium shot from waist up",
+        "mood": "cheerful",
+    },
+    "Florist": {
+        "ethnicity": "English", "body_type": "slim", "height": "average height",
+        "hair_color": "chestnut", "hair_length": "shoulder length", "hair_texture": "wavy",
+        "hair_style": "half up half down", "skin_tone": "fair", "outfit_style": "casual",
+        "accessories": "no accessories", "expression": "warm smile",
+        "location": "farmers market indoor stall", "lighting": "soft window light from the side",
+        "shot_type": "medium shot from waist up", "mood": "cheerful",
+    },
+    "Plumber": {
+        "ethnicity": "Irish", "body_type": "stocky", "height": "average height",
+        "hair_color": "light chestnut", "hair_length": "very short", "skin_tone": "fair",
+        "outfit_style": "casual", "accessories": "no accessories", "expression": "confident",
+        "location": "suburban basement", "lighting": "harsh fluorescent lighting",
+        "shot_type": "medium shot from waist up", "mood": "confident",
+    },
+    "Retail Cashier": {
+        "ethnicity": "Colombian", "body_type": "average", "height": "average height",
+        "hair_color": "near black", "hair_length": "shoulder length", "hair_style": "worn down",
+        "skin_tone": "olive", "outfit_style": "smart casual", "accessories": "no accessories",
+        "expression": "warm smile", "location": "small-town grocery store aisle",
+        "lighting": "cool LED overhead lighting", "shot_type": "medium shot from waist up",
+        "mood": "cheerful",
+    },
+    "Rancher": {
+        "ethnicity": "Mexican", "body_type": "athletic", "height": "tall",
+        "hair_color": "jet black", "hair_length": "very short", "skin_tone": "tan",
+        "complexion": "ruddy", "outfit_style": "vintage retro", "accessories": "no accessories",
+        "expression": "confident", "location": "country dirt road", "lighting": "golden hour sunlight",
+        "shot_type": "cowboy shot from mid-thigh up", "mood": "serene",
+    },
+    "Navy Sailor": {
+        "ethnicity": "Scottish", "body_type": "fit", "height": "average height",
+        "fitness_level": "very fit", "hair_color": "dark brown", "hair_length": "very short",
+        "skin_tone": "light medium", "outfit_style": "smart casual", "accessories": "no accessories",
+        "expression": "confident", "location": "harbor dock at sunrise", "lighting": "soft morning light",
+        "shot_type": "medium shot from waist up", "mood": "confident",
+    },
+    "Pin-up Model": {
+        "gender": "Female", "ethnicity": "Kenyan", "body_type": "voluptuous", "height": "average height",
+        "hair_color": "jet black", "hair_length": "shoulder length", "hair_texture": "wavy",
+        "hair_style": "half up half down", "skin_tone": "dark brown", "makeup_style": "full glam",
+        "outfit_style": "vintage retro", "expression": "flirtatious", "location": "retro diner-style kitchen",
+        "lighting": "warm string lights bokeh background", "shot_type": "medium shot from waist up",
+        "mood": "playful",
+    },
+    "Streamer": {
+        "ethnicity": "Indian", "body_type": "slim", "height": "average height",
+        "hair_color": "platinum blonde", "hair_length": "shoulder length", "hair_style": "worn down",
+        "skin_tone": "medium", "outfit_style": "streetwear", "accessories": "no accessories",
+        "expression": "playful", "location": "co-working space",
+        "lighting": "neon sign glow in multiple colors", "shot_type": "medium close-up from chest up",
+        "mood": "playful",
+    },
 }
 
 
@@ -1510,6 +1589,16 @@ _COSTUMES: dict[str, str] = {
     "Victorian Lady": "a high-collared {jewel_tone} bustle gown of {fabric} with lace trim, puffed sleeves, buttoned boots, and a cameo brooch",
     "Ancient Roman Patrician": "a draped white toga over a tunic with a {color} border, leather sandals, and a {metal} laurel wreath",
     "Prehistoric Hunter": "rugged {fur} hide garments with bone-and-tooth jewelry, leather wraps, and a stone-tipped spear",
+    "Tennis Player": "a {color} athletic tennis polo with matching shorts, a sweatband, wristbands, and court shoes",
+    "Gymnast": "a sleek {jewel_tone} long-sleeved competition leotard with metallic trim and grip wristbands",
+    "Baker": "a flour-dusted white apron over a {color} shirt with rolled sleeves and a soft baker's cap",
+    "Florist": "a {earth_tone} canvas work apron over a floral-print blouse with gardening gloves and pruning shears in the pocket",
+    "Plumber": "{color} work coveralls over a plain tee with a heavy tool belt and scuffed work boots",
+    "Retail Cashier": "a {color} store polo with a name badge and a half-apron over neat chinos",
+    "Rancher": "a {color} plaid western shirt with a worn leather vest, denim jeans, a tooled leather belt, cowboy boots, and a wide-brimmed cowboy hat",
+    "Navy Sailor": "a crisp white naval uniform with a {dark_color} neckerchief, brass buttons, and a sailor's cap",
+    "Pin-up Model": "a {color} polka-dot halter swing dress cinched at the waist with a petticoat and peep-toe heels",
+    "Streamer": "a {color} oversized graphic hoodie with a gaming headset around the neck over a plain tee",
 }
 for _name, _costume in _COSTUMES.items():
     if _name in ARCHETYPES:

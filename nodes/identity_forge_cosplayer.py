@@ -140,6 +140,36 @@ def _is_body_paint(entry: dict, costume: str) -> bool:
     return bool(_BODY_PAINT_RE.search(costume))
 
 
+#: Pulls the colour descriptor out of the canonical body-paint phrase so it can be
+#: planted in the (otherwise empty) ``skin_tone`` slot as a *colour anchor*. Body
+#: paint suppresses the human ``skin_tone``/``complexion``, which leaves the opening
+#: prose with no skin colour at all ("...with a slim build and tall.") — the costume
+#: clause is the only mention, so t2i routinely defaults the high-attention *face* to
+#: a human tone (the Poison Ivy white-face / TMNT pale-face bug). Re-injecting the
+#: colour ("...and vivid green skin") anchors face + body. Captures the words between
+#: "coat of" and the material noun: "an even, smooth coat of <vivid green> body paint".
+_BODY_PAINT_COLOR_RE = re.compile(
+    r"\bcoat of\s+(.+?)\s+"
+    r"(?:body\s+paint|skin|fur|scales?|hide|carapace|exoskeleton|plating|paint|coat)\b",
+    re.IGNORECASE,
+)
+
+
+def _body_paint_skin_color(entry: dict, costume: str) -> str | None:
+    """The colour string to anchor in ``skin_tone`` for a body-paint character.
+
+    An explicit ``skin`` entry key wins (free-text, for phrasings the regex misses or
+    where a cleaner word is wanted); otherwise the colour is auto-derived from the
+    canonical "coat of <colour> <material>" clause. Returns ``None`` when neither is
+    available (the field then stays suppressed, as before).
+    """
+    explicit = entry.get("skin")
+    if explicit:
+        return str(explicit)
+    match = _BODY_PAINT_COLOR_RE.search(costume)
+    return match.group(1).strip() if match else None
+
+
 #: A bald character states it in the costume by convention ("a bald head", "a
 #: clean-shaven bald scalp"). ``\bbald\b`` matches that without catching "baldric"
 #: (the 'r' after 'd' breaks the word boundary). When present the builder locks the
@@ -313,6 +343,15 @@ def build_cosplayer_json(
     # skin") would otherwise still report a stray human skin tone under it.
     if _is_body_paint(entry, costume):
         _apply_suppress(document, _BODY_PAINT_SUPPRESS, override=True)
+        # Re-plant the paint colour in the (now-suppressed) skin_tone slot so the
+        # opening prose anchors it ("...and vivid green skin") instead of leaving the
+        # face uncoloured for t2i to default to a human tone. Free-text value, voiced
+        # verbatim like the ``eyes`` override; the demographics formatter guards the
+        # trailing " skin" so "...scaled-skin" / "...fur" don't read doubled.
+        skin_color = _body_paint_skin_color(entry, costume)
+        if skin_color:
+            group = FIELD_DEFINITIONS.get("skin_tone", {}).get("group", "Body")
+            document.setdefault(group, OrderedDict())["skin_tone"] = skin_color
     # Bald / clean-shaven only fill randomized gaps (override=False) so an entry can
     # still lock a deliberate topknot or stray hairs via its signature. Auto-detected
     # "bald" in the prose suppresses scalp hair only (a bald man may keep a beard); an

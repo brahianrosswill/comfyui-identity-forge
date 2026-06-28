@@ -1365,14 +1365,22 @@ class SuppressionLockSurvivalTests(unittest.TestCase):
     locked-field build -- a default "Random" widget must not re-randomize it. Guards
     the bug where She-Hulk rendered a human skin tone and Voldemort grew hair."""
 
-    def test_body_paint_suppresses_skin_through_node_path(self):
+    def test_body_paint_replaces_human_skin_with_colour_anchor(self):
+        # The wired suppression must still beat a "Random" widget: no *human* skin
+        # tone or complexion leaks. Body-paint characters now carry a colour anchor in
+        # skin_tone (e.g. "rich green") instead of an empty slot -- it must be the
+        # paint colour, never a value from the human skin_tone pool.
+        human = set(FIELD_DEFINITIONS["skin_tone"]["female_options"])
         for name in ("She-Hulk", "Poison Ivy"):
             locked, label, cf, ch = _node_locked(build_cosplayer_json(name, 0, "Costume only"))
             for seed in range(15):
                 _, js = generate_character(seed, "Female", locked, cosplay_label=label,
                                            covers_face=cf, covers_hair=ch)
                 doc = json.loads(js)
-                self.assertNotIn("skin_tone", doc.get("Body", {}), f"{name} seed {seed}")
+                tone = doc.get("Body", {}).get("skin_tone")
+                self.assertIsNotNone(tone, f"{name} seed {seed}: missing colour anchor")
+                self.assertNotIn(tone, human, f"{name} seed {seed}: human tone leaked")
+                self.assertIn("green", tone, f"{name} seed {seed}")
                 self.assertNotIn("complexion", doc.get("Face", {}), f"{name} seed {seed}")
 
     def test_bald_suppresses_scalp_hair_through_node_path(self):
@@ -1405,10 +1413,55 @@ class BodyPaintLipColorTests(unittest.TestCase):
         for seed in range(20):
             _, js = generate_character(seed, "Female", locked, cosplay_label=label,
                                        covers_face=cf, covers_hair=ch)
-            face = json.loads(js).get("Face", {})
-            self.assertEqual(face.get("lip_color"), "red", f"seed {seed}")
-            # The green body-paint coat still suppresses the human skin tone.
-            self.assertNotIn("skin_tone", json.loads(js).get("Body", {}), f"seed {seed}")
+            doc = json.loads(js)
+            self.assertEqual(doc.get("Face", {}).get("lip_color"), "red", f"seed {seed}")
+            # The green body-paint coat anchors skin_tone to the paint colour (so the
+            # face reads green), not a leaked human tone.
+            self.assertEqual(doc.get("Body", {}).get("skin_tone"), "vivid green", f"seed {seed}")
+
+
+class SkinColorAnchorTests(unittest.TestCase):
+    """Body-paint characters re-plant the paint colour in skin_tone so the opening
+    prose anchors it (fixes the white-face bug), without doubling the noun."""
+
+    def test_auto_derived_colour_in_opening_sentence(self):
+        # Poison Ivy: "...and vivid green skin." in the lead sentence, both look levels.
+        for look in ("Costume only", "Full character"):
+            locked, label, cf, ch = _node_locked(build_cosplayer_json("Poison Ivy", 0, look))
+            prose, _ = generate_character(0, "Female", locked, cosplay_label=label,
+                                          covers_face=cf, covers_hair=ch)
+            lead = prose.split(". ")[0]
+            self.assertIn("vivid green skin", lead, look)
+
+    def test_explicit_skin_override_wins(self):
+        # Iceman's "ice" phrasing isn't auto-derivable; the explicit key supplies it.
+        locked, label, cf, ch = _node_locked(build_cosplayer_json("Iceman", 0, "Full character"))
+        prose, _ = generate_character(0, "Male", locked, cosplay_label=label,
+                                      covers_face=cf, covers_hair=ch)
+        self.assertIn("icy pale-blue skin", prose)
+
+    def test_prose_does_not_double_skin_noun(self):
+        # Mystique's anchor already ends in "scaled-skin": the guard must not append
+        # another " skin".
+        locked, label, cf, ch = _node_locked(build_cosplayer_json("Mystique", 0, "Costume only"))
+        prose, _ = generate_character(0, "Female", locked, cosplay_label=label,
+                                      covers_face=cf, covers_hair=ch)
+        self.assertIn("scaled-skin", prose)
+        self.assertNotIn("scaled-skin skin", prose)
+
+    def test_survives_set_all_none(self):
+        # The anchor is a wired value, so the "set all to none" reset keeps it.
+        flat = _parse_archetype_json(build_cosplayer_json("Poison Ivy", 0, "Full character"))
+        label = flat.pop(_COSPLAY_LABEL_KEY, None)
+        cf = bool(flat.pop(_COVERS_FACE_KEY, None)); ch = bool(flat.pop(_COVERS_HAIR_KEY, None))
+        flat.pop(_COVERS_BODY_KEY, None)
+        archetype_locked = {k: v for k, v in flat.items()
+                            if k in FIELD_DEFINITIONS and k not in _CONTROL_FIELDS and v != "Random"}
+        kwargs = {n: "Random" for n in FIELD_DEFINITIONS}
+        locked = resolve_locked_fields(kwargs, archetype_locked, _SET_ALL_NONE)
+        _, js = generate_character(0, "Female", locked, cosplay_label=label,
+                                   covers_face=cf, covers_hair=ch)
+        self.assertEqual(json.loads(js)["Body"]["skin_tone"], "vivid green")
 
 
 class GrammarAgreementTests(unittest.TestCase):

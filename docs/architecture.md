@@ -82,7 +82,8 @@ Archetype ─▶ Cosplayer ─▶ Creature ─▶ Modifier ─▶ IdentityForge 
 gender, used only to scope the `Random — female/male` picks; the *person's* gender is the
 IdentityForge widget, so crossplay works), `costume`. Optional: `signature` / `physique`
 `{field: value}` maps (values **must** be valid `FIELD_DEFINITIONS` options — `validate_data`
-enforces), `covers_face` + `mask`, `prop`, and `eyes` (free-text eye-colour override).
+enforces), `covers_face` + `mask`, `covers_hair`, `body_paint`, `prop`, `eyes` (free-text
+eye-colour override), and `skin` (free-text body-paint skin-colour anchor).
 
 Conventions (keep the data coherent):
 
@@ -110,6 +111,20 @@ Conventions (keep the data coherent):
   `skin_tone`, so an all-over coat (Human Torch flame) would otherwise still report a stray
   skin tone under it. See `_BODY_PAINT_RE` / `_BODY_PAINT_SUPPRESS` in
   `nodes/identity_forge_cosplayer.py`.
+- **Skin-colour anchor (re-plant the colour).** Suppressing `skin_tone` leaves the *opening*
+  prose with no skin colour ("…with a slim build and tall."), so t2i routinely defaults the
+  high-attention **face** to a human tone (the Poison Ivy white-face / TMNT pale-face bug). After
+  suppression the builder **re-injects the paint colour into `skin_tone`** so the lead sentence
+  anchors it ("…tall, **and vivid green skin**"). The colour is auto-derived from the
+  `"coat of <colour> <material>"` clause (`_BODY_PAINT_COLOR_RE` → `_body_paint_skin_color`); an
+  explicit free-text **`skin` entry key** wins for phrasings the regex misses (`ice`, `chitin`,
+  `tattoos`, no-"coat of" prose) or where a cleaner word reads better — it mirrors the `eyes`
+  override and is voiced verbatim. The anchor is a *wired value*, so it survives both look-levels
+  and "set all to none". The demographics formatter (`_format_…`) guards the trailing `" skin"`
+  when the value already ends in a skin/fur/scale/hide word ("dark blue scaled-skin"). For a
+  genuinely non-human **face** prefer Pattern A (`covers_face` + `mask`) over relying on the anchor
+  alone (TMNT turtles, King Shark, Abe Sapien, Jar Jar Binks, Despero); humanoid coloured
+  characters (She-Hulk, Mystique, Gamora) stay face-visible and lean on the anchor.
 - **Bald characters:** state it in `costume` ("a bald head", "a clean-shaven bald scalp"). The
   builder **auto-detects `\bbald\b`** (won't catch "baldric") and locks the scalp-hair fields
   (`hair_color/length/texture/style/part/volume/highlights/accessory`) absent, so a random

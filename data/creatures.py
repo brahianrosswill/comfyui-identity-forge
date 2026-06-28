@@ -1352,6 +1352,34 @@ CREATURES: dict[str, dict] = {
         "legs_feet": "balanced servo-driven legs",
         "extras": "faint status lights running along the spine",
     },
+    "porcelain cyborg": {
+        "class": "Aliens", "palette": "porcelain white",
+        "palette_pool": ["porcelain white", "electric blue", "neon magenta", "teal",
+                         "amber", "violet", "rose gold", "jade green"],
+        "head": "a face of smooth porcelain panels edged in bold black linework",
+        "eyes": "mismatched glowing nonstandard eyes in shifting neon hues",
+        "integument": "interlocking ceramic plating fused with fluid blob-like cybernetic "
+                      "components and embedded micro-circuitry",
+        "arms": "segmented porcelain-and-chrome arms with exposed actuators",
+        "hands": "delicate jointed porcelain fingers tipped with metal",
+        "legs_feet": "smooth panelled legs traced with glowing seam-lines",
+        "extras": "a faint neon glow pulsing through the circuitry",
+    },
+    "chrome-flesh cyborg": {
+        "class": "Aliens", "palette": "chrome and pale flesh",
+        "palette_pool": ["chrome and pale flesh", "gunmetal and bronze",
+                         "brushed steel and copper", "black chrome and neon",
+                         "titanium and gold"],
+        "head": "a half-metallic face where polished implants merge with organic skin "
+                "and glowing circuit-scars",
+        "eyes": "one human eye and one luminous mechanical optic",
+        "integument": "interwoven layers of reflective metal and flesh laced with "
+                      "holographic tattoos",
+        "arms": "one organic arm and one fully cybernetic chrome arm",
+        "hands": "a flesh hand and an articulated steel hand",
+        "legs_feet": "reinforced cybernetic legs with visible pistons",
+        "extras": "digital scars and softly glowing implant lines",
+    },
 
     # --- Mythic & Fantasy (expansion) ------------------------------------
     "pegasus": {
