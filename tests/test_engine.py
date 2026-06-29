@@ -1466,6 +1466,63 @@ class SkinColorAnchorTests(unittest.TestCase):
         self.assertEqual(json.loads(js)["Body"]["skin_tone"], "vivid green")
 
 
+class FaceColorReinforcementTests(unittest.TestCase):
+    """The opening anchors the paint colour on the body; the face must also be
+    coloured or t2i renders it pale (the green-body / white-face bug). The engine
+    restates a non-human skin colour on the face when the face is described."""
+
+    def test_face_reinforced_both_look_levels(self):
+        # Both Costume only and Full character: the face restates the green skin.
+        for look in ("Costume only", "Full character"):
+            for seed in range(6):
+                locked, label, cf, ch = _node_locked(
+                    build_cosplayer_json("Poison Ivy", 0, look))
+                prose, _ = generate_character(seed, "Female", locked, cosplay_label=label,
+                                              covers_face=cf, covers_hair=ch)
+                self.assertIn("face has the same vivid green skin", prose, f"{look} seed {seed}")
+
+    def test_face_reinforced_under_set_all_none(self):
+        # Even with the reset on (only wired hair/eyes/anchor survive), the face is
+        # still described (green eyes, red lips) so the colour is restated on it.
+        flat = _parse_archetype_json(build_cosplayer_json("Poison Ivy", 0, "Full character"))
+        label = flat.pop(_COSPLAY_LABEL_KEY, None)
+        cf = bool(flat.pop(_COVERS_FACE_KEY, None)); ch = bool(flat.pop(_COVERS_HAIR_KEY, None))
+        flat.pop(_COVERS_BODY_KEY, None)
+        archetype_locked = {k: v for k, v in flat.items()
+                            if k in FIELD_DEFINITIONS and k not in _CONTROL_FIELDS and v != "Random"}
+        kwargs = {n: "Random" for n in FIELD_DEFINITIONS}
+        locked = resolve_locked_fields(kwargs, archetype_locked, _SET_ALL_NONE)
+        prose, _ = generate_character(0, "Female", locked, cosplay_label=label,
+                                      covers_face=cf, covers_hair=ch)
+        self.assertIn("face has the same vivid green skin", prose)
+
+    def test_face_reinforcement_not_doubled(self):
+        # Mystique's anchor ends in "scaled-skin": the face line must not say
+        # "scaled-skin skin".
+        locked, label, cf, ch = _node_locked(
+            build_cosplayer_json("Mystique", 0, "Costume only"))
+        prose, _ = generate_character(0, "Female", locked, cosplay_label=label,
+                                      covers_face=cf, covers_hair=ch)
+        self.assertIn("face has the same", prose)
+        self.assertNotIn("scaled-skin skin", prose)
+
+    def test_normal_human_has_no_face_reinforcement(self):
+        # A standard human skin tone is not restated on the face (no output churn).
+        for gender in ("Female", "Male", "Any"):
+            for seed in range(8):
+                prose, _ = generate_character(seed, gender, {})
+                self.assertNotIn("face has the same", prose, f"{gender} seed {seed}")
+
+    def test_masked_body_paint_has_no_face_reinforcement(self):
+        # King Shark is covers_face + body paint: the head is the mask, the face
+        # fields are dropped, so the face colour must not be restated (only the body).
+        locked, label, cf, ch = _node_locked(
+            build_cosplayer_json("King Shark", 0, "Full character"))
+        prose, _ = generate_character(0, "Female", locked, cosplay_label=label,
+                                      covers_face=cf, covers_hair=ch)
+        self.assertNotIn("face has the same", prose)
+
+
 class GrammarAgreementTests(unittest.TestCase):
     """The 'Any' gender uses plural 'They' and must take plural verbs."""
 

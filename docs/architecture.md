@@ -131,6 +131,17 @@ Conventions (keep the data coherent):
   genuinely non-human **face** prefer Pattern A (`covers_face` + `mask`) over relying on the anchor
   alone (TMNT turtles, King Shark, Abe Sapien, Jar Jar Binks, Despero); humanoid coloured
   characters (She-Hulk, Mystique, Gamora) stay face-visible and lean on the anchor.
+- **Face-colour reinforcement (engine, the green-body/white-face fix).** The opening anchor colours
+  the *body* only; the face is otherwise described by colourless feature tokens ("…oval face…, green
+  eyes, red lips"), so t2i kept defaulting the high-attention **face** to a human tone even with the
+  anchor in place. `_format_prose` therefore **restates the colour on the face** ("…**Her face has the
+  same vivid green skin**") when the resolved `skin_tone` is a non-human colour (not in
+  `_STANDARD_SKIN_TONES`, i.e. a body-paint anchor or free-text `skin` override) **and** the face is
+  actually described (`face_struct`/`features` non-empty). It reuses the same material-noun guard so
+  "scaled-skin" isn't doubled. This fires for face-visible coloured characters only: a masked
+  (`covers_face`) or creature-replaced face has its Face-group fields dropped before render, so the
+  reinforcement is skipped (the head is the mask/creature); standard human tones are never restated
+  (prose-only, zero RNG draws — no output churn, no randomization bias).
 - **Bald characters:** state it in `costume` ("a bald head", "a clean-shaven bald scalp"). The
   builder **auto-detects `\bbald\b`** (won't catch "baldric") and locks the scalp-hair fields
   (`hair_color/length/texture/style/part/volume/highlights/accessory`) absent, so a random

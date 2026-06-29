@@ -208,6 +208,17 @@ _MAX_CONSTRAINT_ITERATIONS: int = 12
 #: diversity possible (and locking skin_tone bypasses the bias entirely).
 SKIN_TONE_INBAND_PROBABILITY: float = 0.8
 
+#: The believable human skin tones. A resolved ``skin_tone`` *outside* this set is a
+#: non-human colour: a body-paint colour anchor (She-Hulk green, Mystique blue) or a
+#: free-text ``skin`` override planted by the cosplayer builder. Such a colour must be
+#: restated on the face (see _format_prose), because the opening sentence anchors it on
+#: the body only and t2i otherwise renders the high-attention face from the (colourless)
+#: facial-feature tokens, leaving it pale under the paint -- the green-body/white-face
+#: bug. ``skin_tone``'s female/male pools are identical, so either list defines the set.
+_STANDARD_SKIN_TONES: frozenset[str] = frozenset(
+    FIELD_DEFINITIONS["skin_tone"]["female_options"]
+)
+
 #: Wardrobe modes: how the outfit picker maps to the gendered outfit buckets.
 _WARDROBE_BY_GENDER: dict[str, str] = {
     "Female": "Feminine", "Male": "Masculine", "Any": "Any",
@@ -707,6 +718,20 @@ def _format_prose(
         features.append(brows if "brow" in brows else f"{brows} eyebrows")
     if features:
         sentences.append(f"{subj} {has} " + _join(features))
+
+    # --- Face colour reinforcement (body-paint / exotic skin) ----------
+    # The opening sentence anchors a non-human skin colour on the body only; the face
+    # is otherwise described purely by colourless feature tokens, so t2i defaults it to
+    # a human tone (the green-body / white-face bug). When skin_tone is a non-standard
+    # colour AND the face is actually being described, restate the colour on the face so
+    # the face region renders coloured too. A masked (covers_face) or creature-replaced
+    # face has its Face-group fields popped before render, so face_struct/features are
+    # empty there and this correctly does not fire (the head is the mask/creature).
+    skin_color = g("skin_tone")
+    if skin_color and skin_color not in _STANDARD_SKIN_TONES and (face_struct or features):
+        face_color = (skin_color if re.search(r"\b(?:skin|fur|scales?|hide)$", skin_color)
+                      else f"{skin_color} skin")
+        sentences.append(f"{poss} face has the same {face_color}")
 
     # --- Complexion / skin details -------------------------------------
     skin = []
