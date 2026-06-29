@@ -393,12 +393,6 @@ FIELD_DEFINITIONS: OrderedDict[str, dict] = OrderedDict([
         "male_options": ['center part', 'side part', 'deep side part', 'no part', 'zigzag part', 'diagonal'],
         "optional": False
     }),
-    ("hair_volume", {
-        "group": 'Hair',
-        "female_options": ['flat', 'slight volume', 'medium volume', 'voluminous', 'big hair', 'thick'],
-        "male_options": ['flat', 'slight volume', 'medium volume', 'voluminous', 'big hair', 'thick'],
-        "optional": False
-    }),
     ("hair_highlights", {
         "group": 'Hair',
         "female_options": ['none', 'subtle balayage', 'chunky highlights', 'face framing', 'ombre', 'sombre', 'frosted tips', 'money piece', 'peekaboo highlights'],

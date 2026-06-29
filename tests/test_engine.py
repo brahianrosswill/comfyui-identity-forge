@@ -1389,7 +1389,7 @@ class SuppressionLockSurvivalTests(unittest.TestCase):
         # Saitama is fully bald: no scalp-hair field may survive (facial_hair, a
         # separate Hair-group field, is allowed -- bald is scalp-only).
         scalp = ("hair_color", "hair_length", "hair_style", "hair_texture",
-                 "hair_part", "hair_volume", "hair_highlights")
+                 "hair_part", "hair_highlights")
         locked, label, cf, ch = _node_locked(build_cosplayer_json("Saitama", 0, "Costume only"))
         for seed in range(15):
             _, js = generate_character(seed, "Male", locked, cosplay_label=label,
@@ -1521,6 +1521,84 @@ class FaceColorReinforcementTests(unittest.TestCase):
         prose, _ = generate_character(0, "Female", locked, cosplay_label=label,
                                       covers_face=cf, covers_hair=ch)
         self.assertNotIn("face has the same", prose)
+
+
+class HandColorReinforcementTests(unittest.TestCase):
+    """Body-paint hands are restated in the same colour (the white-hands bug), but
+    only when the hands actually show -- gloves / a full shell hide them."""
+
+    def test_hands_reinforced_for_body_paint(self):
+        # She-Hulk has bare hands: the green is restated on them in both look levels.
+        for look in ("Costume only", "Full character"):
+            for seed in range(6):
+                locked, label, cf, ch = _node_locked(
+                    build_cosplayer_json("She-Hulk", 0, look))
+                prose, _ = generate_character(seed, "Female", locked, cosplay_label=label,
+                                              covers_face=cf, covers_hair=ch)
+                self.assertIn("hands have the same rich green skin", prose,
+                              f"{look} seed {seed}")
+
+    def test_gloved_body_paint_omits_hand_colour_and_nails(self):
+        # Gloves hide the hands: neither the hand skin colour nor nail polish may be
+        # voiced (otherwise t2i paints nails on top of a glove). The face still shows.
+        prose, js = generate_character(
+            1, "Female",
+            {"skin_tone": "vivid green",
+             "outfit_description": "a green bodysuit with long opera gloves"})
+        self.assertIn("face has the same vivid green skin", prose)
+        self.assertNotIn("hands have the same", prose)
+        self.assertNotIn("nails", json.loads(js).get("Jewelry & Nails", {}))
+
+    def test_normal_human_has_no_hand_reinforcement(self):
+        # A standard human skin tone is never restated on the hands (no output churn).
+        for gender in ("Female", "Male", "Any"):
+            for seed in range(8):
+                prose, _ = generate_character(seed, gender, {})
+                self.assertNotIn("hands have the same", prose, f"{gender} seed {seed}")
+
+
+class CostumeArticleTests(unittest.TestCase):
+    """fill_costume recomputes 'a'/'an' from the value it fills into a slot."""
+
+    def test_article_agrees_with_filled_slot(self):
+        from data.templates import fill_costume
+        for tmpl in ("a {gem}", "an {earth_tone}", "a {color}", "a {sheer_fabric}"):
+            for seed in range(60):
+                out = fill_costume(tmpl, random.Random(seed))
+                article, word = out.split()[0], out.split()[1]
+                expected = "an" if word[:1].lower() in "aeiou" else "a"
+                self.assertEqual(article, expected, out)
+
+    def test_article_governed_by_adjective_is_untouched(self):
+        # When the article belongs to an adjective (not the slot), it must not change.
+        from data.templates import fill_costume
+        self.assertTrue(
+            fill_costume("an embroidered {color} doublet", random.Random(0))
+            .startswith("an embroidered "))
+        self.assertTrue(
+            fill_costume("an aristocratic {dark_color} coat", random.Random(0))
+            .startswith("an aristocratic "))
+
+
+class FieldHygieneTests(unittest.TestCase):
+    """Cross-field de-duplication: hair fullness has a single owner."""
+
+    def test_hair_volume_removed(self):
+        # hair_volume duplicated hair_texture's fullness words and was already kept
+        # out of the prose, so it was removed rather than left as a redundant field.
+        self.assertNotIn("hair_volume", FIELD_DEFINITIONS)
+
+    def test_no_constraint_or_data_references_hair_volume(self):
+        from data.constraints import CONSTRAINT_RULES
+        from data.templates import ARCHETYPES
+        for rule in CONSTRAINT_RULES:
+            for key in ("field", "excludes_field", "requires_field"):
+                self.assertNotEqual(rule.get(key), "hair_volume")
+        for name, template in ARCHETYPES.items():
+            self.assertNotIn("hair_volume", template, name)
+        for name, entry in COSPLAYERS.items():
+            for section in ("signature", "physique"):
+                self.assertNotIn("hair_volume", entry.get(section, {}), name)
 
 
 class GrammarAgreementTests(unittest.TestCase):

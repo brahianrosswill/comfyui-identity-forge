@@ -124,5 +124,5 @@ Seed `42`, Female, `hair_color` = auburn:
   for an exact tone.
 - Costume archetypes carry their own outfit, so `wardrobe`/outfit randomization don't apply
   (colours still vary by seed).
-- Prose summarizes: a few fine fields (hair volume, eye size, teeth) live in the JSON but are left
+- Prose summarizes: a few fine fields (eye size, teeth) live in the JSON but are left
   out of the prose to avoid clutter.

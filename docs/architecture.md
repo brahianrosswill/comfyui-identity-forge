@@ -142,9 +142,17 @@ Conventions (keep the data coherent):
   (`covers_face`) or creature-replaced face has its Face-group fields dropped before render, so the
   reinforcement is skipped (the head is the mask/creature); standard human tones are never restated
   (prose-only, zero RNG draws — no output churn, no randomization bias).
+- **Hand-colour reinforcement (engine, the white-hands fix).** The same restatement for the
+  **hands**: `_format_prose` adds "...**Her hands have the same vivid green skin**" when `skin_tone`
+  is non-standard, so bare hands (and any nail polish) do not render in a default human tone (the
+  green-body / **white-hands** bug -- She-Hulk, Gamora). Gated on the hands actually showing:
+  `generate_character` passes `hands_visible`, false when gloves (`_GLOVE_RE`, unless
+  `_FINGERLESS_RE`) or a full shell (`covers_body` / `_FULL_COVER_RE`) hide them -- exactly where
+  the finger fields are already dropped -- so it never colours skin or paints nails under a
+  covering. Same material-noun guard as the face; prose-only, zero RNG (no bias).
 - **Bald characters:** state it in `costume` ("a bald head", "a clean-shaven bald scalp"). The
   builder **auto-detects `\bbald\b`** (won't catch "baldric") and locks the scalp-hair fields
-  (`hair_color/length/texture/style/part/volume/highlights/accessory`) absent, so a random
+  (`hair_color/length/texture/style/part/highlights/accessory`) absent, so a random
   "His hair is …" line can't contradict the bald head (the Doctor Manhattan / Voldemort bug).
   Auto-detected bald is **scalp-only** (a bald man may keep a beard). For a *fully* hairless
   head (creatures/aliens — Kilowog, King Shark, Despero) set the explicit `bald: True` key,
@@ -244,6 +252,18 @@ creature loader copies only the standard slots).
 - Duplicate `COSPLAYERS` / `CREATURES` keys silently override — the last wins.
 - `signature`/`physique` values are gender-gated downstream; prefer unisex fields for crossplay.
 - A locked physique doesn't constrain `fitness`/`muscle` (known loose coherence).
+- **A downstream Full-preset Archetype overrides a chained Cosplayer's costume/skin.** Presets
+  merge with the *downstream* node winning field-by-field (`merge_preset_documents`), so
+  `Cosplayer -> Archetype (Full preset) -> IdentityForge` lets the archetype's `outfit_description`
+  (and any Body `skin_tone`) replace the cosplayer's -- e.g. She-Hulk chained into a "Tennis Player"
+  Full preset comes out in tennis whites with a human tone, losing the green. To **layer** a tilt
+  onto a cosplay instead of overwriting it, set the archetype (or cosplayer) to **Essentials** so it
+  emits only the look groups and leaves the rest to flow through.
+- **Seeded nodes re-roll every queue via `fingerprint_inputs`.** The four randomizers
+  (`IdentityForge`, `Archetype`, `Cosplayer`, `Creature`) return `float("nan")` from
+  `fingerprint_inputs`, forcing ComfyUI to re-execute them -- otherwise an auto-advanced seed can be
+  served from cache and the output "sticks" (ComfyUI#11905). Pure cache control (no RNG): a *fixed*
+  seed still reproduces exactly, and identical output keeps expensive downstream nodes cached.
 - Adding RNG draws in the creature node mid-sequence shifts seed→creature mapping — append draws
   at the end.
 - The roster is large (~840 cosplayers, ~130 creatures): always grep the current keys before

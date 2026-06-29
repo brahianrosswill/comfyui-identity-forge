@@ -78,7 +78,6 @@ const FIELD_TO_GROUP = {
   "fitness_level": "Body",
   "muscle_definition": "Body",
   "hair_part": "Hair",
-  "hair_volume": "Hair",
   "hair_highlights": "Hair",
   "eyebrow_makeup": "Makeup",
   "contour": "Makeup",

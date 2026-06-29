@@ -184,7 +184,6 @@ _BALD_SUPPRESS: dict[str, str] = {
     "hair_texture": "None",
     "hair_style": "None",
     "hair_part": "None",
-    "hair_volume": "None",
     "hair_highlights": "None",
     "hair_accessory": "None",
 }
@@ -457,6 +456,16 @@ if _COMFY_AVAILABLE:
                 ],
                 outputs=[io.String.Output(display_name="character_json")],
             )
+
+        @classmethod
+        def fingerprint_inputs(cls, **kwargs: Any) -> float:
+            # Force a fresh roll on every queue. ComfyUI can serve a stale cached
+            # result when control_after_generate auto-advances the seed (ComfyUI
+            # #11905); returning a never-equal value (NaN) makes this node's cache
+            # signature always differ, so it re-executes and reads the new seed.
+            # Pure cache control -- no RNG here, so a fixed seed still reproduces
+            # exactly and nothing biases the randomization.
+            return float("nan")
 
         @classmethod
         def execute(cls, **kwargs: Any) -> "io.NodeOutput":

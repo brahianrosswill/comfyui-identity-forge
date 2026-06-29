@@ -90,12 +90,6 @@ CONSTRAINT_RULES: list[dict] = [
                          "space buns", "pigtails", "braided pigtails",
                          "high ponytail", "low ponytail", "side ponytail"],
      "reason": "a pixie cut is too short to braid or tie back"},
-    {"type": "exclusion", "field": "hair_length", "value": "buzzed very short",
-     "excludes_field": "hair_volume", "excludes_values": ["voluminous", "big hair"],
-     "reason": "a buzz cut cannot have voluminous body"},
-    {"type": "exclusion", "field": "hair_length", "value": "very short",
-     "excludes_field": "hair_volume", "excludes_values": ["big hair"],
-     "reason": "very short hair cannot be teased into big hair"},
 
     # --- Body coherence: fitness drives plausible muscle definition -------
     {"type": "exclusion", "field": "fitness_level", "value": "sedentary",

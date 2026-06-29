@@ -38,23 +38,54 @@ COSTUME_SLOTS: dict[str, list[str]] = {
 }
 
 
+def _article(value: str) -> str:
+    """Return the indefinite article ("a"/"an") that fits ``value``.
+
+    Naive vowel-letter test -- sufficient for every COSTUME_SLOTS value (the pools
+    contain no silent-h or "unicorn"/"hour" exceptions). Mirrors
+    ``nodes.identity_forge._a``; kept local so this data module never imports the
+    nodes package.
+    """
+    return "an" if value[:1].lower() in "aeiou" else "a"
+
+
 def fill_costume(template: str, rng) -> str:
     """Replace ``{slot}`` placeholders in a costume string with seeded picks.
 
     Each distinct slot is resolved once, so repeated ``{color}`` reads the same.
-    Unknown placeholders are left untouched.
+    Unknown placeholders are left untouched. An indefinite article written directly
+    before a slot ("a {color}", "an {earth_tone}") is recomputed from the resolved
+    value so it always agrees ("an emerald", "a tan"); an article governed by an
+    intervening adjective ("an aristocratic {dark_color}") is left untouched.
     """
     chosen: dict[str, str] = {}
 
-    def _replace(match: "re.Match[str]") -> str:
-        slot = match.group(1)
+    def _pick(slot: str) -> str | None:
         if slot not in COSTUME_SLOTS:
-            return match.group(0)
+            return None
         if slot not in chosen:
             chosen[slot] = rng.choice(COSTUME_SLOTS[slot])
         return chosen[slot]
 
-    return re.sub(r"\{(\w+)\}", _replace, template)
+    def _article_slot(match: "re.Match[str]") -> str:
+        article, slot = match.group(1), match.group(2)
+        value = _pick(slot)
+        if value is None:
+            return match.group(0)
+        fixed = _article(value)
+        if article[:1].isupper():
+            fixed = fixed.capitalize()
+        return f"{fixed} {value}"
+
+    def _plain_slot(match: "re.Match[str]") -> str:
+        value = _pick(match.group(1))
+        return value if value is not None else match.group(0)
+
+    # First resolve "a/an {slot}" pairs, recomputing the article from the value;
+    # then fill any remaining slots. The shared ``chosen`` cache keeps repeated
+    # slots equal regardless of which pass resolves them first.
+    filled = re.sub(r"\b([Aa]n?)\s+\{(\w+)\}", _article_slot, template)
+    return re.sub(r"\{(\w+)\}", _plain_slot, filled)
 
 
 ARCHETYPES: dict[str, dict[str, str]] = {
@@ -831,7 +862,7 @@ ARCHETYPES: dict[str, dict[str, str]] = {
     },
     "Disco Diva": {
         "gender": "Female", "hair_color": "jet black", "hair_style": "afro",
-        "hair_volume": "voluminous", "makeup_style": "club makeup",
+        "makeup_style": "club makeup",
         "outfit_style": "vintage retro", "expression": "flirtatious",
         "location": "neon-lit nightclub", "lighting": "club strobe lighting",
         "shot_type": "full body shot", "mood": "cheerful",
@@ -1280,7 +1311,7 @@ ARCHETYPES: dict[str, dict[str, str]] = {
     "Drag Performer": {
         "gender": "Female", "body_type": "curvy", "height": "tall",
         "hair_color": "platinum blonde", "hair_length": "very long", "hair_texture": "loosely curled",
-        "hair_style": "freshly blown out", "hair_volume": "big hair", "makeup_style": "bold glam",
+        "hair_style": "freshly blown out", "makeup_style": "bold glam",
         "eye_makeup": "colorful bold eyeshadow", "eyeliner": "dramatic winged",
         "lashes": "dramatic falsies", "lips_makeup": "classic red",
         "outfit_style": "evening formal", "expression": "confident",
@@ -1311,7 +1342,7 @@ ARCHETYPES: dict[str, dict[str, str]] = {
     "1950s Greaser": {
         "gender": "Male", "ethnicity": "English", "body_type": "athletic", "height": "average height",
         "hair_color": "jet black", "hair_length": "very short", "hair_texture": "thick and voluminous",
-        "hair_style": "slicked back", "hair_volume": "voluminous", "skin_tone": "light",
+        "hair_style": "slicked back", "skin_tone": "light",
         "outfit_style": "vintage retro", "expression": "smirking",
         "location": "small-town family diner", "lighting": "warm incandescent lamp glow",
         "shot_type": "medium shot from waist up", "mood": "playful",
@@ -1327,7 +1358,7 @@ ARCHETYPES: dict[str, dict[str, str]] = {
     "1980s Pop Icon": {
         "gender": "Female", "ethnicity": "Puerto Rican", "body_type": "slim", "height": "average height",
         "hair_color": "dark brown", "hair_length": "long", "hair_texture": "thick and voluminous",
-        "hair_style": "freshly blown out", "hair_volume": "big hair", "skin_tone": "light medium",
+        "hair_style": "freshly blown out", "skin_tone": "light medium",
         "makeup_style": "club makeup", "eye_makeup": "colorful bold eyeshadow",
         "outfit_style": "edgy alternative", "expression": "confident",
         "location": "neon-lit nightclub", "lighting": "neon sign glow in multiple colors",
@@ -1359,7 +1390,7 @@ ARCHETYPES: dict[str, dict[str, str]] = {
     "1990s Goth": {
         "body_type": "slim", "height": "average height", "hair_color": "jet black",
         "hair_length": "shoulder length", "hair_texture": "thick and voluminous",
-        "hair_style": "natural and unstyled", "hair_volume": "big hair", "skin_tone": "very pale",
+        "hair_style": "natural and unstyled", "skin_tone": "very pale",
         "makeup_style": "gothic dark makeup", "eyeliner": "smudged kohl", "lips_makeup": "deep red",
         "outfit_style": "edgy alternative", "expression": "serious",
         "location": "dimly lit cocktail lounge", "lighting": "low key moody single light source",

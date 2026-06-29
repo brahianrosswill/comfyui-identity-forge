@@ -604,7 +604,7 @@ def _species_subject(species: dict, gender: str) -> str:
 
 def _format_prose(
     resolved: dict[str, str], gender: str, cosplay_label: str | None = None,
-    species: dict | None = None,
+    species: dict | None = None, hands_visible: bool = True,
 ) -> str:
     """Build a natural-language description from resolved field values.
 
@@ -733,6 +733,18 @@ def _format_prose(
                       else f"{skin_color} skin")
         sentences.append(f"{poss} face has the same {face_color}")
 
+    # --- Hand colour reinforcement (body-paint / exotic skin) ----------
+    # The same restatement as the face, for the hands: t2i renders bare hands (and
+    # any nail polish) in a default human tone unless the body-paint colour is
+    # restated there too -- the green-body / white-hands bug. Fires only when the
+    # hands actually show as skin; gloves or a full shell hide them (their nails
+    # were already dropped upstream), so neither hand colour nor nails are voiced
+    # under a covering. Prose-only -- no RNG draws, so no randomization bias.
+    if hands_visible and skin_color and skin_color not in _STANDARD_SKIN_TONES:
+        hand_color = (skin_color if re.search(r"\b(?:skin|fur|scales?|hide)$", skin_color)
+                      else f"{skin_color} skin")
+        sentences.append(f"{poss} hands have the same {hand_color}")
+
     # --- Complexion / skin details -------------------------------------
     skin = []
     if g("complexion"):
@@ -745,8 +757,6 @@ def _format_prose(
         sentences.append(f"{poss} skin shows " + _join(skin))
 
     # --- Hair -----------------------------------------------------------
-    # hair_volume is recorded in the JSON but folded out of the prose: it
-    # overlaps with hair_texture ("thick and voluminous") and reads redundantly.
     hair_desc = _words(g("hair_length"), g("hair_texture"), g("hair_color"))
     if hair_desc:
         s = f"{poss} hair is {hair_desc}"
@@ -1205,7 +1215,14 @@ def generate_character(
             if descriptor and value:
                 species["slots"][slot] = f"{descriptor} {value}"
 
-    prose = _format_prose(resolved, gender, cosplay_label, species)
+    # Restate the body-paint / exotic skin colour on the hands too (see
+    # _format_prose), but only when the hands show as bare skin -- gloves or a
+    # full shell hide them, and their nails were already dropped above.
+    hands_covered = full_shell or bool(
+        _GLOVE_RE.search(outfit_text) and not _FINGERLESS_RE.search(outfit_text)
+    )
+    prose = _format_prose(resolved, gender, cosplay_label, species,
+                          hands_visible=not hands_covered)
     json_output = _format_json(
         resolved, gender, hair_color_scope, wardrobe, cosplay_label, species
     )
@@ -1470,6 +1487,16 @@ if _COMFY_AVAILABLE:
                     io.String.Output(display_name="prompt_json"),
                 ],
             )
+
+        @classmethod
+        def fingerprint_inputs(cls, **kwargs: Any) -> float:
+            # Force a fresh roll on every queue. ComfyUI can serve a stale cached
+            # result when control_after_generate auto-advances the seed (ComfyUI
+            # #11905); returning a never-equal value (NaN) makes this node's cache
+            # signature always differ, so it re-executes and reads the new seed.
+            # Pure cache control -- no RNG here, so a fixed seed still reproduces
+            # exactly and nothing biases the randomization.
+            return float("nan")
 
         @classmethod
         def execute(cls, **kwargs: Any) -> "io.NodeOutput":
