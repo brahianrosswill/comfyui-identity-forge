@@ -39,13 +39,15 @@ Built on the ComfyUI **V3 API** (`comfy_api.latest`). Category: `conditioning/ch
 
 ## Showcase
 
-**The main node** (a slice of the fields shown):
+**Optionally chain nodes to the main Identity Forge node. Pro Tip: Closest node "wins" if there is a conflict:**
+<img width="480" alt="Sample Node Chain" src="https://github.com/user-attachments/assets/82d80ecd-b25a-475a-a4e0-ae0d6116a744" />
 
-<img src="https://github.com/user-attachments/assets/01be6441-457a-4ea1-b88d-e93b40623756" alt="Identity Forge main node" width="480" />
+**Sample archetypes, cosplay characters, creatures:**
 
-**Example archetypes:**
+<img width="320" alt="Archetypes" src="https://github.com/user-attachments/assets/c1871f28-f52d-42b6-8ca6-6dff2d1793f8" />
+<img width="320" alt="Cosplay Characters" src="https://github.com/user-attachments/assets/256d81e2-ed75-47cd-80f5-e8e7e2837a91" />
+<img width="320" alt="Creatures" src="https://github.com/user-attachments/assets/65b0cbfa-6e93-47de-bf39-8d497c9dfb47" />
 
-<img src="https://github.com/user-attachments/assets/96da503c-eea8-489a-82c8-a48f34888ba5" alt="Identity Forge archetype presets" width="320" />
 
 **Sample outputs** (each image embeds the test workflow — drag one into ComfyUI to load it):
 
