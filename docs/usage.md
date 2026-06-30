@@ -103,7 +103,7 @@ to check that your custom field values are valid options.
 | Makeup | style, eyeshadow, eyeliner, lashes, lips, blush, brows, contour, highlight, finish |
 | Jewelry & Nails | earrings, necklace, rings, bracelet, watch, other jewellery, piercings, nails |
 | Clothing | outfit style (a full outfit), footwear, colour, pattern, bag, accessories |
-| Setting & Shot | expression, pose, location (indoor/outdoor), lighting, time of day, season, framing, mood |
+| Setting & Shot | expression, pose, location (indoor/outdoor), lighting, season, framing, mood |
 
 ## Example
 

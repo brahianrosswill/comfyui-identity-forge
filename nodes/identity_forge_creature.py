@@ -129,12 +129,11 @@ _OVERRIDE_SLOTS: tuple[str, ...] = (
 )
 
 _MORE_HELP = (
-    "# Add or override anatomy with free text (optional).\n"
-    "# 'slot: phrase' overrides a slot; a line with no ':' is an extra feature.\n"
-    "# slots: head, eyes, integument, arms, hands, legs_feet, tail, wings, extras\n"
+    "# Optional free text — delete these lines to use it.\n"
+    "# 'slot: phrase' overrides a slot; a plain line adds an extra feature.\n"
+    "# slots: head, eyes, integument, arms, hands, legs_feet, tail, wings\n"
     "#\n"
     "# eyes: six glowing ocelli\n"
-    "# wings: feathered angel wings\n"
     "# a crown of bone spurs\n"
 )
 

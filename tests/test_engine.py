@@ -276,7 +276,7 @@ class OutputFormatTests(unittest.TestCase):
     def test_none_excludes_non_optional_field(self):
         # Any field (even non-optional scene fields) can be omitted via "None".
         scene = {f: "None" for f in ("location", "lighting", "shot_type",
-                                     "time_of_day", "season", "mood", "expression", "pose")}
+                                     "season", "mood", "expression", "pose")}
         prose, js = generate_character(9, "Female", scene)
         self.assertNotIn("Setting & Shot", json.loads(js))
         for word in ("set in", "the framing is", "mood", "expression is"):

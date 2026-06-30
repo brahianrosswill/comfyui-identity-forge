@@ -33,7 +33,7 @@ socket. On overlap, the node **closest to IdentityForge wins** (downstream wins)
 Archetype ─▶ Cosplayer ─▶ Creature ─▶ Modifier ─▶ IdentityForge ─▶ prompt_text + prompt_json
 ```
 
-- **IdentityForge** ([nodes/identity_forge.py](../nodes/identity_forge.py)) — the engine. 65+
+- **IdentityForge** ([nodes/identity_forge.py](../nodes/identity_forge.py)) — the engine. Many
   lockable dropdowns + control toggles → randomize → constraints → prose + JSON. Entry point
   `generate_character(...)`; widget schema in `define_schema`.
 - **Cosplayer** → `build_cosplayer_json`: a character's `costume` becomes the hidden

@@ -68,8 +68,8 @@ FIELD_DEFINITIONS: OrderedDict[str, dict] = OrderedDict([
     # prose order is independent (hard-coded in _format_prose).
     ("face_shape", {
         "group": 'Face',
-        "female_options": ['oval', 'round', 'soft round', 'square', 'soft square', 'heart-shaped', 'diamond', 'oblong', 'rectangular', 'wide with high forehead', 'narrow and angular'],
-        "male_options": ['oval', 'round', 'soft round', 'square', 'soft square', 'heart-shaped', 'diamond', 'oblong', 'rectangular', 'wide with high forehead', 'narrow and angular'],
+        "female_options": ['oval', 'round', 'soft round', 'square', 'soft square', 'heart-shaped', 'diamond', 'oblong', 'rectangular', 'wide', 'narrow and angular'],
+        "male_options": ['oval', 'round', 'soft round', 'square', 'soft square', 'heart-shaped', 'diamond', 'oblong', 'rectangular', 'wide', 'narrow and angular'],
         "optional": False
     }),
     ("forehead", {
@@ -84,10 +84,13 @@ FIELD_DEFINITIONS: OrderedDict[str, dict] = OrderedDict([
         "male_options": ['very high and prominent', 'high and defined', 'high and soft', 'prominent', 'softly prominent', 'average', 'wide and flat', 'subtle', 'barely defined'],
         "optional": False
     }),
+    # Natural brow shape/thickness only. Styling/makeup looks (feathered, laminated,
+    # bold sculpted) are owned by the Makeup eyebrow_makeup field, so they are not
+    # repeated here -- avoids "feathered eyebrows ... laminated look brows" doubling.
     ("eyebrows", {
         "group": 'Face',
-        "female_options": ['thin and arched', 'thin and straight', 'pencil thin', 'barely there', 'natural full', 'thick and straight', 'thick and arched', 'bushy', 'feathered', 'well defined and arched', 'bleached', 'bold statement brows', 'laminated brows'],
-        "male_options": ['thin and arched', 'thin and straight', 'pencil thin', 'barely there', 'natural full', 'thick and straight', 'thick and arched', 'bushy', 'feathered', 'well defined and arched', 'bleached', 'bold statement brows', 'laminated brows'],
+        "female_options": ['thin and arched', 'thin and straight', 'pencil thin', 'barely there', 'natural full', 'thick and straight', 'thick and arched', 'bushy', 'well defined and arched', 'bleached'],
+        "male_options": ['thin and arched', 'thin and straight', 'pencil thin', 'barely there', 'natural full', 'thick and straight', 'thick and arched', 'bushy', 'well defined and arched', 'bleached'],
         "optional": False
     }),
     ("eye_color", {
@@ -142,10 +145,12 @@ FIELD_DEFINITIONS: OrderedDict[str, dict] = OrderedDict([
     }),
     ("complexion", {
         "group": 'Face',
-        # Skin finish / undertone (always rendered). 'olive' removed: it collided
-        # with the skin_tone field's 'olive'. Texture words live in skin_details.
-        "female_options": ['clear', 'rosy', 'sallow', 'ruddy', 'peaches and cream', 'matte', 'dewy'],
-        "male_options": ['clear', 'rosy', 'sallow', 'ruddy', 'peaches and cream', 'matte', 'dewy'],
+        # Skin undertone / health (always rendered). 'olive' removed: it collided with
+        # skin_tone's 'olive'. 'matte'/'dewy' removed: those are finishes owned by the
+        # Makeup skin_finish field (avoids "matte complexion ... matte finish" doubling).
+        # Texture words live in skin_details.
+        "female_options": ['clear', 'rosy', 'sallow', 'ruddy', 'peaches and cream'],
+        "male_options": ['clear', 'rosy', 'sallow', 'ruddy', 'peaches and cream'],
         "optional": False
     }),
     ("skin_details", {
@@ -323,8 +328,10 @@ FIELD_DEFINITIONS: OrderedDict[str, dict] = OrderedDict([
         # Watches live solely in the dedicated watch_type field, so they are not
         # repeated here (a watch was previously sourceable from both this slot and
         # watch_type, over-representing it). Pocket square / statement belt keep variety.
-        "female_options": ['no accessories', 'classic black sunglasses', 'cat eye sunglasses', 'round sunglasses', 'aviator sunglasses', 'wide brim sun hat', 'baseball cap', 'beret', 'silk neck scarf', 'belt cinching waist', 'western belt', 'silk pocket square', 'statement belt', 'long pendant necklace layered over outfit', 'reading glasses pushed up on head', 'woven hat'],
-        "male_options": ['no accessories', 'classic black sunglasses', 'cat eye sunglasses', 'round sunglasses', 'aviator sunglasses', 'wide brim sun hat', 'baseball cap', 'beret', 'silk neck scarf', 'belt cinching waist', 'western belt', 'silk pocket square', 'statement belt', 'long pendant necklace layered over outfit', 'reading glasses pushed up on head', 'woven hat'],
+        # No necklace here: the necklace field owns necklaces, so a "long pendant
+        # necklace" accessory would double up. Hats/glasses/belts/scarf only.
+        "female_options": ['no accessories', 'classic black sunglasses', 'cat eye sunglasses', 'round sunglasses', 'aviator sunglasses', 'wide brim sun hat', 'baseball cap', 'beret', 'silk neck scarf', 'belt cinching waist', 'western belt', 'silk pocket square', 'statement belt', 'reading glasses pushed up on head', 'woven hat'],
+        "male_options": ['no accessories', 'classic black sunglasses', 'cat eye sunglasses', 'round sunglasses', 'aviator sunglasses', 'wide brim sun hat', 'baseball cap', 'beret', 'silk neck scarf', 'belt cinching waist', 'western belt', 'silk pocket square', 'statement belt', 'reading glasses pushed up on head', 'woven hat'],
         "optional": False
     }),
     ("expression", {
@@ -439,12 +446,6 @@ FIELD_DEFINITIONS: OrderedDict[str, dict] = OrderedDict([
         "group": 'Clothing',
         "female_options": ['solid', 'subtle texture', 'stripes', 'plaid', 'floral', 'animal print', 'geometric', 'abstract', 'camouflage', 'denim'],
         "male_options": ['solid', 'subtle texture', 'stripes', 'plaid', 'floral', 'animal print', 'geometric', 'abstract', 'camouflage', 'denim'],
-        "optional": False
-    }),
-    ("time_of_day", {
-        "group": 'Setting & Shot',
-        "female_options": ['early morning', 'mid morning', 'noon', 'afternoon', 'golden hour', 'twilight', 'night', 'late night'],
-        "male_options": ['early morning', 'mid morning', 'noon', 'afternoon', 'golden hour', 'twilight', 'night', 'late night'],
         "optional": False
     }),
     ("season", {

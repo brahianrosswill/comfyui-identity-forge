@@ -282,10 +282,7 @@ _MALE_EXCLUDED_VALUES: dict[str, list[str]] = {
     "hair_length": ["chin length bob", "waist length", "hip length"],
     "hair_highlights": ["subtle balayage", "face framing", "ombre", "sombre",
                         "money piece", "peekaboo highlights"],
-    "eyebrows": [
-        "thin and arched", "pencil thin", "feathered", "well defined and arched",
-        "bold statement brows", "laminated brows",
-    ],
+    "eyebrows": ["thin and arched", "pencil thin", "well defined and arched"],
     "lips": ["bow-shaped", "heart-shaped", "petite and defined"],
     "eye_shape": ["doe-like"],
     "bust": ["large"],

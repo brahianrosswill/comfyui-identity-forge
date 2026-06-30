@@ -665,7 +665,11 @@ def _format_prose(
         sentences.append(connector + _join(anatomy))
 
     # --- Physique + body proportions -----------------------------------
+    # Drop the fitness word when it merely restates the body_type silhouette
+    # (e.g. "athletic build ... athletic physique"); body_type already carries it.
     physique = g("fitness_level")
+    if physique and physique == g("body_type"):
+        physique = ""
     body_detail = []
     if g("shoulder_width"):
         body_detail.append(f"{g('shoulder_width')} shoulders")
@@ -851,16 +855,20 @@ def _format_prose(
     if g("location"):
         scene.append(f"set in {_a(g('location'))} {g('location')}")
     if g("lighting"):
+        # lighting encodes time-of-day (golden hour / moonlight / midday sun), so the
+        # separate time_of_day field was removed to avoid contradictions; season stands.
         scene.append(f"under {g('lighting')}")
-    time_season = _join([g("time_of_day"), g("season")])
-    if time_season:
-        scene.append(f"during {time_season}")
+    if g("season"):
+        scene.append(f"during {g('season')}")
     if g("shot_type"):
         # No article: shot_type values vary wildly ("close-up portrait",
         # "from slightly behind…", "shot through a doorway") and "a/an" + value
         # reads badly or doubles "shot".
         scene.append(f"the framing is {g('shot_type')}")
-    if g("mood"):
+    # Skip mood when it merely restates the expression (e.g. expression "confident"
+    # + "confident mood"); expression is the face, mood the scene -- only redundant
+    # when identical.
+    if g("mood") and g("mood") != g("expression"):
         scene.append(f"with {_a(g('mood'))} {g('mood')} mood")
     if scene:
         sentences.append(_join(scene) if len(scene) > 1 else scene[0])
@@ -1477,7 +1485,7 @@ if _COMFY_AVAILABLE:
                 node_id="IdentityForge",
                 display_name="Identity Forge",
                 category="conditioning/character",
-                description="Randomize a detailed character description across 65+ "
+                description="Randomize a detailed character description across many "
                             "lockable fields with a constraint engine, producing "
                             "natural-language prose and structured JSON.",
                 inputs=inputs,

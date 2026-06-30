@@ -59,10 +59,23 @@ function showWidget(w) {
   w.__origComputeSize = null;
 }
 
+// Extra vertical space (px) handed to the more_features multiline box so it shows a
+// comfortable few rows on first load instead of rendering squashed. ComfyUI's
+// computeSize() returns the node's *minimum* height (which collapses the flex-filling
+// DOM textarea to a sliver); the textarea grows to absorb any extra node height, so we
+// add this allowance on every resize -- first paint and after any group collapse/expand
+// -- and it never re-squashes. Uses only setSize/computeSize, so it behaves the same in
+// classic litegraph and the newer ("nodes 2.0") frontend; no DOM-element poking.
+const MORE_FEATURES_EXTRA = 120;
+
 function resize(node) {
   if (typeof node.computeSize === "function") {
     const sz = node.computeSize();
-    node.setSize([Math.max(node.size[0], sz[0]), sz[1]]);
+    const hasBox = (node.widgets || []).some(
+      (w) => MULTILINE_AFTER_HEADLINE.includes(w.name) && !w.__hidden,
+    );
+    const extra = hasBox ? MORE_FEATURES_EXTRA : 0;
+    node.setSize([Math.max(node.size[0], sz[0]), sz[1] + extra]);
   }
   node.setDirtyCanvas(true, true);
 }

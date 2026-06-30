@@ -10,7 +10,7 @@ import { app } from "../../scripts/app.js";
  * works headless):
  *   - Master buttons: set every field to "Random", or lock every field to a
  *     concrete random value.
- *   - Collapsible group sections so 60+ widgets stay manageable.
+ *   - Collapsible group sections so the many widgets stay manageable.
  *   - Gender pool-swapping: changing the gender toggle restricts the
  *     gender-divergent dropdowns and resets any now-invalid lock to "Random".
  *
@@ -83,7 +83,6 @@ const FIELD_TO_GROUP = {
   "footwear": "Clothing",
   "clothing_color": "Clothing",
   "clothing_pattern": "Clothing",
-  "time_of_day": "Setting & Shot",
   "season": "Setting & Shot",
   "mood": "Setting & Shot",
   "pose": "Setting & Shot"
