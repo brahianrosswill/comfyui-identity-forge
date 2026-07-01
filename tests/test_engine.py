@@ -758,7 +758,9 @@ class IntegrationTests(unittest.TestCase):
         _, js = generate_character(7, flat.get("gender", "Any"), locked)
         doc = json.loads(js)
         self.assertEqual(doc["_meta"]["gender"], "Female")
-        self.assertEqual(doc["Hair"]["hair_color"], "raven black")
+        # hair_color is a shade-family list since 0.39 (raven black leads it);
+        # the node resolves it to one member per seed.
+        self.assertIn(doc["Hair"]["hair_color"], ("raven black", "jet black", "near black"))
         self.assertEqual(doc["Makeup"]["makeup_style"], "gothic dark makeup")
         self.assertIn("age", doc["Demographics"])
 
