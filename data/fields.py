@@ -527,6 +527,24 @@ HAIR_STYLE_FAMILIES: OrderedDict[str, dict] = OrderedDict([
     ("bangs", {"weight": 2, "variants": ['curtain bangs', 'blunt bangs']}),
 ])
 
+#: hair_color families (0.41): shade neighbourhoods, weights = current family
+#: sizes so the pick reproduces the flat uniform draw exactly (sum = 45). The
+#: "vivid" family is precisely the set the "Natural only" hair_color_scope
+#: filters out, so the conversion is distribution-neutral under both scopes.
+#: New colours join their shade family and subdivide its share (no bias).
+HAIR_COLOR_FAMILIES: OrderedDict[str, dict] = OrderedDict([
+    ("blonde", {"weight": 7, "variants": ['platinum blonde', 'white blonde', 'golden blonde', 'dirty blonde', 'strawberry blonde', 'light blonde', 'dark blonde']}),
+    ("red", {"weight": 4, "variants": ['auburn', 'copper', 'bright red', 'deep red']}),
+    ("brunette", {"weight": 6, "variants": ['light chestnut', 'chestnut', 'warm brown', 'medium brown', 'ash brown', 'dark brown']}),
+    ("black", {"weight": 3, "variants": ['near black', 'jet black', 'raven black']}),
+    ("gray_white", {"weight": 5, "variants": ['salt and pepper', 'silver', 'white', 'charcoal gray', 'gray-streaked dark hair']}),
+    # "platinum white" is a fashion shade (full-spectrum only, not in
+    # natural_hair_colors) so it lives with the vivids — this keeps every
+    # family entirely inside or entirely outside the "Natural only" scope,
+    # which is what makes the family pick exactly uniform under both scopes.
+    ("vivid", {"weight": 20, "variants": ['hot pink', 'baby pink', 'magenta', 'lavender', 'purple', 'deep purple', 'electric blue', 'navy blue', 'teal', 'mint green', 'emerald green', 'lime green', 'orange', 'coral', 'yellow', 'platinum white', 'rose gold', 'iridescent', 'rainbow ombre', 'black with colored tips']}),
+])
+
 #: Weighted families for other large flat fields, following the HAIR_STYLE_FAMILIES
 #: contract: the flat option list above still drives the widget (every variant is
 #: lockable); these only steer the *random* pick. The engine draws a family
@@ -593,6 +611,7 @@ LOCATION_FAMILIES: OrderedDict[str, dict] = OrderedDict([
 #: field uses a flat uniform rng.choice as before.
 FIELD_FAMILIES: OrderedDict[str, OrderedDict[str, dict]] = OrderedDict([
     ("hair_style", HAIR_STYLE_FAMILIES),
+    ("hair_color", HAIR_COLOR_FAMILIES),
     ("expression", EXPRESSION_FAMILIES),
     ("mood", MOOD_FAMILIES),
     ("pose", POSE_FAMILIES),
