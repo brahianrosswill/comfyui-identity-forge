@@ -42,8 +42,8 @@ _LONG_HAIR_STYLES: list[str] = [
     "side braid", "fishtail braid", "French braid", "dutch braids", "crown braid",
     "waterfall braid", "loose braids", "box braids", "locs", "updo", "French twist",
     "top knot", "chignon", "high ponytail", "low ponytail", "side ponytail",
-    "messy bun", "sleek bun", "space buns", "pigtails", "high pigtails",
-    "low pigtails", "curled pigtails", "braided pigtails",
+    "braided ponytail", "messy bun", "sleek bun", "ballerina bun", "space buns",
+    "pigtails", "high pigtails", "low pigtails", "curled pigtails", "braided pigtails",
     "half up half down", "twist-out", "afro",
 ]
 
@@ -90,7 +90,8 @@ CONSTRAINT_RULES: list[dict] = [
                          "waterfall braid", "loose braids", "updo", "French twist",
                          "space buns", "pigtails", "high pigtails", "low pigtails",
                          "curled pigtails", "braided pigtails",
-                         "high ponytail", "low ponytail", "side ponytail"],
+                         "high ponytail", "low ponytail", "side ponytail",
+                         "braided ponytail"],
      "reason": "a pixie cut is too short to braid or tie back"},
 
     # Note: the "Natural only" hair scope is enforced during randomization (see
@@ -230,7 +231,7 @@ _CLOSED_EXPRESSIONS = ["neutral", "serious", "stern", "intense gaze",
                        "pensive and thoughtful", "contemplative", "sultry",
                        "serene", "determined", "calm and composed", "at ease",
                        "steely", "focused", "brooding", "melancholic",
-                       "lost in thought", "wistful", "skeptical"]
+                       "lost in thought", "wistful", "skeptical", "daydreaming"]
 _SOFT_SMILE_EXPRESSIONS = ["subtle soft smile", "warm smile", "bright smile",
                            "gentle smile"]
 _OPEN_EXPRESSIONS = ["wide toothy grin", "laughing", "candid mid-laugh", "beaming"]
@@ -299,7 +300,7 @@ _MALE_EXCLUDED_VALUES: dict[str, list[str]] = {
     "hair_style": [
         "space buns", "pigtails", "high pigtails", "low pigtails", "curled pigtails",
         "braided pigtails", "updo", "French twist",
-        "crown braid", "fishtail braid", "half up half down",
+        "crown braid", "fishtail braid", "half up half down", "ballerina bun",
     ],
     "hair_length": ["chin length bob", "waist length", "hip length"],
     "hair_highlights": ["subtle balayage", "face framing", "ombre", "sombre",
