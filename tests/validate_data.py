@@ -145,28 +145,51 @@ def validate() -> list[str]:
                 errors.append(f"rule {i}: values not options of {target}: {bad}")
 
     # --- archetypes: every value must be a real option ---------------
+    # A merged archetype may carry a ``variants`` block ({"Female"/"Male": {look}});
+    # the base holds the soft-preference ``gender`` and shared fields, and each
+    # variant is validated as its own field map (but must not restate ``gender``).
     if len(ARCHETYPES) < 20:
         errors.append(f"ARCHETYPES has {len(ARCHETYPES)}; need >= 20")
-    for name, template in ARCHETYPES.items():
-        for field, value in template.items():
+
+    def _check_archetype_fields(name: str, fields: dict, where: str) -> None:
+        for field, value in fields.items():
             if field == "gender":
-                if value not in ("Female", "Male", "Any"):
+                if where != "base":
+                    errors.append(f"archetype '{name}' {where}: 'gender' belongs on the base, not a variant")
+                elif value not in ("Female", "Male", "Any"):
                     errors.append(f"archetype '{name}': bad gender {value!r}")
                 continue
             if field not in FIELD_DEFINITIONS:
-                errors.append(f"archetype '{name}': unknown field {field!r}")
+                errors.append(f"archetype '{name}' {where}: unknown field {field!r}")
             elif field not in _FREEFORM_FIELDS and value not in _options(field):
-                errors.append(f"archetype '{name}': {field}={value!r} is not a valid option")
+                errors.append(f"archetype '{name}' {where}: {field}={value!r} is not a valid option")
+
+    for name, template in ARCHETYPES.items():
+        variants = template.get("variants")
+        _check_archetype_fields(name, {k: v for k, v in template.items() if k != "variants"}, "base")
+        if variants is not None:
+            if not isinstance(variants, dict) or set(variants) - {"Female", "Male"} or not variants:
+                errors.append(f"archetype '{name}': variants keys must be a non-empty subset of {{Female, Male}}")
+            else:
+                for vgender, look in variants.items():
+                    if not isinstance(look, dict):
+                        errors.append(f"archetype '{name}': variant '{vgender}' must be a dict")
+                        continue
+                    _check_archetype_fields(name, look, f"variant {vgender}")
 
     # --- costume slots ------------------------------------------------
     for slot, pool in COSTUME_SLOTS.items():
         if not pool:
             errors.append(f"COSTUME_SLOTS['{slot}']: empty pool")
     for name, template in ARCHETYPES.items():
-        costume = template.get("outfit_description", "")
-        for slot in re.findall(r"\{(\w+)\}", costume):
-            if slot not in COSTUME_SLOTS:
-                errors.append(f"archetype '{name}': costume references unknown slot {{{slot}}}")
+        costumes = [template.get("outfit_description", "")]
+        costumes += [look.get("outfit_description", "")
+                     for look in (template.get("variants") or {}).values()
+                     if isinstance(look, dict)]
+        for costume in costumes:
+            for slot in re.findall(r"\{(\w+)\}", costume):
+                if slot not in COSTUME_SLOTS:
+                    errors.append(f"archetype '{name}': costume references unknown slot {{{slot}}}")
 
     # --- cosplayers: costume/signature/physique validity -------------
     if len(COSPLAYERS) < 50:

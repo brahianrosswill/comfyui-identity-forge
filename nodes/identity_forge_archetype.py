@@ -90,19 +90,39 @@ def build_archetype_json(archetype: str, seed: int = 0, lock_level: str = _ESSEN
 
     preset = get_archetype_preset(archetype)
 
+    # A per-gender archetype carries its two divergent looks under "variants"; pull
+    # them out of the flat preset (not FIELD_DEFINITIONS fields) and process each the
+    # same way as the base — fill costume slots, then Essentials-filter to the look.
+    variants = preset.pop("variants", None)
+
     # Fill costume slots (e.g. "{color}") with seeded picks.
     if "outfit_description" in preset:
         preset["outfit_description"] = fill_costume(preset["outfit_description"], rng)
+
+    filtered_variants: "dict[str, dict[str, str]]" = {}
+    if isinstance(variants, dict):
+        for variant_gender, look in variants.items():
+            if variant_gender not in ("Female", "Male") or not isinstance(look, dict):
+                continue
+            look = dict(look)
+            if "outfit_description" in look:
+                look["outfit_description"] = fill_costume(look["outfit_description"], rng)
+            if lock_level == _ESSENTIALS:
+                look = {f: v for f, v in look.items() if _is_essential(f)}
+            filtered_variants[variant_gender] = look
 
     if lock_level == _ESSENTIALS:
         preset = {f: v for f, v in preset.items() if _is_essential(f)}
 
     document: "OrderedDict[str, Any]" = OrderedDict()
-    document["_meta"] = OrderedDict([
+    meta: "OrderedDict[str, Any]" = OrderedDict([
         ("archetype", archetype),
         ("gender", get_archetype_preset(archetype).get("gender", "Any")),
         ("lock_level", lock_level),
     ])
+    if filtered_variants:
+        meta["variants"] = filtered_variants
+    document["_meta"] = meta
     document.update(group_fields(preset))
     return json.dumps(document, indent=2)
 

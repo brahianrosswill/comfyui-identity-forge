@@ -300,8 +300,16 @@ _MALE_EXCLUDED_VALUES: dict[str, list[str]] = {
     "eye_shape": ["doe-like"],
     "bust": ["large"],
 }
+# Jewellery & nails are a wardrobe *presentation* choice, not anatomy: their trims
+# are gated on the resolved presentation so a man with a Feminine/"Any" wardrobe can
+# still draw feminine-coded pieces. The rest (hair, brows, lips, eye shape, bust) are
+# structural/anatomical male defaults and always apply for a male character.
+_PRESENTATION_GATED_FIELDS: frozenset[str] = frozenset({
+    "nails", "earrings", "necklace", "other_jewelry", "rings", "bracelet",
+})
 for _field, _excluded in _MALE_EXCLUDED_VALUES.items():
     CONSTRAINT_RULES.append({
         "type": "exclusion", "field": "gender", "value": "Male",
         "excludes_field": _field, "excludes_values": _excluded,
+        "presentation_gated": _field in _PRESENTATION_GATED_FIELDS,
         "reason": f"feminine-coded {_field} is not a male default"})

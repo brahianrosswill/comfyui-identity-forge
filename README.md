@@ -10,8 +10,8 @@ no Irish ancestry rendered in ebony skin. Lock the few traits you care about, le
 
 - **Coherent by design** — a constraint engine resolves clashing traits for you, automatically.
 - **Reproducible** — seed-driven, so any character you like comes back exactly.
-- **180+ archetypes · 800+ cosplayers** — themed looks and fictional-character costumes dropped
-  onto an ever-changing person, with crossplay and a helmet-off *Unmask* toggle.
+- **Archetypes & cosplayers** — a deep library of themed looks and fictional-character costumes
+  dropped onto an ever-changing person, with crossplay and a helmet-off *Unmask* toggle.
 - **Creature layer** — render the character as an animal / monster / alien, *hybridized
   slot-by-slot* (a praying-mantis body with a sloth's head), anthropomorphic, feral or a subtle accent.
 - **Chainable** — Archetype → Cosplayer → Creature → Modifier → Identity Forge stack instead of

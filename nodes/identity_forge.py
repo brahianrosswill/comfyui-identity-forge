@@ -110,6 +110,12 @@ _SPECIES_GROUP = "Species & Anatomy"
 #: through the flattened parsed-archetype dict.
 _SPECIES_KEY = "__species__"
 
+#: Reserved key carrying an archetype's per-gender variant look blocks
+#: (``{"Female": {...}, "Male": {...}}``) through the flattened parsed-archetype
+#: dict. Folded into the locks *after* the gender coin-flip so one archetype
+#: selection yields either a coherent male or female look.
+_VARIANTS_KEY = "__variants__"
+
 #: Canonical transformation-form tokens emitted in a creature document's ``_meta``
 #: (the node maps its friendlier widget labels onto these). ``Anthropomorphic`` and
 #: ``Feral`` lead the prose with the creature; ``Subtle`` keeps the human subject and
@@ -331,6 +337,17 @@ def _dedupe(items: list[str]) -> list[str]:
 # Randomization engine (pure functions)
 # ===========================================================================
 
+def _presentation_mode(gender: str, wardrobe: str) -> str:
+    """Resolve the wardrobe *presentation* — ``"Feminine"`` / ``"Masculine"`` / ``"Any"``.
+
+    "Match gender" follows the character's gender (Female→Feminine, Male→Masculine,
+    Any→Any); every other wardrobe value is an explicit presentation the user chose
+    to mix. Drives both the outfit pool and the masculine jewellery trim so a man's
+    accessories match the wardrobe he is actually wearing.
+    """
+    return _WARDROBE_BY_GENDER.get(gender, "Any") if wardrobe == "Match gender" else wardrobe
+
+
 def _build_option_pool(
     field_name: str,
     field_def: dict,
@@ -507,11 +524,18 @@ def _apply_constraints(
     gender: str,
     locked: set[str],
     rng: random.Random,
+    presentation: str = "Masculine",
 ) -> list[str]:
     """Apply :data:`CONSTRAINT_RULES` until stable. Returns warning messages.
 
     Locked fields are never silently overwritten: when a constraint would
     change a locked field, the lock wins and a warning is recorded instead.
+
+    ``presentation`` is the resolved wardrobe presentation. Rules flagged
+    ``presentation_gated`` (the masculine-default jewellery/nail trims) apply only
+    when a man reads ``"Masculine"``; a Feminine/"Any" wardrobe skips them so a
+    deliberately femme male look keeps feminine-coded pieces available. The default
+    is ``"Masculine"`` so a caller that omits it keeps the historical male defaults.
     """
     warnings: list[str] = []
     warned: set[tuple[str, str]] = set()
@@ -526,6 +550,10 @@ def _apply_constraints(
         changed = False
 
         for rule in CONSTRAINT_RULES:
+            # A masculine-default trim only fires when the man reads Masculine; a
+            # Feminine/"Any" wardrobe leaves the feminine-coded pool intact.
+            if rule.get("presentation_gated") and presentation != "Masculine":
+                continue
             # Trigger values are concrete option values (e.g. "no makeup",
             # "Natural only"); match exactly. The "absence" notion applies only
             # to prose rendering, never to whether a rule fires.
@@ -592,7 +620,7 @@ def _resolve_outfit_description(
     buckets = OUTFIT_DESCRIPTIONS.get(resolved.get("outfit_style", "casual"))
     if not buckets:
         return ""
-    mode = _WARDROBE_BY_GENDER.get(gender, "Any") if wardrobe == "Match gender" else wardrobe
+    mode = _presentation_mode(gender, wardrobe)
     pool = list(buckets.get("unisex", []))
     if mode == "Feminine":
         pool += buckets.get("female", [])
@@ -1073,6 +1101,7 @@ def generate_character(
     covers_hair: bool = False,
     modifiers: dict[str, str] | None = None,
     species: dict | None = None,
+    gender_variants: dict[str, dict[str, str]] | None = None,
 ) -> tuple[str, str]:
     """Engine entry point. Returns ``(prose, json_output)``.
 
@@ -1105,6 +1134,11 @@ def generate_character(
     ``suppress_fields`` lists. The suppressed human fields are dropped (a creature
     head hides the face/hair, a creature integument hides the skin) and the slots
     are woven into both outputs by the species-aware formatters.
+
+    ``gender_variants`` (set by a per-gender archetype) maps ``"Female"`` /
+    ``"Male"`` to a look block; once the gender is settled the matching block is
+    folded into the locks, so one archetype selection yields a coherent male or
+    female look (e.g. a housewife dress vs a suburban-dad sweater-vest).
     """
     rng = random.Random(seed)
     # "None" locks the *absent* state (optional fields only); keep it. Only
@@ -1127,6 +1161,24 @@ def generate_character(
     # pronouns -- is preserved only when the user also sets wardrobe to "Any".
     if gender == "Any" and wardrobe != "Any":
         gender = _gender_from_locks(locked_clean) or rng.choice(["Female", "Male"])
+
+    # A per-gender-variant archetype ships two look blocks; now that the gender is
+    # settled, fold the matching block into the locks (the variant's look wins). This
+    # lets one archetype selection render either a coherent male or female look. When
+    # the gender is the neutral "Any" (the wardrobe="Any" escape hatch), coin-flip a
+    # block so the outfit still reads coherent rather than half-mixed.
+    if gender_variants:
+        variant = gender_variants.get(gender)
+        if variant is None and gender_variants:
+            variant = gender_variants[rng.choice(sorted(gender_variants))]
+        for name, value in (variant or {}).items():
+            if (
+                name in FIELD_DEFINITIONS
+                and name not in _CONTROL_FIELDS
+                and value != "Random"
+                and (name not in _HIDDEN_FIELDS or name in _PRESET_HIDDEN_FIELDS)
+            ):
+                locked_clean[name] = value
 
     # The gender gate must hold for *injected* locks too. An archetype emits
     # look-defining fields (incl. facial_hair) and its own gender; when the
@@ -1156,7 +1208,11 @@ def generate_character(
         locked_clean, gender, hair_color_scope, accessory_density, location_setting, rng
     )
 
-    warnings = _apply_constraints(resolved, gender, set(locked_clean), rng)
+    # Wardrobe presentation gates the masculine-default trims: a man reads Masculine
+    # under "Match gender", but a Feminine/"Any" wardrobe keeps feminine-coded
+    # jewellery/nails available so a deliberately femme male look still works.
+    presentation = _presentation_mode(gender, wardrobe)
+    warnings = _apply_constraints(resolved, gender, set(locked_clean), rng, presentation)
     for message in warnings:
         print(message)
 
@@ -1339,6 +1395,18 @@ def _parse_archetype_json(raw: str) -> dict[str, str]:
             for control in ("gender", "hair_color_scope"):
                 if isinstance(meta.get(control), str):
                     flat[control] = meta[control]
+            # Per-gender variant look blocks from a merged archetype. Kept under a
+            # reserved key (not real fields) so the locked-field loops never treat
+            # them as locks; applied in generate_character after the gender is fixed.
+            variants = meta.get("variants")
+            if isinstance(variants, dict):
+                clean = {
+                    g: {k: v for k, v in look.items() if isinstance(v, str)}
+                    for g, look in variants.items()
+                    if g in ("Female", "Male") and isinstance(look, dict)
+                }
+                if clean:
+                    flat[_VARIANTS_KEY] = clean
             # A cosplay preset names its character; surface a display label under
             # a reserved key (not a real field, so the locked-field loops ignore
             # it) for the prose prefix / JSON _meta.
@@ -1565,6 +1633,7 @@ if _COMFY_AVAILABLE:
             covers_hair = bool(archetype.pop(_COVERS_HAIR_KEY, None))
             modifiers = archetype.pop(_MODIFIERS_KEY, None)
             species = archetype.pop(_SPECIES_KEY, None)
+            gender_variants = archetype.pop(_VARIANTS_KEY, None)
             if species is not None and not species.get("slots"):
                 species = None  # form without anatomy → nothing to render
 
@@ -1605,6 +1674,6 @@ if _COMFY_AVAILABLE:
             prose, json_output = generate_character(
                 seed, gender, locked, hair_color_scope, wardrobe,
                 accessory_density, location_setting, cosplay_label, covers_face,
-                covers_body, covers_hair, modifiers, species,
+                covers_body, covers_hair, modifiers, species, gender_variants,
             )
             return io.NodeOutput(prose, json_output)

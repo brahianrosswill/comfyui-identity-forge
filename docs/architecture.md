@@ -258,6 +258,15 @@ creature loader copies only the standard slots).
   even 50/50. The old unioned androgynous mode (both pools mixed, *they/them* pronouns,
   `_meta.gender` stays `"Any"`) is preserved **only** when `wardrobe == "Any"`, the explicit
   "anything goes" escape hatch.
+- **Per-gender archetype variants** — an archetype may carry a `variants: {"Female": {...},
+  "Male": {...}}` block so *one* selection yields two coherent looks (a 1980s Aerobics leotard vs
+  the male tank/shorts). The base dict holds only shared fields + a soft `gender` lean (e.g.
+  `"Female"`, applied when the widget is `"Any"`, overridable by the widget). `build_archetype_json`
+  fills each variant's costume slots and Essentials-filters it, emitting `_meta.variants`;
+  `generate_character` folds `variants[resolved_gender]` into the locks **after** the coin-flip and
+  before the gender gate, so the variant's look wins. Author the divergent fields (outfit, hair,
+  body, makeup) in the variants and keep `gender` on the base — never inside a variant.
+  `merge_preset_documents` carries `_meta.variants` through chaining (downstream wins).
 - **`smile_type` is the mouth/smile field and IS rendered** (in `_format_prose` face features);
   `constraints.py` buckets every `expression` into closed / soft-smile / open so the mouth never
   contradicts the face. (It was dead — resolved but unrendered — before 0.33.)
@@ -289,6 +298,14 @@ creature loader copies only the standard slots).
 - Adding options to a **flat** field shifts its distribution; prefer the density-gated
   `_EXTRA_ABSENCE` fields (variety changes, frequency doesn't). New feminine-coded values on a
   shared-pool field must also be added to `_MALE_EXCLUDED_VALUES` so a random Male skips them.
+- **Masculine-default trims are wardrobe-gated for jewellery/nails.** `_MALE_EXCLUDED_VALUES`
+  drives the "no chandeliers/pearls/polish on a random man" behaviour, but the jewellery/nails
+  fields (`_PRESENTATION_GATED_FIELDS`) tag their rules `presentation_gated=True`. `_apply_constraints`
+  skips those unless the man reads `"Masculine"` (i.e. `wardrobe == "Match gender"`), so a
+  **Feminine/"Any" wardrobe leaves the full feminine-coded pool available** to a man for a femme look;
+  the structural defaults (hair, brows, lips, eye_shape, bust) always apply. Presentation is
+  `_presentation_mode(gender, wardrobe)`, shared with the outfit picker. Locked/archetype values
+  bypass the trim entirely (constraint warns and keeps them).
 - **Wired `"None"` is an explicit omit and survives to the engine.** `IdentityForge.execute`
   builds `archetype_locked` from every wired value *except* `"Random"` — so a cosplayer/archetype
   field set to `"None"` (the builder's body-paint, bald, and free-text-eye suppressions) reaches

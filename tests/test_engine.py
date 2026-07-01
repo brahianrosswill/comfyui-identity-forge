@@ -408,7 +408,29 @@ class ArchetypeTests(unittest.TestCase):
     def test_all_archetype_fields_valid(self):
         valid = set(FIELD_DEFINITIONS)
         for name, template in ARCHETYPES.items():
-            self.assertEqual(set(template) - valid, set(), f"{name}")
+            # "variants" is a per-gender look block, not a field; its nested looks
+            # are validated below.
+            self.assertEqual(set(template) - valid - {"variants"}, set(), f"{name}")
+            for vgender, look in (template.get("variants") or {}).items():
+                self.assertIn(vgender, ("Female", "Male"), name)
+                self.assertNotIn("gender", look, f"{name}/{vgender}")
+                self.assertEqual(set(look) - valid, set(), f"{name}/{vgender}")
+
+    def test_gender_variants_resolve_per_gender(self):
+        # A merged archetype renders its female look on the female override and its
+        # male look on the male override — one selection, two coherent looks.
+        doc = build_archetype_json("1980s Aerobics", 3, "Essentials")
+        flat = _parse_archetype_json(doc)
+        variants = flat.pop("__variants__", None)
+        self.assertIsNotNone(variants)
+        self.assertEqual(set(variants), {"Female", "Male"})
+        locked = {k: v for k, v in flat.items() if not k.startswith("__")}
+        _, jf = generate_character(7, "Female", dict(locked), gender_variants=variants)
+        _, jm = generate_character(7, "Male", dict(locked), gender_variants=variants)
+        of = json.loads(jf)["Clothing"]["outfit_description"]
+        om = json.loads(jm)["Clothing"]["outfit_description"]
+        self.assertIn("leotard", of)
+        self.assertNotEqual(of, om)
 
 
 class CosplayerTests(unittest.TestCase):
@@ -941,6 +963,31 @@ class WardrobeAndCostumeTests(unittest.TestCase):
             for s in range(40)
         )
         self.assertTrue(seen_gown)
+
+    _FEMININE_EARRINGS = frozenset({
+        "chandelier earrings", "long drop earrings", "tassel earrings", "pearl studs",
+        "clip-on pearl earrings", "threader earrings", "mismatched earrings",
+        "medium gold hoops", "large bold gold hoops",
+    })
+
+    def _male_earrings(self, wardrobe, n=250):
+        out = set()
+        for s in range(n):
+            _, js = generate_character(s, "Male", {}, wardrobe=wardrobe)
+            e = json.loads(js).get("Jewelry & Nails", {}).get("earrings")
+            if e:
+                out.add(e)
+        return out
+
+    def test_masculine_male_never_draws_feminine_jewellery(self):
+        # Default "Match gender" reads Masculine for a man: no chandeliers/pearls.
+        drawn = self._male_earrings("Match gender")
+        self.assertEqual(drawn & self._FEMININE_EARRINGS, set())
+
+    def test_feminine_or_any_wardrobe_keeps_feminine_jewellery_for_a_man(self):
+        # A deliberately femme/mixed wardrobe leaves the feminine-coded pool intact.
+        self.assertTrue(self._male_earrings("Feminine") & self._FEMININE_EARRINGS)
+        self.assertTrue(self._male_earrings("Any") & self._FEMININE_EARRINGS)
 
     def test_costume_outfit_description_is_preserved(self):
         costume = "frilly French maid uniform with a lace apron"
