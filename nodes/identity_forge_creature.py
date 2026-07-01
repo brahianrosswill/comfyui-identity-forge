@@ -294,8 +294,8 @@ def build_creature_json(
     # Recolour / retexture the integument. Palette resolves last — after every
     # creature / slot / form pick — so a given seed keeps its creature and only the
     # colour shifts: an explicit colour wins; "Random" rolls any palette; "Auto" uses
-    # the source creature's own colour, or, for amorphous creatures that ship a
-    # ``palette_pool`` (blobs, slimes, energy beings…), a seed-varied hue from it, so
+    # the source creature's own colour, or, for colour-variable species that ship a
+    # ``palette_pool`` (most of the roster since 0.38), a seed-varied hue from it, so
     # they are not the same colour every run. The finish then sits outermost.
     if slots.get("integument"):
         src = get_creature(integument_source) if integument_source else {}

@@ -219,10 +219,13 @@ free-form prose (own render path — not validated against human fields). Rules:
 
 - **Integument is colour-free**; the hue lives in `palette` and is prepended at render
   (`_prepend_descriptor` fixes a/an). Texture words stay in `integument`.
-- **`palette_pool`** (optional list): for amorphous/colour-variable creatures (blob, slime,
-  energy being, jellyfish, crystalline alien). When the node palette is `Auto` it draws a
-  seed-varied hue from the pool instead of the single `palette` (so they aren't one fixed
-  colour). The palette combo also offers `Random` (rolls `_PALETTES` for any creature). The
+- **`palette_pool`** (optional list): for colour-variable species — most of the roster
+  since 0.38 (dragons, wolves, parrots, chameleons, demons, blobs…). When the node palette
+  is `Auto` it draws a seed-varied hue from the pool instead of the single `palette` (so
+  they aren't one fixed colour). Conventions: the entry's `palette` leads the pool (iconic
+  colour stays reachable); pattern words may ride in entries ("black-and-orange banded");
+  skip species whose colour IS the identity (raven, panda, orca, skeleton…). The palette
+  combo also offers `Random` (rolls `_PALETTES` for any creature). The
   palette RNG draw happens **last** in `build_creature_json`, after creature/slot/form picks,
   so existing seeds keep their creature and only colour shifts; the `Auto`+no-pool path draws no
   RNG and is byte-identical to before.

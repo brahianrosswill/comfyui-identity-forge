@@ -114,6 +114,42 @@ class HybridTests(unittest.TestCase):
         self.assertIn("crimson", integ)
         self.assertIn("glossy", integ)
 
+    def test_auto_palette_draws_from_pool_and_varies(self):
+        # 0.38 gave colour-variable species a palette_pool: 'Auto' must land in
+        # the pool every time and actually vary across seeds.
+        pool = CREATURES["dragon"]["palette_pool"]
+        seen = set()
+        for seed in range(40):
+            integ = _doc(build_creature_json("dragon", seed=seed))[_SPECIES_GROUP]["integument"]
+            # a mass/plural integument carries no article ("crimson overlapping
+            # armored scales"); a singular one does ("a crimson hide").
+            hits = [hue for hue in pool
+                    if integ.startswith((f"{hue} ", f"a {hue} ", f"an {hue} "))]
+            self.assertEqual(len(hits), 1, integ)
+            seen.add(hits[0])
+        self.assertGreater(len(seen), 1)  # not stuck on one hue
+
+    def test_pool_palette_does_not_shift_creature_or_slot_picks(self):
+        # The palette draw is last, so seed->anatomy mapping is colour-independent:
+        # everything except the recoloured integument matches an explicit-palette build.
+        for seed in range(10):
+            auto = _doc(build_creature_json("wolf", seed=seed))[_SPECIES_GROUP]
+            fixed = _doc(build_creature_json("wolf", seed=seed, palette="crimson"))[_SPECIES_GROUP]
+            auto.pop("integument"), fixed.pop("integument")
+            self.assertEqual(auto, fixed, f"seed {seed}")
+
+    def test_multiword_pattern_palette_keeps_article_agreement(self):
+        # Pattern-bearing pool entries ("orange-spotted cream") ride the same
+        # descriptor path; the leading article must agree with the first word.
+        integ = _doc(build_creature_json(
+            "wolf", seed=1, palette="orange-spotted cream",
+        ))[_SPECIES_GROUP]["integument"]
+        self.assertTrue(integ.startswith("an orange-spotted cream "), integ)
+        integ = _doc(build_creature_json(
+            "wolf", seed=1, palette="russet brown",
+        ))[_SPECIES_GROUP]["integument"]
+        self.assertTrue(integ.startswith("a russet brown "), integ)
+
 
 class SuppressionTests(unittest.TestCase):
     def test_anthro_suppresses_demographics_and_head_hides_face(self):

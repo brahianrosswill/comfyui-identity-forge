@@ -35,11 +35,13 @@ Curation rules (so the data stays coherent with the engine):
   ``palette`` — the node prepends the palette (and any finish) onto the integument, so a
   user can recolour it ("crimson" instead of "emerald") without fighting baked-in text.
   Texture words (chitinous, scaled, furred, plated) stay in ``integument``.
-* **Amorphous / colour-variable creatures may add an optional ``palette_pool``** — a list
-  of hues. With the node's palette on ``Auto`` it draws a seed-varied colour from this pool
-  instead of the single ``palette`` (so a blob alien is not always cyan); ``palette`` stays
-  as the required fallback. Use it only where many colours are plausible (blobs, slimes,
-  energy beings, jellyfish, crystals), not for naturalistic animals whose colour is fixed.
+* **Colour-variable species may add an optional ``palette_pool``** — a list of hues. With
+  the node's palette on ``Auto`` it draws a seed-varied colour from this pool instead of
+  the single ``palette`` (so a dragon is not always crimson, a wolf not always slate-grey).
+  ``palette`` stays as the required fallback and should **lead the pool** so the iconic
+  colour remains reachable. Pattern words may ride in an entry ("black-and-orange banded")
+  — the article is recomputed from its first word. Skip species whose colour IS the
+  identity (raven, panda, orca, skeleton…).
 * ``head`` and ``integument`` drive suppression: a creature head hides the human
   Face / Hair / Makeup; a creature integument hides the human skin fields. ``arms`` /
   ``hands`` / ``legs_feet`` have no human field to hide (the body is humanoid under an
@@ -78,6 +80,7 @@ CREATURES: dict[str, dict] = {
     # --- Mammals ----------------------------------------------------------
     "sloth": {
         "class": "Mammals", "palette": "grey-brown",
+        "palette_pool": ["grey-brown", "tawny beige", "moss-tinged grey"],
         "head": "a sloth's round, sleepy face with a blunt muzzle",
         "eyes": "small dark half-lidded eyes",
         "integument": "a coat of coarse shaggy fur",
@@ -88,6 +91,8 @@ CREATURES: dict[str, dict] = {
     },
     "wolf": {
         "class": "Mammals", "palette": "slate-grey",
+        "palette_pool": ["slate-grey", "jet black", "snow white", "grizzled grey-and-white",
+                         "russet brown"],
         "head": "a lupine head with a long muzzle and upright ears",
         "eyes": "sharp amber eyes",
         "integument": "a dense double coat of fur",
@@ -98,6 +103,7 @@ CREATURES: dict[str, dict] = {
     },
     "lion": {
         "class": "Mammals", "palette": "tawny gold",
+        "palette_pool": ["tawny gold", "pale sand", "ghostly white"],
         "head": "a broad leonine head framed by a thick mane",
         "eyes": "golden predatory eyes",
         "integument": "short tawny fur",
@@ -108,6 +114,7 @@ CREATURES: dict[str, dict] = {
     },
     "fox": {
         "class": "Mammals", "palette": "rust-orange",
+        "palette_pool": ["rust-orange", "silver-black", "arctic white", "sandy tan"],
         "head": "a slender vulpine head with large pointed ears",
         "eyes": "bright slitted amber eyes",
         "integument": "soft fur with a cream underbelly",
@@ -118,6 +125,7 @@ CREATURES: dict[str, dict] = {
     },
     "bear": {
         "class": "Mammals", "palette": "deep brown",
+        "palette_pool": ["deep brown", "jet black", "cinnamon brown", "ivory white"],
         "head": "a massive ursine head with a wide snout and small round ears",
         "eyes": "small dark eyes",
         "integument": "a thick rugged coat of fur",
@@ -127,6 +135,7 @@ CREATURES: dict[str, dict] = {
     },
     "rabbit": {
         "class": "Mammals", "palette": "dove-grey",
+        "palette_pool": ["dove-grey", "snow white", "warm brown", "jet black", "pale fawn"],
         "head": "a soft rounded head with tall upright ears",
         "eyes": "large gentle dark eyes",
         "integument": "plush velvety fur",
@@ -137,6 +146,7 @@ CREATURES: dict[str, dict] = {
     },
     "stag": {
         "class": "Mammals", "palette": "chestnut",
+        "palette_pool": ["chestnut", "russet brown", "pale fawn", "ghostly white"],
         "head": "a noble deer head crowned with broad branching antlers",
         "eyes": "deep liquid brown eyes",
         "integument": "sleek short fur",
@@ -149,6 +159,7 @@ CREATURES: dict[str, dict] = {
     # --- Birds ------------------------------------------------------------
     "owl": {
         "class": "Birds", "palette": "mottled brown",
+        "palette_pool": ["mottled brown", "snowy white", "ash grey", "tawny russet"],
         "head": "a rounded owl head with a sharp hooked beak and a facial disc",
         "eyes": "huge forward-facing golden eyes",
         "integument": "soft barred plumage",
@@ -159,6 +170,7 @@ CREATURES: dict[str, dict] = {
     },
     "eagle": {
         "class": "Birds", "palette": "umber and white",
+        "palette_pool": ["umber and white", "golden brown", "slate grey"],
         "head": "a fierce eagle head with a hooked golden beak",
         "eyes": "piercing pale eyes with a heavy brow",
         "integument": "crisp overlapping feathers",
@@ -179,6 +191,7 @@ CREATURES: dict[str, dict] = {
     },
     "peacock": {
         "class": "Birds", "palette": "jewel-blue and green",
+        "palette_pool": ["jewel-blue and green", "pure white"],
         "head": "a delicate head topped with a fan crest of filament feathers",
         "eyes": "bright dark eyes",
         "integument": "shimmering iridescent plumage",
@@ -189,6 +202,7 @@ CREATURES: dict[str, dict] = {
     },
     "falcon": {
         "class": "Birds", "palette": "steel-grey",
+        "palette_pool": ["steel-grey", "russet-barred brown", "gyr white"],
         "head": "a streamlined falcon head with a notched beak and a dark eye-stripe",
         "eyes": "keen black eyes",
         "integument": "tight aerodynamic plumage",
@@ -201,6 +215,7 @@ CREATURES: dict[str, dict] = {
     # --- Reptiles & Amphibians -------------------------------------------
     "gecko": {
         "class": "Reptiles & Amphibians", "palette": "leaf-green",
+        "palette_pool": ["leaf-green", "electric blue", "sandy tan", "orange-spotted cream"],
         "head": "a smooth lizard head with a wide jaw",
         "eyes": "large lidless eyes with vertical pupils",
         "integument": "fine pebbled scales",
@@ -211,6 +226,8 @@ CREATURES: dict[str, dict] = {
     },
     "cobra": {
         "class": "Reptiles & Amphibians", "palette": "olive and gold",
+        "palette_pool": ["olive and gold", "jet black", "sandy brown",
+                         "cream-and-brown banded"],
         "head": "a flat serpentine head with a flaring hood",
         "eyes": "fixed lidless eyes",
         "integument": "smooth overlapping scales",
@@ -221,6 +238,7 @@ CREATURES: dict[str, dict] = {
     },
     "crocodile": {
         "class": "Reptiles & Amphibians", "palette": "swamp-green",
+        "palette_pool": ["swamp-green", "muddy grey", "sandy olive"],
         "head": "a long armored crocodilian head with interlocking teeth",
         "eyes": "raised reptilian eyes set far back",
         "integument": "thick bony-plated hide",
@@ -231,6 +249,8 @@ CREATURES: dict[str, dict] = {
     },
     "chameleon": {
         "class": "Reptiles & Amphibians", "palette": "shifting teal",
+        "palette_pool": ["shifting teal", "vivid green", "sunset orange",
+                         "turquoise-and-yellow"],
         "head": "a knobbed chameleon head with a tall casque",
         "eyes": "independently swiveling turret eyes",
         "integument": "colour-shifting granular scales",
@@ -241,6 +261,8 @@ CREATURES: dict[str, dict] = {
     },
     "frog": {
         "class": "Reptiles & Amphibians", "palette": "bright green",
+        "palette_pool": ["bright green", "electric blue", "golden yellow",
+                         "red-and-black spotted"],
         "head": "a wide-mouthed amphibian head",
         "eyes": "bulging golden eyes set high",
         "integument": "smooth moist glistening skin",
@@ -252,6 +274,7 @@ CREATURES: dict[str, dict] = {
     # --- Insects & Arachnids ---------------------------------------------
     "praying mantis": {
         "class": "Insects & Arachnids", "palette": "emerald",
+        "palette_pool": ["emerald", "orchid pink-and-white", "dried-leaf brown"],
         "head": "a triangular mantis head with swiveling antennae",
         "eyes": "large bulbous compound eyes",
         "integument": "a segmented chitinous exoskeleton",
@@ -263,6 +286,7 @@ CREATURES: dict[str, dict] = {
     },
     "rhinoceros beetle": {
         "class": "Insects & Arachnids", "palette": "glossy black",
+        "palette_pool": ["glossy black", "metallic emerald", "burnished bronze"],
         "head": "an armored beetle head bearing a curved horn",
         "eyes": "small dark bead eyes",
         "integument": "a hard glossy carapace",
@@ -273,6 +297,7 @@ CREATURES: dict[str, dict] = {
     },
     "tarantula": {
         "class": "Insects & Arachnids", "palette": "dusky brown",
+        "palette_pool": ["dusky brown", "cobalt blue", "black-and-orange banded"],
         "head": "a low arachnid head clustered with eyes",
         "eyes": "eight glossy black eyes",
         "integument": "a coat of bristled setae over a hard exoskeleton",
@@ -283,6 +308,8 @@ CREATURES: dict[str, dict] = {
     },
     "butterfly": {
         "class": "Insects & Arachnids", "palette": "sunset-orange",
+        "palette_pool": ["sunset-orange", "sapphire-blue morpho",
+                         "black-and-yellow swallowtail", "jade green"],
         "head": "a delicate head with long curled antennae",
         "eyes": "round dark compound eyes",
         "integument": "a fine velvety scaled body",
@@ -294,6 +321,7 @@ CREATURES: dict[str, dict] = {
     },
     "scorpion": {
         "class": "Insects & Arachnids", "palette": "sand-amber",
+        "palette_pool": ["sand-amber", "glossy black", "reddish brown"],
         "head": "a low armored head with grasping mouthparts",
         "eyes": "rows of tiny dark eyes",
         "integument": "a hard segmented exoskeleton",
@@ -304,6 +332,7 @@ CREATURES: dict[str, dict] = {
     },
     "dragonfly": {
         "class": "Insects & Arachnids", "palette": "metallic teal",
+        "palette_pool": ["metallic teal", "ruby red", "cobalt blue", "burnished emerald"],
         "head": "a globular head dominated by enormous eyes",
         "eyes": "vast wraparound compound eyes",
         "integument": "a slender iridescent exoskeleton",
@@ -317,6 +346,7 @@ CREATURES: dict[str, dict] = {
     # --- Marine Life ------------------------------------------------------
     "octopus": {
         "class": "Marine Life", "palette": "mottled coral-red",
+        "palette_pool": ["mottled coral-red", "deep purple", "sandy brown", "ghostly white"],
         "head": "a bulbous domed octopus head",
         "eyes": "horizontal slit-pupiled eyes",
         "integument": "soft colour-shifting skin dotted with chromatophores",
@@ -327,6 +357,7 @@ CREATURES: dict[str, dict] = {
     },
     "shark": {
         "class": "Marine Life", "palette": "steel-blue",
+        "palette_pool": ["steel-blue", "slate grey", "sandy bronze"],
         "head": "a streamlined shark head with rows of jagged teeth",
         "eyes": "flat black lidless eyes",
         "integument": "rough denticled grey skin",
@@ -360,6 +391,7 @@ CREATURES: dict[str, dict] = {
     },
     "crab": {
         "class": "Marine Life", "palette": "brick-red",
+        "palette_pool": ["brick-red", "vivid blue", "sandy tan", "olive green"],
         "head": "a low carapaced head with stalked eyes",
         "eyes": "eyes on swiveling stalks",
         "integument": "a hard calcified shell",
@@ -381,6 +413,7 @@ CREATURES: dict[str, dict] = {
     # --- Monsters ---------------------------------------------------------
     "zombie": {
         "class": "Monsters", "palette": "ashen grey-green",
+        "palette_pool": ["ashen grey-green", "mottled livid purple-grey", "rotting umber"],
         "head": "a gaunt rotting head with a slack jaw",
         "eyes": "clouded sunken eyes",
         "integument": "decayed mottled flesh stretched over bone",
@@ -401,6 +434,7 @@ CREATURES: dict[str, dict] = {
     },
     "werewolf": {
         "class": "Monsters", "palette": "charcoal",
+        "palette_pool": ["charcoal", "grizzled grey", "russet brown", "jet black"],
         "head": "a snarling wolfen head with a bristling ruff",
         "eyes": "burning yellow eyes",
         "integument": "coarse bristling fur over corded muscle",
@@ -411,6 +445,7 @@ CREATURES: dict[str, dict] = {
     },
     "demon": {
         "class": "Monsters", "palette": "ember-red",
+        "palette_pool": ["ember-red", "obsidian black", "bruised violet", "deep crimson"],
         "head": "a horned demonic head with a fanged grin",
         "eyes": "slitted glowing eyes",
         "integument": "cracked smoldering hide",
@@ -422,6 +457,7 @@ CREATURES: dict[str, dict] = {
     },
     "eldritch horror": {
         "class": "Monsters", "palette": "void-violet",
+        "palette_pool": ["void-violet", "abyssal green-black", "oil-slick iridescent black"],
         "head": "an asymmetric head wreathed in writhing tendrils",
         "eyes": "too many eyes scattered across the flesh",
         "integument": "shifting non-euclidean flesh that the gaze slides off",
@@ -432,6 +468,8 @@ CREATURES: dict[str, dict] = {
     },
     "gargoyle": {
         "class": "Monsters", "palette": "weathered stone-grey",
+        "palette_pool": ["weathered stone-grey", "moss-stained granite", "dark basalt",
+                         "pale limestone"],
         "head": "a grotesque horned head carved in stone",
         "eyes": "blank hollow eyes",
         "integument": "rough weathered stone skin",
@@ -465,6 +503,7 @@ CREATURES: dict[str, dict] = {
     },
     "insectoid xeno": {
         "class": "Aliens", "palette": "obsidian black",
+        "palette_pool": ["obsidian black", "chitinous bronze", "bone-pale"],
         "head": "an elongated ridged carapace head with no visible eyes",
         "eyes": "a smooth eyeless domed crown",
         "integument": "a biomechanical chitinous shell",
@@ -476,6 +515,7 @@ CREATURES: dict[str, dict] = {
     },
     "reptilian alien": {
         "class": "Aliens", "palette": "venom-green",
+        "palette_pool": ["venom-green", "ochre-scaled brown", "slate grey"],
         "head": "a ridged saurian head with a frill",
         "eyes": "vertical-slit golden eyes",
         "integument": "fine iridescent scales",
@@ -498,6 +538,7 @@ CREATURES: dict[str, dict] = {
     },
     "biomechanical alien": {
         "class": "Aliens", "palette": "gunmetal and chrome",
+        "palette_pool": ["gunmetal and chrome", "black and copper", "bone-white and steel"],
         "head": "a sleek fused organic-metal head with sensor slits",
         "eyes": "a glowing horizontal optical band",
         "integument": "ridged metal plating grown over grey flesh",
@@ -522,6 +563,8 @@ CREATURES: dict[str, dict] = {
     # --- Mythic & Fantasy -------------------------------------------------
     "dragon": {
         "class": "Mythic & Fantasy", "palette": "crimson",
+        "palette_pool": ["crimson", "emerald", "obsidian black", "burnished gold", "ice-blue",
+                         "bone-white"],
         "head": "a horned draconic head with a long snout and back-swept horns",
         "eyes": "slit-pupiled molten eyes",
         "integument": "overlapping armored scales",
@@ -533,6 +576,7 @@ CREATURES: dict[str, dict] = {
     },
     "naga": {
         "class": "Mythic & Fantasy", "palette": "jade",
+        "palette_pool": ["jade", "cobalt blue", "golden ochre", "emerald-banded black"],
         "head": "a regal serpent-browed head crowned with a small hood",
         "eyes": "golden slit-pupiled eyes",
         "integument": "smooth jeweled scales over a human torso",
@@ -542,6 +586,7 @@ CREATURES: dict[str, dict] = {
     },
     "centaur": {
         "class": "Mythic & Fantasy", "palette": "chestnut",
+        "palette_pool": ["chestnut", "jet black", "dapple grey", "palomino gold"],
         "head": "a human head with a flowing mane",
         "eyes": "warm dark eyes",
         "integument": "a human torso joined to a horse's hide",
@@ -552,6 +597,7 @@ CREATURES: dict[str, dict] = {
     },
     "gryphon": {
         "class": "Mythic & Fantasy", "palette": "gold and brown",
+        "palette_pool": ["gold and brown", "white-and-grey", "tawny-and-slate"],
         "head": "an eagle's head with a hooked beak and tufted crest",
         "eyes": "fierce golden eyes",
         "integument": "feathered forequarters blending into a lion's pelt",
@@ -563,6 +609,7 @@ CREATURES: dict[str, dict] = {
     },
     "minotaur": {
         "class": "Mythic & Fantasy", "palette": "dark umber",
+        "palette_pool": ["dark umber", "coal black", "russet brown"],
         "head": "a broad bovine head with heavy curved horns and a ring-pierced nose",
         "eyes": "deep-set dark eyes",
         "integument": "short coarse hide over a massive frame",
@@ -573,6 +620,7 @@ CREATURES: dict[str, dict] = {
     },
     "merfolk": {
         "class": "Mythic & Fantasy", "palette": "aqua and pearl",
+        "palette_pool": ["aqua and pearl", "coral-and-gold", "deep teal-and-silver"],
         "head": "a comely head with finned ears and pearl-strung hair",
         "eyes": "large sea-green eyes",
         "integument": "a human torso scaled below into shimmering fish-skin",
@@ -583,6 +631,7 @@ CREATURES: dict[str, dict] = {
     },
     "satyr": {
         "class": "Mythic & Fantasy", "palette": "earthy brown",
+        "palette_pool": ["earthy brown", "chestnut", "dark umber"],
         "head": "a human head with small curling ram's horns and pointed ears",
         "eyes": "mischievous amber eyes",
         "integument": "a human torso above shaggy goat-furred legs",
@@ -593,6 +642,7 @@ CREATURES: dict[str, dict] = {
     },
     "harpy": {
         "class": "Mythic & Fantasy", "palette": "dusky brown",
+        "palette_pool": ["dusky brown", "storm grey", "russet"],
         "head": "a fierce human head with a feathered crest",
         "eyes": "wild raptor-bright eyes",
         "integument": "a human torso edged in feathers",
@@ -605,6 +655,7 @@ CREATURES: dict[str, dict] = {
     # --- Plant & Fungal ---------------------------------------------------
     "treant": {
         "class": "Plant & Fungal", "palette": "mossy bark-brown",
+        "palette_pool": ["mossy bark-brown", "silver-barked grey", "dark oak umber"],
         "head": "a head of knotted bark with a face in the grain",
         "eyes": "deep-set glowing sap-amber eyes",
         "integument": "rough living bark wrapped in moss",
@@ -615,6 +666,7 @@ CREATURES: dict[str, dict] = {
     },
     "mushroom folk": {
         "class": "Plant & Fungal", "palette": "spotted scarlet",
+        "palette_pool": ["spotted scarlet", "pale porcelain", "honey-amber", "dusky violet"],
         "head": "a broad domed mushroom cap for a head",
         "eyes": "small dark dot eyes beneath the cap",
         "integument": "a soft spongy fibrous body",
@@ -625,6 +677,7 @@ CREATURES: dict[str, dict] = {
     },
     "carnivorous plant": {
         "class": "Plant & Fungal", "palette": "venus-green and red",
+        "palette_pool": ["venus-green and red", "deep maroon", "chartreuse green"],
         "head": "a great hinged trap-jaw head fringed with teeth-like cilia",
         "eyes": "no eyes, only sensing trigger-hairs",
         "integument": "waxy veined plant flesh",
@@ -635,6 +688,7 @@ CREATURES: dict[str, dict] = {
     },
     "cactus folk": {
         "class": "Plant & Fungal", "palette": "sage-green",
+        "palette_pool": ["sage-green", "dusty blue-green"],
         "head": "a rounded cactus head topped with a crown of small flowers",
         "eyes": "simple dark dot eyes",
         "integument": "thick ribbed succulent skin studded with spines",
@@ -644,6 +698,7 @@ CREATURES: dict[str, dict] = {
     },
     "flower folk": {
         "class": "Plant & Fungal", "palette": "blossom-pink",
+        "palette_pool": ["blossom-pink", "lilac", "ivory white", "deep crimson"],
         "head": "a head haloed by a wide blooming flower",
         "eyes": "bright dew-glistening eyes",
         "integument": "smooth petal-soft green skin",
@@ -656,6 +711,7 @@ CREATURES: dict[str, dict] = {
     # --- Mammals (more) ---------------------------------------------------
     "tiger": {
         "class": "Mammals", "palette": "burnt orange",
+        "palette_pool": ["burnt orange", "snow white", "pale golden"],
         "head": "a broad tiger head with white cheek ruffs and a pink nose",
         "eyes": "intense amber eyes",
         "integument": "short fur marked with bold dark stripes",
@@ -666,6 +722,7 @@ CREATURES: dict[str, dict] = {
     },
     "elephant": {
         "class": "Mammals", "palette": "slate-grey",
+        "palette_pool": ["slate-grey", "dusty brown-grey", "pale ash"],
         "head": "a great elephantine head with broad ears, curved tusks and a long trunk",
         "eyes": "small wise dark eyes",
         "integument": "thick wrinkled leathery hide",
@@ -675,6 +732,7 @@ CREATURES: dict[str, dict] = {
     },
     "gorilla": {
         "class": "Mammals", "palette": "blue-black",
+        "palette_pool": ["blue-black", "charcoal with a silver saddle"],
         "head": "a heavy-browed gorilla head with a flat broad nose and a sagittal crest",
         "eyes": "deep-set brown eyes",
         "integument": "coarse dark fur over a barrel chest",
@@ -684,6 +742,7 @@ CREATURES: dict[str, dict] = {
     },
     "bat": {
         "class": "Mammals", "palette": "dusky brown",
+        "palette_pool": ["dusky brown", "jet black", "russet red"],
         "head": "a snub-nosed bat head with enormous upright ears",
         "eyes": "small beady black eyes",
         "integument": "fine velvety fur",
@@ -706,6 +765,7 @@ CREATURES: dict[str, dict] = {
     # --- Birds (more) -----------------------------------------------------
     "parrot": {
         "class": "Birds", "palette": "scarlet and blue",
+        "palette_pool": ["scarlet and blue", "emerald green", "blue and gold", "dove-grey"],
         "head": "a bright macaw head with a heavy curved beak and a bare cheek patch",
         "eyes": "pale ringed eyes",
         "integument": "vivid multicolour plumage",
@@ -717,6 +777,7 @@ CREATURES: dict[str, dict] = {
     },
     "swan": {
         "class": "Birds", "palette": "pure white",
+        "palette_pool": ["pure white", "jet black"],
         "head": "an elegant swan head on a long curved neck with a black-knobbed orange bill",
         "eyes": "calm dark eyes",
         "integument": "immaculate downy plumage",
@@ -748,6 +809,7 @@ CREATURES: dict[str, dict] = {
     # --- Reptiles & Amphibians (more) ------------------------------------
     "iguana": {
         "class": "Reptiles & Amphibians", "palette": "mint-green",
+        "palette_pool": ["mint-green", "teal-blue", "sandy grey", "burnt orange"],
         "head": "a blunt iguana head with a dewlap and a spiny crest",
         "eyes": "round lidded eyes",
         "integument": "pebbled scales with a serrated dorsal crest",
@@ -789,6 +851,7 @@ CREATURES: dict[str, dict] = {
     # --- Insects & Arachnids (more) --------------------------------------
     "ant": {
         "class": "Insects & Arachnids", "palette": "reddish black",
+        "palette_pool": ["reddish black", "jet black", "fiery red"],
         "head": "a heart-shaped ant head with elbowed antennae and strong mandibles",
         "eyes": "small compound eyes",
         "integument": "a hard segmented exoskeleton",
@@ -820,6 +883,7 @@ CREATURES: dict[str, dict] = {
     },
     "moth": {
         "class": "Insects & Arachnids", "palette": "dusty taupe",
+        "palette_pool": ["dusty taupe", "pale luna green", "rosy pink-and-cream"],
         "head": "a fuzzy moth head with broad feathered antennae",
         "eyes": "round dark compound eyes",
         "integument": "a thickly furred body",
@@ -854,6 +918,7 @@ CREATURES: dict[str, dict] = {
     },
     "eel": {
         "class": "Marine Life", "palette": "olive-green",
+        "palette_pool": ["olive-green", "charcoal grey", "silvery"],
         "head": "a snake-like eel head with a wide gaping jaw",
         "eyes": "small fixed eyes",
         "integument": "smooth slick scaleless skin",
@@ -864,6 +929,7 @@ CREATURES: dict[str, dict] = {
     },
     "lobster": {
         "class": "Marine Life", "palette": "deep blue-black",
+        "palette_pool": ["deep blue-black", "mottled rust", "vivid blue"],
         "head": "a low armored head with long whip antennae and stalked eyes",
         "eyes": "small eyes on short stalks",
         "integument": "a hard jointed carapace",
@@ -876,6 +942,7 @@ CREATURES: dict[str, dict] = {
     # --- Monsters (more) -------------------------------------------------
     "ghost": {
         "class": "Monsters", "palette": "pale spectral white",
+        "palette_pool": ["pale spectral white", "faint spectral blue", "cold spectral green"],
         "head": "a translucent sorrowful face that drifts in and out of focus",
         "eyes": "hollow glowing eyes",
         "integument": "a semi-transparent vaporous form",
@@ -896,6 +963,7 @@ CREATURES: dict[str, dict] = {
     },
     "flesh golem": {
         "class": "Monsters", "palette": "sallow green-grey",
+        "palette_pool": ["sallow green-grey", "livid patchwork pale", "bruised grey"],
         "head": "a heavy stitched-together head with mismatched features and bolts",
         "eyes": "dull asymmetric eyes",
         "integument": "patchwork stitched skin over a hulking frame",
@@ -918,6 +986,7 @@ CREATURES: dict[str, dict] = {
     # --- Aliens (more) ---------------------------------------------------
     "fungal alien": {
         "class": "Aliens", "palette": "bruised violet",
+        "palette_pool": ["bruised violet", "pallid ochre", "phosphorescent green"],
         "head": "a soft head crowned with pulsing fungal caps and gills",
         "eyes": "clusters of simple light-sensing ocelli",
         "integument": "spongy mycelial flesh threaded with glowing veins",
@@ -928,6 +997,7 @@ CREATURES: dict[str, dict] = {
     },
     "hive drone": {
         "class": "Aliens", "palette": "amber and black",
+        "palette_pool": ["amber and black", "jade and black"],
         "head": "a smooth chitin-plated drone head with sensory antennae",
         "eyes": "huge faceted hexagonal eyes",
         "integument": "a resinous segmented carapace",
@@ -952,6 +1022,7 @@ CREATURES: dict[str, dict] = {
     # --- Mythic & Fantasy (more) -----------------------------------------
     "phoenix": {
         "class": "Mythic & Fantasy", "palette": "fiery orange-gold",
+        "palette_pool": ["fiery orange-gold", "deep crimson-and-gold", "blue-white flame"],
         "head": "a regal bird head with a golden beak and a crest of flame-feathers",
         "eyes": "burning ember eyes",
         "integument": "radiant plumage that smoulders at the edges",
@@ -974,6 +1045,7 @@ CREATURES: dict[str, dict] = {
     },
     "kitsune": {
         "class": "Mythic & Fantasy", "palette": "white and gold",
+        "palette_pool": ["white and gold", "russet red", "midnight black"],
         "head": "a delicate fox head with large upright ears",
         "eyes": "sly golden eyes",
         "integument": "soft luxurious fur",
@@ -996,6 +1068,8 @@ CREATURES: dict[str, dict] = {
     },
     "fairy": {
         "class": "Mythic & Fantasy", "palette": "luminous green",
+        "palette_pool": ["luminous green", "lavender glow", "rose-gold shimmer",
+                         "moonlight silver"],
         "head": "a delicate elfin head with pointed ears and an antenna-thin circlet",
         "eyes": "large luminous eyes",
         "integument": "smooth faintly glowing skin dusted with pollen",
@@ -1007,6 +1081,7 @@ CREATURES: dict[str, dict] = {
     },
     "cyclops": {
         "class": "Mythic & Fantasy", "palette": "ruddy tan",
+        "palette_pool": ["ruddy tan", "slate grey", "olive"],
         "head": "a heavy brutish head with a single great central eye",
         "eyes": "one enormous staring eye",
         "integument": "thick weathered skin over a giant's frame",
@@ -1016,6 +1091,7 @@ CREATURES: dict[str, dict] = {
     },
     "hydra": {
         "class": "Mythic & Fantasy", "palette": "bog-green",
+        "palette_pool": ["bog-green", "swamp brown", "slate grey"],
         "head": "several serpentine heads writhing on long necks",
         "eyes": "many pairs of slitted yellow eyes",
         "integument": "slick overlapping reptilian scales",
@@ -1028,6 +1104,7 @@ CREATURES: dict[str, dict] = {
     # --- Plant & Fungal (more) -------------------------------------------
     "pumpkin head": {
         "class": "Plant & Fungal", "palette": "harvest orange",
+        "palette_pool": ["harvest orange", "ghostly pale white", "deep moss green"],
         "head": "a carved pumpkin for a head with a flickering grin",
         "eyes": "glowing candle-lit eye holes",
         "integument": "a body of woven vine and dried cornhusk",
@@ -1048,6 +1125,7 @@ CREATURES: dict[str, dict] = {
     },
     "lotus folk": {
         "class": "Plant & Fungal", "palette": "serene pink-jade",
+        "palette_pool": ["serene pink-jade", "white-and-jade", "blue-and-jade"],
         "head": "a calm head crowned with a great lotus blossom",
         "eyes": "tranquil half-closed eyes",
         "integument": "smooth jade-green skin beaded with water",
@@ -1060,6 +1138,7 @@ CREATURES: dict[str, dict] = {
     # --- Mammals (expansion) ---------------------------------------------
     "horse": {
         "class": "Mammals", "palette": "chestnut",
+        "palette_pool": ["chestnut", "jet black", "dapple grey", "palomino gold", "bay brown"],
         "head": "an equine head with a long muzzle, flared nostrils, and upright ears",
         "eyes": "large dark liquid eyes",
         "integument": "a sleek short-haired coat",
@@ -1070,6 +1149,8 @@ CREATURES: dict[str, dict] = {
     },
     "cat": {
         "class": "Mammals", "palette": "tabby grey",
+        "palette_pool": ["tabby grey", "jet black", "ginger orange", "calico patched",
+                         "smoky cream"],
         "head": "a sleek feline head with tufted ears and long whiskers",
         "eyes": "slit-pupiled green eyes",
         "integument": "soft short fur",
@@ -1080,6 +1161,8 @@ CREATURES: dict[str, dict] = {
     },
     "rat": {
         "class": "Mammals", "palette": "dusty brown",
+        "palette_pool": ["dusty brown", "charcoal grey", "pure white",
+                         "black-and-white piebald"],
         "head": "a pointed rodent head with round ears and a twitching nose",
         "eyes": "small dark beady eyes",
         "integument": "short coarse fur",
@@ -1090,6 +1173,7 @@ CREATURES: dict[str, dict] = {
     },
     "hedgehog": {
         "class": "Mammals", "palette": "earthy brown",
+        "palette_pool": ["earthy brown", "cream-and-brown banded", "salt-and-pepper grey"],
         "head": "a small pointed-snouted head",
         "eyes": "tiny bright black eyes",
         "integument": "a back of stiff protective quills over soft fur",
@@ -1111,6 +1195,7 @@ CREATURES: dict[str, dict] = {
     # --- Birds (expansion) -----------------------------------------------
     "flamingo": {
         "class": "Birds", "palette": "rosy pink",
+        "palette_pool": ["rosy pink", "coral orange", "pale blush"],
         "head": "a small head on a very long S-curved neck with a black-tipped down-bent bill",
         "eyes": "pale round eyes",
         "integument": "fine soft plumage",
@@ -1153,6 +1238,7 @@ CREATURES: dict[str, dict] = {
     # --- Reptiles & Amphibians (expansion) -------------------------------
     "python": {
         "class": "Reptiles & Amphibians", "palette": "tan and brown",
+        "palette_pool": ["tan and brown", "golden albino yellow", "charcoal-patterned grey"],
         "head": "a broad wedge-shaped serpent head with heat-sensing pits",
         "eyes": "fixed lidless eyes with vertical pupils",
         "integument": "smooth glossy patterned scales",
@@ -1173,6 +1259,7 @@ CREATURES: dict[str, dict] = {
     },
     "axolotl": {
         "class": "Reptiles & Amphibians", "palette": "pale pink",
+        "palette_pool": ["pale pink", "mottled charcoal", "golden albino", "leucistic white"],
         "head": "a wide-smiling axolotl head fringed with feathery external gills",
         "eyes": "tiny lidless dark eyes",
         "integument": "smooth translucent amphibian skin",
@@ -1206,6 +1293,7 @@ CREATURES: dict[str, dict] = {
     },
     "grasshopper": {
         "class": "Insects & Arachnids", "palette": "leaf green",
+        "palette_pool": ["leaf green", "sandy brown"],
         "head": "an angular grasshopper head with long antennae",
         "eyes": "rounded compound eyes",
         "integument": "a slender segmented exoskeleton",
@@ -1227,6 +1315,7 @@ CREATURES: dict[str, dict] = {
     },
     "snail": {
         "class": "Insects & Arachnids", "palette": "soft grey",
+        "palette_pool": ["soft grey", "amber-and-brown banded"],
         "head": "a soft head with two long retractable eye-stalks and feeler tentacles",
         "eyes": "tiny eyes on the tips of long stalks",
         "integument": "soft moist glistening flesh",
@@ -1239,6 +1328,7 @@ CREATURES: dict[str, dict] = {
     # --- Marine Life (expansion) -----------------------------------------
     "squid": {
         "class": "Marine Life", "palette": "pearly mauve",
+        "palette_pool": ["pearly mauve", "deep red", "translucent silver"],
         "head": "a streamlined torpedo-shaped mantle and head",
         "eyes": "large intelligent eyes",
         "integument": "smooth colour-shifting skin",
@@ -1249,6 +1339,7 @@ CREATURES: dict[str, dict] = {
     },
     "seahorse": {
         "class": "Marine Life", "palette": "sunny yellow",
+        "palette_pool": ["sunny yellow", "coral orange", "charcoal", "seafoam green"],
         "head": "a horse-like head with a tubular snout and a bony crown",
         "eyes": "independently swiveling eyes",
         "integument": "a ringed bony-plated body",
@@ -1259,6 +1350,7 @@ CREATURES: dict[str, dict] = {
     },
     "pufferfish": {
         "class": "Marine Life", "palette": "sandy beige",
+        "palette_pool": ["sandy beige", "golden spotted", "olive-green"],
         "head": "a round blunt head with a small beaked mouth",
         "eyes": "big round eyes",
         "integument": "an inflatable spine-studded skin",
@@ -1302,6 +1394,7 @@ CREATURES: dict[str, dict] = {
     },
     "goblin": {
         "class": "Monsters", "palette": "sickly green",
+        "palette_pool": ["sickly green", "muddy yellow-green", "ashen grey-green"],
         "head": "a small hook-nosed head with huge pointed ears and a wide fanged grin",
         "eyes": "sharp yellow eyes",
         "integument": "warty leathery hide",
@@ -1312,6 +1405,7 @@ CREATURES: dict[str, dict] = {
     },
     "troll": {
         "class": "Monsters", "palette": "mossy grey-green",
+        "palette_pool": ["mossy grey-green", "river-stone grey", "muddy brown"],
         "head": "a lumpen brutish head with a heavy brow and underbite tusks",
         "eyes": "small dull eyes",
         "integument": "thick warty rubbery hide",
@@ -1336,6 +1430,7 @@ CREATURES: dict[str, dict] = {
     # --- Aliens (expansion) ----------------------------------------------
     "cephalopod alien": {
         "class": "Aliens", "palette": "deep violet",
+        "palette_pool": ["deep violet", "bioluminescent teal", "mottled crimson"],
         "head": "a tall domed cranium with a beaked underside",
         "eyes": "huge horizontal-slit eyes",
         "integument": "smooth glistening colour-shifting skin",
@@ -1346,6 +1441,7 @@ CREATURES: dict[str, dict] = {
     },
     "plant alien": {
         "class": "Aliens", "palette": "verdant teal",
+        "palette_pool": ["verdant teal", "magenta-veined green", "amber"],
         "head": "a head of folded petal-like fronds around a central pod",
         "eyes": "clusters of glassy seed-like eyes",
         "integument": "a body of fibrous vine and leaf woven over a sap-filled core",
@@ -1356,6 +1452,7 @@ CREATURES: dict[str, dict] = {
     },
     "android": {
         "class": "Aliens", "palette": "matte white and chrome",
+        "palette_pool": ["matte white and chrome", "gloss black and gold", "gunmetal grey"],
         "head": "a smooth synthetic head with sculpted features and fine seam-lines",
         "eyes": "softly glowing optical lenses",
         "integument": "a sleek panelled synthetic shell over articulated joints",
@@ -1396,6 +1493,7 @@ CREATURES: dict[str, dict] = {
     # --- Mythic & Fantasy (expansion) ------------------------------------
     "pegasus": {
         "class": "Mythic & Fantasy", "palette": "pearl white",
+        "palette_pool": ["pearl white", "storm grey", "jet black"],
         "head": "a noble equine head with a flowing forelock",
         "eyes": "gentle dark eyes",
         "integument": "a gleaming short-haired coat",
@@ -1418,6 +1516,7 @@ CREATURES: dict[str, dict] = {
     },
     "manticore": {
         "class": "Mythic & Fantasy", "palette": "blood red",
+        "palette_pool": ["blood red", "tawny brown"],
         "head": "a near-human leonine face with three rows of teeth",
         "eyes": "cruel amber eyes",
         "integument": "a dense lion-like pelt",
@@ -1522,6 +1621,7 @@ CREATURES: dict[str, dict] = {
     },
     "heron": {
         "class": "Birds", "palette": "slate blue-grey",
+        "palette_pool": ["slate blue-grey", "pure white", "silvery grey"],
         "head": "a sleek heron head with a long dagger beak and a trailing crest",
         "eyes": "sharp yellow eyes",
         "integument": "smooth grey plumage",
@@ -1532,6 +1632,8 @@ CREATURES: dict[str, dict] = {
     },
     "hummingbird": {
         "class": "Birds", "palette": "iridescent emerald",
+        "palette_pool": ["iridescent emerald", "ruby-throated green", "sapphire blue",
+                         "iridescent violet"],
         "head": "a tiny hummingbird head with a needle-thin bill",
         "eyes": "bright bead-like eyes",
         "integument": "shimmering iridescent plumage",
@@ -1542,6 +1644,7 @@ CREATURES: dict[str, dict] = {
     },
     "cockatoo": {
         "class": "Birds", "palette": "white with a sulphur crest",
+        "palette_pool": ["white with a sulphur crest", "salmon pink", "smoky black"],
         "head": "a crested cockatoo head with a curved beak",
         "eyes": "round dark eyes",
         "integument": "soft white plumage",
@@ -1582,6 +1685,7 @@ CREATURES: dict[str, dict] = {
     },
     "lynx": {
         "class": "Mammals", "palette": "silvery grey",
+        "palette_pool": ["silvery grey", "sandy tawny", "smoky blue-grey"],
         "head": "a tufted-eared lynx head with a ruffed face",
         "eyes": "pale piercing green eyes",
         "integument": "thick spotted winter fur",
@@ -1592,6 +1696,7 @@ CREATURES: dict[str, dict] = {
     },
     "otter": {
         "class": "Mammals", "palette": "warm brown",
+        "palette_pool": ["warm brown", "dark chocolate", "silvery river-grey"],
         "head": "a sleek round otter head with bristling whiskers",
         "eyes": "bright dark eyes",
         "integument": "dense water-repellent fur",
